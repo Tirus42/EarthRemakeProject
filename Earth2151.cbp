@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Earth 2151" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Server - Debug">
+				<Option output="bin\Debug\Earth2150-Server" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Server - Release">
+				<Option output="bin\Release\Earth2150-Server" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="Server - VS - Debug">
+				<Option output="bin\Debug\Earth 2150 VS" prefix_auto="1" extension_auto="1" />
+				<Option object_output="R:\comp\debug-objs" />
+				<Option type="1" />
+				<Option compiler="msvc10" />
+				<Option use_console_runner="0" />
+				<Compiler>
+					<Add option="/D_DEBUG" />
+				</Compiler>
+			</Target>
+			<Target title="Server - VS - Release">
+				<Option output="bin\Release\Earth 2150 VS" prefix_auto="1" extension_auto="1" />
+				<Option object_output="R:\comp\release-objs" />
+				<Option type="1" />
+				<Option compiler="msvc10" />
+				<Option use_console_runner="0" />
+				<Compiler>
+					<Add option="/MT" />
+					<Add option="/arch:SSE" />
+					<Add option="/GS" />
+					<Add option="/Ox" />
+				</Compiler>
+			</Target>
+			<Target title="VS - Debug">
+				<Option output="bin\VS - Debug\Earth 2150" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin\VS - Debug\" />
+				<Option object_output="obj\VS - Debug\" />
+				<Option type="1" />
+				<Option compiler="msvc10" />
+				<Compiler>
+					<Add option="/Zi" />
+					<Add option="/D_DEBUG" />
+					<Add option="/MDd" />
+				</Compiler>
+				<Linker>
+					<Add option="/DEBUG" />
+					<Add library="msvcrtd.lib" />
+					<Add library="msvcprtd.lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-std=c++11" />
+			<Add directory="include" />
+		</Compiler>
+		<Linker>
+			<Add library="ws2_32" />
+		</Linker>
+		<Unit filename="include\Entity.h" />
+		<Unit filename="include\Faction.h" />
+		<Unit filename="include\HumanPlayer.h" />
+		<Unit filename="include\Map.h" />
+		<Unit filename="include\MapPosition.h" />
+		<Unit filename="include\Player.h" />
+		<Unit filename="include\Unit.h" />
+		<Unit filename="include\UnitChassis.h" />
+		<Unit filename="include\funktionen\network.h" />
+		<Unit filename="include\main.h" />
+		<Unit filename="src\Entity.cpp" />
+		<Unit filename="src\Faction.cpp" />
+		<Unit filename="src\HumanPlayer.cpp" />
+		<Unit filename="src\Map.cpp" />
+		<Unit filename="src\Unit.cpp" />
+		<Unit filename="src\funktionen\network.cpp" />
+		<Unit filename="src\main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
