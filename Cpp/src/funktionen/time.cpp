@@ -1,5 +1,13 @@
 #include "time.h"
 
+///Wenn man das Hier drin lässt, macht das keine solche Probleme :)
+
+#ifdef WIN32
+	#include <windows.h>
+#else
+	#include <sys/time.h>
+#endif
+
 unsigned int MilliSecs(){
 	#ifdef WIN32
         return timeGetTime();   ///THX.. wenn so fehler kommen fehlt ne lib.. und lib*.a kannste kürzer schreiben.. wo haste das mingw verz?

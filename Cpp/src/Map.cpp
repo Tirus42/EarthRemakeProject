@@ -50,28 +50,28 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
             //Ist dieses Feld begehbar?
             if (buffer[index]) {
                 if (buffer[index - width]) {
-                    value|=NORTH;
+                    value |= NORTH;
                 }
                 if (buffer[index + width]) {
-                    value|=SOUTH;
+                    value |= SOUTH;
                 }
                 if (buffer[index + 1]) {
-                    value|=EAST;
+                    value |= EAST;
                 }
                 if (buffer[index - 1]) {
-                    value|=WEST;
+                    value |= WEST;
                 }
                 if (buffer[index + 1 - width]) {
-                    value|=NORTH_EAST;
+                    value |= NORTH_EAST;
                 }
                 if (buffer[index + 1 + width]) {
-                    value|=SOUTH_EAST;
+                    value |= SOUTH_EAST;
                 }
                 if (buffer[index - 1 + width]) {
-                    value|=SOUTH_WEST;
+                    value |= SOUTH_WEST;
                 }
                 if (buffer[index - 1 - width]) {
-                    value|=NORTH_WEST;
+                    value |= NORTH_WEST;
                 }
             }
 			movementMap[index] = value;
