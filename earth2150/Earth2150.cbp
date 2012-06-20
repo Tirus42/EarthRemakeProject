@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Earth 2151" />
+		<Option title="Earth 2150" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -80,21 +80,21 @@
 		</Linker>
 		<Unit filename="..\tf\include\tf\network.h" />
 		<Unit filename="..\tf\src\tf\network.cpp" />
-		<Unit filename="include\e2151\Entity.h" />
-		<Unit filename="include\e2151\Faction.h" />
-		<Unit filename="include\e2151\HumanPlayer.h" />
-		<Unit filename="include\e2151\Map.h" />
-		<Unit filename="include\e2151\MapPosition.h" />
-		<Unit filename="include\e2151\Player.h" />
-		<Unit filename="include\e2151\Unit.h" />
-		<Unit filename="include\e2151\UnitChassis.h" />
-		<Unit filename="include\e2151\main.h" />
-		<Unit filename="src\e2151\Entity.cpp" />
-		<Unit filename="src\e2151\Faction.cpp" />
-		<Unit filename="src\e2151\HumanPlayer.cpp" />
-		<Unit filename="src\e2151\Map.cpp" />
-		<Unit filename="src\e2151\Unit.cpp" />
-		<Unit filename="src\e2151\main.cpp" />
+		<Unit filename="include\e2150\Entity.h" />
+		<Unit filename="include\e2150\Faction.h" />
+		<Unit filename="include\e2150\HumanPlayer.h" />
+		<Unit filename="include\e2150\Map.h" />
+		<Unit filename="include\e2150\MapPosition.h" />
+		<Unit filename="include\e2150\Player.h" />
+		<Unit filename="include\e2150\Unit.h" />
+		<Unit filename="include\e2150\UnitChassis.h" />
+		<Unit filename="include\e2150\main.h" />
+		<Unit filename="src\e2150\Entity.cpp" />
+		<Unit filename="src\e2150\Faction.cpp" />
+		<Unit filename="src\e2150\HumanPlayer.cpp" />
+		<Unit filename="src\e2150\Map.cpp" />
+		<Unit filename="src\e2150\Unit.cpp" />
+		<Unit filename="src\e2150\main.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

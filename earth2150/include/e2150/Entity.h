@@ -1,7 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "e2151/MapPosition.h"
+#include "e2150/MapPosition.h"
 
 class Entity {
     public:

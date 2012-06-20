@@ -1,7 +1,7 @@
 #ifndef HUMANPLAYER_H
 #define HUMANPLAYER_H
 
-#include "e2151/Player.h"
+#include "e2150/Player.h"
 #include "tf/network.h"
 
 /**

@@ -1,6 +1,5 @@
 *.depend
 *.layout
 *.pdb
-
-/earth2151/bin
-/earth2151/obj
+/earth2150/bin
+/earth2150/obj
