@@ -20,7 +20,11 @@
 #include <iostream>
 #include <stdint.h>
 
+#ifdef WIN32
 bool InitNetwork();
+#else
+bool InitNetwork() {return true;}; //Unix braucht das nicht
+#endif
 
 int CreateTCPServer(unsigned short port, bool nonblock);
 int OpenTCPStream(const std::string& server, unsigned short port);

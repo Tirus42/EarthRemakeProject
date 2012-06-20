@@ -2,7 +2,7 @@
 #define HUMANPLAYER_H_INCLUDED
 
 #include "Player.h"
-#include "funktionen/network.h"
+#include "tf/network.h"
 
 /**
 * Jeder über das Netzwerk verbundene Spieler wird in dieser Klasse gespeichert

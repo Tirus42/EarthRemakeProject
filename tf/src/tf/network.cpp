@@ -1,4 +1,4 @@
-#include "network.h"
+#include "tf/network.h"
 
 #ifdef WIN32
 bool InitNetwork() {
@@ -11,8 +11,6 @@ bool InitNetwork() {
     }
     return true;
 }
-#else
-bool InitNetwork() {return true;};  //Unix braucht das nicht
 #endif
 
 int CreateTCPServer(unsigned short port, bool nonblock) {

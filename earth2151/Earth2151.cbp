@@ -69,31 +69,32 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
-			<Add option="-std=c++11" />
 			<Add directory="include" />
+			<Add directory="..\tf\include" />
 		</Compiler>
 		<Linker>
 			<Add library="ws2_32" />
 		</Linker>
-		<Unit filename="include\Entity.h" />
-		<Unit filename="include\Faction.h" />
-		<Unit filename="include\HumanPlayer.h" />
-		<Unit filename="include\Map.h" />
-		<Unit filename="include\MapPosition.h" />
-		<Unit filename="include\Player.h" />
-		<Unit filename="include\Unit.h" />
-		<Unit filename="include\UnitChassis.h" />
-		<Unit filename="include\funktionen\network.h" />
-		<Unit filename="include\main.h" />
-		<Unit filename="src\Entity.cpp" />
-		<Unit filename="src\Faction.cpp" />
-		<Unit filename="src\HumanPlayer.cpp" />
-		<Unit filename="src\Map.cpp" />
-		<Unit filename="src\Unit.cpp" />
-		<Unit filename="src\funktionen\network.cpp" />
-		<Unit filename="src\main.cpp" />
+		<Unit filename="..\tf\include\tf\network.h" />
+		<Unit filename="..\tf\src\tf\network.cpp" />
+		<Unit filename="include\e2151\Entity.h" />
+		<Unit filename="include\e2151\Faction.h" />
+		<Unit filename="include\e2151\HumanPlayer.h" />
+		<Unit filename="include\e2151\Map.h" />
+		<Unit filename="include\e2151\MapPosition.h" />
+		<Unit filename="include\e2151\Player.h" />
+		<Unit filename="include\e2151\Unit.h" />
+		<Unit filename="include\e2151\UnitChassis.h" />
+		<Unit filename="include\e2151\main.h" />
+		<Unit filename="src\e2151\Entity.cpp" />
+		<Unit filename="src\e2151\Faction.cpp" />
+		<Unit filename="src\e2151\HumanPlayer.cpp" />
+		<Unit filename="src\e2151\Map.cpp" />
+		<Unit filename="src\e2151\Unit.cpp" />
+		<Unit filename="src\e2151\main.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

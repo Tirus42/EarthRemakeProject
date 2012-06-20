@@ -1,6 +1,5 @@
+#include "tf/network.h"
 #include <iostream>
-
-#include "funktionen/network.h"
 
 //#include "Map.h"
 
@@ -11,7 +10,7 @@ int main(int argc, char *argv[]) {
 
     InitNetwork();
 
-    SOCKET udp = CreateUDPStream(12356);
+    /* SOCKET udp = */ CreateUDPStream(12356);
 
     //int test;
     //std::cin >> test;
