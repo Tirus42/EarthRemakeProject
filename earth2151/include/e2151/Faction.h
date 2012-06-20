@@ -1,5 +1,5 @@
-#ifndef FRACTION_H_INCLUDED
-#define FRACTION_H_INCLUDED
+#ifndef FRACTION_H
+#define FRACTION_H
 
 #include <stdint.h>
 #include <string>

@@ -2,8 +2,8 @@
 #define MAP_H
 
 #include <list>
-#include <vector>
 #include <stdint.h>
+#include <vector>
 
 #define MAX_HEIGHTDIFF 2000
 
@@ -25,7 +25,7 @@ class Map {
         std::vector<uint16_t> heightMap;
         std::vector<uint8_t> movementMap;  //Karte der bewegungsmöglichkeiten
 
-        int32_t borderWidth;//Die Anzahl an Felder an Rand, die nicht nutzbar für die Spieler ist
+        int32_t borderWidth; //Die Anzahl an Felder an Rand, die nicht nutzbar für die Spieler ist
 
         void updateMovementMap();
         void updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);

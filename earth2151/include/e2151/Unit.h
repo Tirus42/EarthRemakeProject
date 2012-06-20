@@ -1,13 +1,12 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-#include "Entity.h"
-
-#define FLAG_INBUILDING 1
+#include "e2151/Entity.h"
 
 class Unit : public Entity {
     private:
         char controlableFlags;
+        static const int FLAG_INBUILDING = 1;
     public:
         Unit();
         virtual ~Unit();
