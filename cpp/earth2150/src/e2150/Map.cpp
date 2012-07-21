@@ -1,6 +1,6 @@
 #include "e2150/Map.h"
 
-Map::Map(uint32_t width, uint32_t height) :
+Map::Map(uint16_t width, uint16_t height) :
 		width(width),
 		height(height),
 		heightMap(width * height),
@@ -17,10 +17,10 @@ void Map::updateMovementMap() {
 }
 
 void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
-    if(x1 > x2) {
+    if (x1 > x2) {
 		return updateMovementMap(x2, y1, x1, y2);
     }
-    if(y1 > y2) {
+    if (y1 > y2) {
 		return updateMovementMap(x1, y2, x2, y1);
     }
     int32_t w = x2 - x1;
@@ -81,10 +81,10 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 }
 
 void Map::updateMovementMap(uint32_t position1, uint32_t position2) {
-	uint16_t x1=positionX(position1);
-	uint16_t y1=positionY(position1);
-	uint16_t x2=positionX(position2);
-	uint16_t y2=positionY(position2);
+	uint16_t x1 = positionX(position1);
+	uint16_t y1 = positionY(position1);
+	uint16_t x2 = positionX(position2);
+	uint16_t y2 = positionY(position2);
 	updateMovementMap(x1, y1, x2, y2);
 }
 
@@ -93,7 +93,7 @@ uint32_t Map::getNumberOfMoveableFields() const{
     for (uint32_t y=0; y<height; ++y) {
         for (uint32_t x=0; x<width; ++x) {
 			uint32_t index = position(x, y);
-			if(movementMap[index]) {
+			if (movementMap[index]) {
 				moveableFields++;
 			}
         }
@@ -101,7 +101,7 @@ uint32_t Map::getNumberOfMoveableFields() const{
     return moveableFields;
 }
 
-uint32_t Map::getHeightDiffOnField(uint32_t position) const{
+uint16_t Map::getHeightDiffOnField(uint32_t position) const{
     uint16_t h1 = heightMap[position];
     uint16_t h2 = heightMap[position + 1];
     uint16_t h3 = heightMap[position + width];
@@ -111,4 +111,41 @@ uint32_t Map::getHeightDiffOnField(uint32_t position) const{
     uint16_t minValue = std::min(std::min(h1, h2), std::min(h3, h4));
 
     return maxValue - minValue;
+}
+
+bool Map::loadHeightMapRAW(const std::string& filename) {
+	uint32_t fileSize = FileSize(filename);
+    uint32_t dataSize = width * height;
+
+    if (fileSize > uint32_t(width * height)*2) {
+        fileSize = width * height * 2;  //Wir arbeiten mit Shorts (2 Byte)
+
+        std::cout << "Warnung: Map Datei ist groeser als erwartet, lese nur " << fileSize << " bytes ein!\n";
+    }
+
+    std::ifstream file(filename.c_str(), std::ifstream::in | std::ifstream::binary);
+
+    if(!file.good()) {
+        std::cout << "Konnte Map-Datei nicht lesen! (" << filename << ")\n";
+        return false;
+    }
+
+    //Themporären Speicher anlegen (Todo: Direkt in Heightmap laden)
+    uint16_t* data = new uint16_t[dataSize];
+
+    //Daten einlesen
+    file.read((char*)data, fileSize);
+
+    //Datei wieder schließen
+    file.close();
+
+    //Nun in die Heightmap schreiben (...)
+    for (uint32_t i = 0; i < dataSize; ++i) {
+        heightMap[i] = data[i];
+    }
+
+    //Speicher wieder freigeben (...)
+    delete[] data;
+
+    return true;
 }

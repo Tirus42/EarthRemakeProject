@@ -1,9 +1,9 @@
 #include "e2150/Unit.h"
 
-Unit::Unit(){
+Unit::Unit() {
     //ctor
 }
 
-Unit::~Unit(){
+Unit::~Unit() {
     //dtor
 }

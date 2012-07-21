@@ -13,6 +13,7 @@ class Player {
         std::string name;
     public:
         Player(const std::string& name) : name(name){};
+        virtual ~Player();
 };
 
 #endif

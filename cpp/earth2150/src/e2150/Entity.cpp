@@ -1,9 +1,9 @@
 #include "e2150/Entity.h"
 
-Entity::Entity(){
+Entity::Entity() {
     //ctor
 }
 
-Entity::~Entity(){
+Entity::~Entity() {
     //dtor
 }
