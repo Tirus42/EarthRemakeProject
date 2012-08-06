@@ -1,5 +1,5 @@
 *.depend
 *.layout
 *.pdb
-/earth2150/bin
-/earth2150/obj
+/cpp/earth2150/bin
+/cpp/earth2150/obj

@@ -7,6 +7,7 @@ class Unit : public Entity {
     private:
         char controlableFlags;
         static const int FLAG_INBUILDING = 1;
+
     public:
         Unit();
         virtual ~Unit();
