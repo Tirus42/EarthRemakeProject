@@ -4,12 +4,12 @@
 #include "e2150/MapPosition.h"
 
 class Entity {
-    public:
-        Entity();
-        virtual ~Entity();
-    private:
-        int id;
-        MapPosition mapPosition;
+	public:
+		Entity();
+		virtual ~Entity();
+	private:
+		int id;
+		MapPosition mapPosition;
 };
 
 #endif

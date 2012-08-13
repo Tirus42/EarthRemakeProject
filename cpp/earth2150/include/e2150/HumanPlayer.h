@@ -9,15 +9,15 @@
 	#include <windows.h>
 #else
 	#include <sys/types.h>
-    #include <sys/socket.h>
-    #include <netinet/in.h>
+	#include <sys/socket.h>
+	#include <netinet/in.h>
 
-    #include <fcntl.h>
-    #include <netdb.h>
-    #include <memory.h>
+	#include <fcntl.h>
+	#include <netdb.h>
+	#include <memory.h>
 
-    #define NO_ERROR 0
-    #define SOCKET_ERROR -1
+	#define NO_ERROR 0
+	#define SOCKET_ERROR -1
 #endif
 
 class Map;
@@ -28,25 +28,25 @@ class SendBuffer;
 * Die Klasse sendet alle (nötigen) Events die an den Player gehen, über das Netzwerk an den Spieler weiter
 */
 class HumanPlayer: public Player {
-    private:
-        HumanPlayer(const HumanPlayer&);
-        HumanPlayer operator=(const HumanPlayer&);
+	private:
+		HumanPlayer(const HumanPlayer&);
+		HumanPlayer operator=(const HumanPlayer&);
 
-        int32_t socket;
-        sockaddr_in networkAdress;
+		int32_t socket;
+		sockaddr_in networkAdress;
 
-        Map* currentMap;    //Zeigen auf die Spielkarte, worauf der Spieler gerade seine Kamera hat
+		Map* currentMap;	//Zeigen auf die Spielkarte, worauf der Spieler gerade seine Kamera hat
 
-        std::list<SendBuffer*> sendBuffers;   //Netzwerkbuffer, welche noch an den Spieler gesendet werden müssen
+		std::list<SendBuffer*> sendBuffers;   //Netzwerkbuffer, welche noch an den Spieler gesendet werden müssen
 
-    public:
-        HumanPlayer(int32_t socket, const std::string& name, sockaddr_in networkAdress);
-        ~HumanPlayer();
+	public:
+		HumanPlayer(int32_t socket, const std::string& name, sockaddr_in networkAdress);
+		~HumanPlayer();
 
-        int32_t getSocket() const{return socket;}
+		int32_t getSocket() const{return socket;}
 
-        void sendPacket(char* pointer, uint32_t length);    //Sendet angegebene Daten an den Client (behält Reihenfolge!)
-        void sendBufferContent();   //Sendet ggf. ausstehende Daten an den Client
+		void sendPacket(char* pointer, uint32_t length);	//Sendet angegebene Daten an den Client (behält Reihenfolge!)
+		void sendBufferContent();   //Sendet ggf. ausstehende Daten an den Client
 };
 
 #endif

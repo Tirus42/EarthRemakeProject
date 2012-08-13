@@ -5,7 +5,7 @@ uint32_t Faction::lastUID = 0;
 Faction::Faction(const std::string& name) :
 		uID(lastUID),
 		name(name) {
-    lastUID++;
+	lastUID++;
 }
 
 Faction::Faction(const std::string& name, uint32_t uID) :

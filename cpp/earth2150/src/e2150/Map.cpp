@@ -9,78 +9,78 @@ Map::Map(uint16_t width, uint16_t height) :
 		heightMap(width * height),
 		movementMap(width * height),
 		borderWidth(1) {
-    updateMovementMap();
+	updateMovementMap();
 }
 
 Map::~Map() {
 }
 
 void Map::updateMovementMap() {
-    updateMovementMap(borderWidth, borderWidth, width - borderWidth, height - borderWidth);
+	updateMovementMap(borderWidth, borderWidth, width - borderWidth, height - borderWidth);
 }
 
 void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
-    if (x1 > x2) {
+	if (x1 > x2) {
 		return updateMovementMap(x2, y1, x1, y2);
-    }
-    if (y1 > y2) {
+	}
+	if (y1 > y2) {
 		return updateMovementMap(x1, y2, x2, y1);
-    }
-    int32_t w = x2 - x1;
-    int32_t h = y2 - y1;
-    bool* buffer = new bool[w * h]; //bool* buffer = new bool[w][h]
+	}
+	int32_t w = x2 - x1;
+	int32_t h = y2 - y1;
+	bool* buffer = new bool[w * h]; //bool* buffer = new bool[w][h]
 
-    //Felder definieren, welche nicht "zu schief" sind
-    for (uint32_t y = y1; y < y2; ++y) {
-        for (uint32_t x = x1; x < x2; ++x) {
-            uint32_t index = position(x, y);
-            buffer[index] = (getHeightDiffOnField(index) < MAX_HEIGHTDIFF);
-        }
-    }
+	//Felder definieren, welche nicht "zu schief" sind
+	for (uint32_t y = y1; y < y2; ++y) {
+		for (uint32_t x = x1; x < x2; ++x) {
+			uint32_t index = position(x, y);
+			buffer[index] = (getHeightDiffOnField(index) < MAX_HEIGHTDIFF);
+		}
+	}
 
-    //Feld um eines "Einengen"
-    ++x1;
-    --x2;
-    ++y1;
-    --y2;
+	//Feld um eines "Einengen"
+	++x1;
+	--x2;
+	++y1;
+	--y2;
 
-    //Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
-    for (uint32_t y = y1; y<y2; ++y) {
-        for (uint32_t x = x1; x<x2; ++x) {
-            uint32_t index = position(x, y);
-            uint8_t value = 0;
+	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
+	for (uint32_t y = y1; y<y2; ++y) {
+		for (uint32_t x = x1; x<x2; ++x) {
+			uint32_t index = position(x, y);
+			uint8_t value = 0;
 
-            //Ist dieses Feld begehbar?
-            if (buffer[index]) {
-                if (buffer[index - width]) {
-                    value |= NORTH;
-                }
-                if (buffer[index + width]) {
-                    value |= SOUTH;
-                }
-                if (buffer[index + 1]) {
-                    value |= EAST;
-                }
-                if (buffer[index - 1]) {
-                    value |= WEST;
-                }
-                if (buffer[index + 1 - width]) {
-                    value |= NORTH_EAST;
-                }
-                if (buffer[index + 1 + width]) {
-                    value |= SOUTH_EAST;
-                }
-                if (buffer[index - 1 + width]) {
-                    value |= SOUTH_WEST;
-                }
-                if (buffer[index - 1 - width]) {
-                    value |= NORTH_WEST;
-                }
-            }
+			//Ist dieses Feld begehbar?
+			if (buffer[index]) {
+				if (buffer[index - width]) {
+					value |= NORTH;
+				}
+				if (buffer[index + width]) {
+					value |= SOUTH;
+				}
+				if (buffer[index + 1]) {
+					value |= EAST;
+				}
+				if (buffer[index - 1]) {
+					value |= WEST;
+				}
+				if (buffer[index + 1 - width]) {
+					value |= NORTH_EAST;
+				}
+				if (buffer[index + 1 + width]) {
+					value |= SOUTH_EAST;
+				}
+				if (buffer[index - 1 + width]) {
+					value |= SOUTH_WEST;
+				}
+				if (buffer[index - 1 - width]) {
+					value |= NORTH_WEST;
+				}
+			}
 			movementMap[index] = value;
-        }
-    }
-    delete[] buffer;
+		}
+	}
+	delete[] buffer;
 }
 
 void Map::updateMovementMap(uint32_t position1, uint32_t position2) {
@@ -93,62 +93,62 @@ void Map::updateMovementMap(uint32_t position1, uint32_t position2) {
 
 uint32_t Map::getNumberOfMoveableFields() const{
 	uint32_t moveableFields = 0;
-    for (uint32_t y=0; y<height; ++y) {
-        for (uint32_t x=0; x<width; ++x) {
+	for (uint32_t y=0; y<height; ++y) {
+		for (uint32_t x=0; x<width; ++x) {
 			uint32_t index = position(x, y);
 			if (movementMap[index]) {
 				moveableFields++;
 			}
-        }
-    }
-    return moveableFields;
+		}
+	}
+	return moveableFields;
 }
 
 uint16_t Map::getHeightDiffOnField(uint32_t position) const{
-    uint16_t h1 = heightMap[position];
-    uint16_t h2 = heightMap[position + 1];
-    uint16_t h3 = heightMap[position + width];
-    uint16_t h4 = heightMap[position + width + 1];
+	uint16_t h1 = heightMap[position];
+	uint16_t h2 = heightMap[position + 1];
+	uint16_t h3 = heightMap[position + width];
+	uint16_t h4 = heightMap[position + width + 1];
 
-    uint16_t maxValue = std::max(std::max(h1, h2), std::max(h3, h4));
-    uint16_t minValue = std::min(std::min(h1, h2), std::min(h3, h4));
+	uint16_t maxValue = std::max(std::max(h1, h2), std::max(h3, h4));
+	uint16_t minValue = std::min(std::min(h1, h2), std::min(h3, h4));
 
-    return maxValue - minValue;
+	return maxValue - minValue;
 }
 
 bool Map::loadHeightMapRAW(const std::string& filename) {
 	uint32_t fileSize = FileSize(filename);
-    uint32_t dataSize = width * height;
+	uint32_t dataSize = width * height;
 
-    if (fileSize > uint32_t(width * height)*2) {
-        fileSize = width * height * 2;  //Wir arbeiten mit Shorts (2 Byte)
+	if (fileSize > uint32_t(width * height)*2) {
+		fileSize = width * height * 2;  //Wir arbeiten mit Shorts (2 Byte)
 
-        std::cout << "Warnung: Map Datei ist groeser als erwartet, lese nur " << fileSize << " bytes ein!\n";
-    }
+		std::cout << "Warnung: Map Datei ist groeser als erwartet, lese nur " << fileSize << " bytes ein!\n";
+	}
 
-    std::ifstream file(filename.c_str(), std::ifstream::in | std::ifstream::binary);
+	std::ifstream file(filename.c_str(), std::ifstream::in | std::ifstream::binary);
 
-    if(!file.good()) {
-        std::cout << "Konnte Map-Datei nicht lesen! (" << filename << ")\n";
-        return false;
-    }
+	if(!file.good()) {
+		std::cout << "Konnte Map-Datei nicht lesen! (" << filename << ")\n";
+		return false;
+	}
 
-    //Themporären Speicher anlegen (Todo: Direkt in Heightmap laden)
-    uint16_t* data = new uint16_t[dataSize];
+	//Themporären Speicher anlegen (Todo: Direkt in Heightmap laden)
+	uint16_t* data = new uint16_t[dataSize];
 
-    //Daten einlesen
-    file.read((char*)data, fileSize);
+	//Daten einlesen
+	file.read((char*)data, fileSize);
 
-    //Datei wieder schließen
-    file.close();
+	//Datei wieder schließen
+	file.close();
 
-    //Nun in die Heightmap schreiben (...)
-    for (uint32_t i = 0; i < dataSize; ++i) {
-        heightMap[i] = data[i];
-    }
+	//Nun in die Heightmap schreiben (...)
+	for (uint32_t i = 0; i < dataSize; ++i) {
+		heightMap[i] = data[i];
+	}
 
-    //Speicher wieder freigeben (...)
-    delete[] data;
+	//Speicher wieder freigeben (...)
+	delete[] data;
 
-    return true;
+	return true;
 }

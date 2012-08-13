@@ -4,19 +4,19 @@
 #include "e2150/Entity.h"
 
 class Unit : public Entity {
-    private:
-        char controlableFlags;
-        static const int FLAG_INBUILDING = 1;
+	private:
+		char controlableFlags;
+		static const int FLAG_INBUILDING = 1;
 
-    public:
-        Unit();
-        virtual ~Unit();
+	public:
+		Unit();
+		virtual ~Unit();
 
-        /**
-        * Gibt an ob auf Spielerbefehle direkt reagiert werden kann
-        * Nicht der fall wenn Einheit aus Werkshalle fährt, unter einfluss von Signalstörern steht ect
-        */
-        bool isControlable() const{return !controlableFlags;} //controlableFlags == 0
+		/**
+		* Gibt an ob auf Spielerbefehle direkt reagiert werden kann
+		* Nicht der fall wenn Einheit aus Werkshalle fährt, unter einfluss von Signalstörern steht ect
+		*/
+		bool isControlable() const{return !controlableFlags;} //controlableFlags == 0
 };
 
 #endif

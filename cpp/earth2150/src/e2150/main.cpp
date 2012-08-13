@@ -10,27 +10,27 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    std::cout << "Hello world!" << std::endl;
+	std::cout << "Hello world!" << std::endl;
 
-    Map* m = new Map(1024, 1024);
+	Map* m = new Map(1024, 1024);
 
-    bool result = m->loadHeightMapRAW("map1024x1024.bin");
+	bool result = m->loadHeightMapRAW("map1024x1024.bin");
 
-    cout << "Laden der Map: " << result << endl;
+	cout << "Laden der Map: " << result << endl;
 
-    InitNetwork();
+	InitNetwork();
 
-    int32_t server = CreateTCPServer(2000, true);
+	int32_t server = CreateTCPServer(2000, true);
 
-    if (server == 0) {
-        cout << "Konnte TCP-Server nicht starten, Port belegt?" << endl;
-        return EXIT_FAILURE;
-    }
+	if (server == 0) {
+		cout << "Konnte TCP-Server nicht starten, Port belegt?" << endl;
+		return EXIT_FAILURE;
+	}
 
-    TestServer gameServer(server);
+	TestServer gameServer(server);
 
-    gameServer.run(m);
+	gameServer.run(m);
 
 
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
