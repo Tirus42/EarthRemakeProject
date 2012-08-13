@@ -3,3 +3,5 @@
 *.pdb
 /cpp/earth2150/bin
 /cpp/earth2150/obj
+/earth2150/obj
+/earth2150/bin
