@@ -108,6 +108,7 @@
 		<Unit filename="src\e2150\SendBuffer.cpp" />
 		<Unit filename="src\e2150\TestServer.cpp" />
 		<Unit filename="src\e2150\Unit.cpp" />
+		<Unit filename="src\e2150\UnitChassis.cpp" />
 		<Unit filename="src\e2150\main.cpp" />
 		<Extensions>
 			<code_completion />

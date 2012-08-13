@@ -1,6 +1,7 @@
 #include "e2150/main.h"
 
 #include "e2150/Map.h"
+#include "e2150/UnitChassis.h"
 #include "e2150/TestServer.h"
 
 #include "tf/network.h"
@@ -10,10 +11,8 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	std::cout << "Hello world!" << std::endl;
 
 	Map* m = new Map(1024, 1024);
-
 	bool result = m->loadHeightMapRAW("map1024x1024.bin");
 
 	cout << "Laden der Map: " << result << endl;
@@ -28,6 +27,11 @@ int main(int argc, char *argv[]) {
 	}
 
 	TestServer gameServer(server);
+
+	UnitChassis unit_LCUCR3(1, "LCUCR3", 27777, 1000000);		//Einheit braucht zum Test 10 seks für eine komplette Drehung
+	UnitChassis unit_EDGRUZ(2, "ed_gruz_mk1", 27777, 1000000);
+
+
 
 	gameServer.run(m);
 

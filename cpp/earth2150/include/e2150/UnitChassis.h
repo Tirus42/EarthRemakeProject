@@ -21,9 +21,11 @@ class UnitChassis {
 		}
 
 	public:
-		uint32_t getTurnRate() const{return turnRate;}
-		uint32_t getMoveRate() const{return moveRate;}
-		uint32_t getMoveRateDiag() const{return moveRateDiag;}
+		UnitChassis(uint32_t uID, std::string name, uint32_t turnRate, uint32_t moveRate);
+
+		uint32_t getTurnRate() const {return turnRate;}
+		uint32_t getMoveRate() const {return moveRate;}
+		uint32_t getMoveRateDiag() const {return moveRateDiag;}
 
 };
 

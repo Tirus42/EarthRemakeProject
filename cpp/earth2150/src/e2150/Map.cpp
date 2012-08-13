@@ -88,10 +88,11 @@ void Map::updateMovementMap(uint32_t position1, uint32_t position2) {
 	uint16_t y1 = positionY(position1);
 	uint16_t x2 = positionX(position2);
 	uint16_t y2 = positionY(position2);
+
 	updateMovementMap(x1, y1, x2, y2);
 }
 
-uint32_t Map::getNumberOfMoveableFields() const{
+uint32_t Map::getNumberOfMoveableFields() const {
 	uint32_t moveableFields = 0;
 	for (uint32_t y=0; y<height; ++y) {
 		for (uint32_t x=0; x<width; ++x) {
@@ -104,7 +105,7 @@ uint32_t Map::getNumberOfMoveableFields() const{
 	return moveableFields;
 }
 
-uint16_t Map::getHeightDiffOnField(uint32_t position) const{
+uint16_t Map::getHeightDiffOnField(uint32_t position) const {
 	uint16_t h1 = heightMap[position];
 	uint16_t h2 = heightMap[position + 1];
 	uint16_t h3 = heightMap[position + width];

@@ -6,9 +6,8 @@
 
 TestServer::TestServer(int32_t socket) :
 		socket(socket),
-		netbuffer(0),
+		netbuffer(new char[BUFFERSIZE]),
 		map(0) {
-	netbuffer = new char[BUFFERSIZE];
 
 	std::cout << "Server erstellt!\n";
 }
