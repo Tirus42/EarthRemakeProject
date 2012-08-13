@@ -1,9 +1,11 @@
 #include "e2150/main.h"
 
+#include "e2150/Map.h"
+#include "e2150/TestServer.h"
+
 #include "tf/network.h"
 #include <iostream>
-
-#include "e2150/TestServer.h"
+#include <cstdlib>
 
 using namespace std;
 
@@ -25,7 +27,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    TestServer gameServer = TestServer(server);
+    TestServer gameServer(server);
 
     gameServer.run(m);
 

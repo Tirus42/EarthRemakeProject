@@ -1,10 +1,8 @@
 #ifndef SENDBUFFER_H_INCLUDED
 #define SENDBUFFER_H_INCLUDED
 
-#include <stdint.h>
-#include <string.h>
-
 #include <tf/network.h>
+#include <stdint.h>
 
 class SendBuffer{
     public:
@@ -15,7 +13,7 @@ class SendBuffer{
 
     private:
         SendBuffer(const SendBuffer &buffer);
-        SendBuffer & operator=(const SendBuffer &buffer);
+        SendBuffer& operator=(const SendBuffer &buffer);
 
         char* buffer;
         int32_t length;

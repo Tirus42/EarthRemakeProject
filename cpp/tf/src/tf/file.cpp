@@ -1,5 +1,7 @@
 #include "tf/file.h"
 
+#include <sys/stat.h>
+
 unsigned char FileType(const std::string& filename){
     struct stat Status;
     int Dateityp;
@@ -10,7 +12,6 @@ unsigned char FileType(const std::string& filename){
         case S_IFDIR: return 2; break;
         default: return 0;
    }
-
 }
 
 long long FileSize(const std::string& filename){

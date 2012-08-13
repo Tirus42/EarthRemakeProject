@@ -1,5 +1,8 @@
 #include "e2150/HumanPlayer.h"
 
+#include "e2150/SendBuffer.h"
+#include <iostream>
+
 HumanPlayer::HumanPlayer(int32_t socket, const std::string& name, sockaddr_in networkAddress) :
 		Player(name),
 		socket(socket),

@@ -1,14 +1,16 @@
 #include "e2150/TestServer.h"
 
+#include "e2150/HumanPlayer.h"
+#include "e2150/Map.h"
+#include <iostream>
+
 TestServer::TestServer(int32_t socket) :
-    socket(socket),
-    netbuffer(0),
-    map(0) {
+        socket(socket),
+        netbuffer(0),
+        map(0) {
     netbuffer = new char[BUFFERSIZE];
 
-
     std::cout << "Server erstellt!\n";
-
 }
 
 TestServer::~TestServer() {
@@ -24,7 +26,6 @@ void TestServer::run(Map* map) {
         acceptNewConnections();
         handleNewConnections();
         checkIncommingData();
-
 
         Sleep(50);
     }
@@ -130,7 +131,7 @@ void TestServer::sendMapDataRaw(Map* map, HumanPlayer* player) {
     buffer[0] = map->getWidth();
     buffer[1] = map->getHeight();
 
-    for (int32_t i = 0; i < dataSize; ++i) {
+    for (uint32_t i = 0; i < dataSize; ++i) {
         buffer[2 + i] = map->getRawHeight(i);
     }
 

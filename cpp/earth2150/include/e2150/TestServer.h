@@ -2,11 +2,11 @@
 #define TESTSERVER_H
 
 #include <stdint.h>
+#include <string>
 #include <list>
 
-#include "e2150/Map.h"
-#include "e2150/Player.h"
-#include "e2150/HumanPlayer.h"
+class HumanPlayer;
+class Map;
 
 class TestServer {
     private:

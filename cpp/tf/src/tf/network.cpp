@@ -1,5 +1,21 @@
 #include "tf/network.h"
 
+#include <iostream>
+#ifdef WIN32
+	#include <windows.h>
+#else
+	#include <sys/types.h>
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+
+    #include <fcntl.h>
+    #include <netdb.h>
+    #include <memory.h>
+
+    #define NO_ERROR 0
+    #define SOCKET_ERROR -1
+#endif
+
 #ifdef WIN32
 bool InitNetwork() {
     WORD wVersionRequested = MAKEWORD(2, 2);

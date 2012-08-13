@@ -1,13 +1,27 @@
 #ifndef HUMANPLAYER_H
 #define HUMANPLAYER_H
 
+#include "e2150/Player.h"
+#include "tf/network.h"
 #include <list>
 
-#include "e2150/Player.h"
-#include "e2150/SendBuffer.h"
-#include "e2150/Map.h"
+#ifdef WIN32
+	#include <windows.h>
+#else
+	#include <sys/types.h>
+    #include <sys/socket.h>
+    #include <netinet/in.h>
 
-#include "tf/network.h"
+    #include <fcntl.h>
+    #include <netdb.h>
+    #include <memory.h>
+
+    #define NO_ERROR 0
+    #define SOCKET_ERROR -1
+#endif
+
+class Map;
+class SendBuffer;
 
 /**
 * Jeder über das Netzwerk verbundene Spieler wird in dieser Klasse gespeichert

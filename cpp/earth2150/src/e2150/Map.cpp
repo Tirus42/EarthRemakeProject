@@ -1,5 +1,8 @@
 #include "e2150/Map.h"
 
+#include <fstream>
+#include <iostream>
+
 Map::Map(uint16_t width, uint16_t height) :
 		width(width),
 		height(height),

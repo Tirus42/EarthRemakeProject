@@ -1,24 +1,10 @@
 #ifndef NETWORK_H_INCLUDED
 #define NETWORK_H_INCLUDED
 
-#ifdef WIN32
-	#include <windows.h>
-#else
-	#include <sys/types.h>
-    #include <sys/socket.h>
-    #include <netinet/in.h>
-
-    #include <fcntl.h>
-    #include <netdb.h>
-    #include <memory.h>
-
-    #define NO_ERROR 0
-    #define SOCKET_ERROR -1
-#endif
-
 #include <string>
-#include <iostream>
 #include <stdint.h>
+
+class sockaddr_in;
 
 #ifdef WIN32
 bool InitNetwork();
