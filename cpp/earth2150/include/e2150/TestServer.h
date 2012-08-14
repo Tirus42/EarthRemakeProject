@@ -40,6 +40,8 @@ class TestServer {
 		TestServer(int32_t socket);
 		virtual ~TestServer();
 
+		char* getNetbufferPtr() const {return netbuffer;}
+
 		void run(Map* m);	//Nur eine Test Impelemtierung!!!!! (nicht verändern / schöner machen!)
 
 };

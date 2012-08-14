@@ -96,7 +96,7 @@ void TestServer::handleNewConnections() {
 				//Nachricht komplett lesen
 				recv(socket, netbuffer, 4, 0);
 
-				HumanPlayer* player = new HumanPlayer(socket, std::string("Player"), sockaddr_in());
+				HumanPlayer* player = new HumanPlayer(this, socket, std::string("Player"), sockaddr_in());
 
 				players.push_back(player);
 

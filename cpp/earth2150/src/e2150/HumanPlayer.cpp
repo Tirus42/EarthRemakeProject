@@ -3,8 +3,9 @@
 #include "e2150/SendBuffer.h"
 #include <iostream>
 
-HumanPlayer::HumanPlayer(int32_t socket, const std::string& name, sockaddr_in networkAddress) :
+HumanPlayer::HumanPlayer(TestServer* server, int32_t socket, const std::string& name, sockaddr_in networkAddress) :
 		Player(name),
+		server(server),
 		socket(socket),
 		networkAdress(networkAdress),
 		currentMap(0) {
@@ -41,4 +42,22 @@ void HumanPlayer::sendBufferContent() {
 			return;
 		}
 	}
+}
+
+void HumanPlayer::debugPaintFields(std::list<uint32_t>& fields, uint32_t color) {
+	char* netbuffer = server->getNetbufferPtr();
+
+	netbuffer[0] = 255;
+
+	*(uint32_t*)&netbuffer[1] = color;
+	*(uint32_t*)&netbuffer[5] = fields.size();
+
+	uint32_t offset = 9;
+
+	for (std::list<uint32_t>::iterator i=fields.begin(); i != fields.end(); ++i) {
+		*(uint32_t*)&netbuffer[offset] = *i;
+		offset += 4;
+	}
+
+	sendPacket(netbuffer, 4 + offset);
 }

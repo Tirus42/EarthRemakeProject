@@ -11,9 +11,12 @@
 class Player {
 	private:
 		std::string name;
+
 	public:
 		Player(const std::string& name) : name(name){};
 		virtual ~Player();
+
+		const std::string& getName() const {return name;}
 };
 
 #endif

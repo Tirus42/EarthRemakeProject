@@ -2,6 +2,7 @@
 #define HUMANPLAYER_H
 
 #include "e2150/Player.h"
+#include "e2150/TestServer.h"
 #include "tf/network.h"
 #include <list>
 
@@ -20,6 +21,7 @@
 	#define SOCKET_ERROR -1
 #endif
 
+class TestServer;
 class Map;
 class SendBuffer;
 
@@ -35,18 +37,22 @@ class HumanPlayer : public Player {
 		int32_t socket;
 		sockaddr_in networkAdress;
 
+		TestServer* server;
 		Map* currentMap;	//Zeigen auf die Spielkarte, worauf der Spieler gerade seine Kamera hat
 
 		std::list<SendBuffer*> sendBuffers;   //Netzwerkbuffer, welche noch an den Spieler gesendet werden müssen
 
 	public:
-		HumanPlayer(int32_t socket, const std::string& name, sockaddr_in networkAdress);
+		HumanPlayer(TestServer* server, int32_t socket, const std::string& name, sockaddr_in networkAdress);
 		~HumanPlayer();
 
 		int32_t getSocket() const {return socket;}
 
 		void sendPacket(char* pointer, uint32_t length);	//Sendet angegebene Daten an den Client (behält Reihenfolge!)
 		void sendBufferContent();   //Sendet ggf. ausstehende Daten an den Client
+
+
+		void debugPaintFields(std::list<uint32_t>& fields, uint32_t color);	//Zeichnet beim Client die angegebenen Felder farbig
 };
 
 #endif
