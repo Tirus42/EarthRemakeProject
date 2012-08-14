@@ -52,6 +52,11 @@ void TestServer::handleIncommingData(HumanPlayer* player, int32_t size) {
 			sendMapDataRaw(map, player);
 			break;
 
+		case 0x02:
+			recv(socket, netbuffer, 1, 0);
+			sendMapWaymapRaw(map, player);
+			break;
+
 		default:
 			recv(socket, netbuffer, 1, 0);
 			std::cout << "Unbekanntes Paket eingegangen! (" << (int)netbuffer[0] << ")\n";
@@ -124,7 +129,6 @@ void TestServer::sendMapDataRaw(Map* map, HumanPlayer* player) {
 	std::cout << "Sende Karte\n";
 
 	uint32_t dataSize = map->getWidth() * map->getHeight();
-
 	uint16_t* buffer = new uint16_t[dataSize + 4];
 
 	buffer[0] = map->getWidth();
@@ -135,6 +139,21 @@ void TestServer::sendMapDataRaw(Map* map, HumanPlayer* player) {
 	}
 
 	player->sendPacket((char*)buffer, 4 + dataSize * 2);
+
+	delete[] buffer;
+}
+
+void TestServer::sendMapWaymapRaw(Map* map, HumanPlayer* player) {
+	std::cout << "Sende Wegekarte\n";
+
+	uint32_t dataSize = map->getWidth() * map->getHeight();
+	uint8_t* buffer = new uint8_t[dataSize];
+
+	for (uint32_t i = 0; i < dataSize; ++i) {
+		buffer[i] = map->getRawWay(i);
+	}
+
+	player->sendPacket((char*)buffer, dataSize);
 
 	delete[] buffer;
 }

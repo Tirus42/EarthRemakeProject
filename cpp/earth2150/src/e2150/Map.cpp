@@ -9,13 +9,16 @@ Map::Map(uint16_t width, uint16_t height) :
 		heightMap(width * height),
 		movementMap(width * height),
 		borderWidth(1) {
-	updateMovementMap();
+
 }
 
 Map::~Map() {
 }
 
 void Map::updateMovementMap() {
+	updateMovementMap(0, 0, width, height);
+	return;
+
 	updateMovementMap(borderWidth, borderWidth, width - borderWidth, height - borderWidth);
 }
 
@@ -28,7 +31,7 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 	}
 	int32_t w = x2 - x1;
 	int32_t h = y2 - y1;
-	bool* buffer = new bool[w * h]; //bool* buffer = new bool[w][h]
+	bool* buffer = new bool[w * h];
 
 	//Felder definieren, welche nicht "zu schief" sind
 	for (uint32_t y = y1; y < y2; ++y) {
@@ -45,8 +48,8 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 	--y2;
 
 	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
-	for (uint32_t y = y1; y<y2; ++y) {
-		for (uint32_t x = x1; x<x2; ++x) {
+	for (uint32_t y = y1; y < y2; ++y) {
+		for (uint32_t x = x1; x < x2; ++x) {
 			uint32_t index = position(x, y);
 			uint8_t value = 0;
 
@@ -90,6 +93,52 @@ void Map::updateMovementMap(uint32_t position1, uint32_t position2) {
 	uint16_t y2 = positionY(position2);
 
 	updateMovementMap(x1, y1, x2, y2);
+}
+
+void Map::updateMovementMapWithBorder() {
+	bool* buffer = new bool[width * height];
+
+	//Felder definieren, welche nicht "zu schief" sind
+	uint32_t size = (width-1) * (height-1);
+
+	for (uint32_t i = 0; i < size; ++i) {
+		buffer[i] = (getHeightDiffOnField(i) < MAX_HEIGHTDIFF);
+	}
+
+	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
+	for (uint32_t index = 0; index < width*height-1; ++index) {
+		uint8_t value = 0;
+
+		//Ist dieses Feld begehbar?
+		if (buffer[index]) {
+			if ((index > width-1) && (buffer[index - width])) {
+				value |= NORTH;
+			}
+			if (buffer[index + width]) {
+				value |= SOUTH;
+			}
+			if ((index % width != width-2) && (buffer[index + 1])) {
+				value |= EAST;
+			}
+			if ((index % width > 0) && (buffer[index - 1])) {
+				value |= WEST;
+			}
+			if (((index % width != width-2) && (index > width-1)) &&(buffer[index + 1 - width])) {
+				value |= NORTH_EAST;
+			}
+			if ((index % width != width-2) && (buffer[index + 1 + width])) {
+				value |= SOUTH_EAST;
+			}
+			if ((index % width > 0) && (buffer[index - 1 + width])) {
+				value |= SOUTH_WEST;
+			}
+			if (((index % width > 0) && (index > width)) && (buffer[index - 1 - width])) {
+				value |= NORTH_WEST;
+			}
+		}
+		movementMap[index] = value;
+	}
+	delete[] buffer;
 }
 
 uint32_t Map::getNumberOfMoveableFields() const {
@@ -146,6 +195,7 @@ bool Map::loadHeightMapRAW(const std::string& filename) {
 	//Nun in die Heightmap schreiben (...)
 	for (uint32_t i = 0; i < dataSize; ++i) {
 		heightMap[i] = data[i];
+		//std::cout << heightMap[i];
 	}
 
 	//Speicher wieder freigeben (...)

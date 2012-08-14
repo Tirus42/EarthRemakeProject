@@ -17,6 +17,8 @@ int main(int argc, char *argv[]) {
 
 	cout << "Laden der Map: " << result << endl;
 
+	m->updateMovementMapWithBorder();
+
 	InitNetwork();
 
 	int32_t server = CreateTCPServer(2000, true);

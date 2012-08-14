@@ -15,10 +15,10 @@ class TestServer {
 		//TestServer(const TestServer&);
 		TestServer operator=(const TestServer&);
 
-		int32_t socket;	 //TCP-Server socket, hört auf Eingehende Verbindungen
+		int32_t socket;	 	//TCP-Server socket, hört auf Eingehende Verbindungen
 		char* netbuffer;	//Bufferspeicher für das lesen und schreiben von Netzwerknachrichten
 
-		Map* map;
+		Map* map;		//Jaja unschön, nur zum Test...
 
 		void acceptNewConnections();
 		void handleNewConnections();
@@ -29,6 +29,7 @@ class TestServer {
 		void createHumanPlayer();
 
 		void sendMapDataRaw(Map* map, HumanPlayer* player);
+		void sendMapWaymapRaw(Map* map, HumanPlayer* player);
 
 		std::list<int32_t> waitingConnections;  //Speichert alle eingehende Verbindungen, bis eine Anfrage kommt
 		std::list<HumanPlayer*> players;

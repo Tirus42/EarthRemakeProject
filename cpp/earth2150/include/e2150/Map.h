@@ -37,10 +37,6 @@ class Map {
 
 		int32_t borderWidth; //Die Anzahl an Felder an Rand, die nicht nutzbar für die Spieler ist
 
-		void updateMovementMap();   //Berechnet die gesammte Karte neu
-		void updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
-		void updateMovementMap(uint32_t position1, uint32_t position2);
-
 		uint32_t getNumberOfMoveableFields() const; //Anzahl der Felder, auf denen sich Bewegt werden kann (Weggitter hat verbindung)
 
 		uint16_t getHeightDiffOnField(uint32_t position) const;
@@ -53,10 +49,17 @@ class Map {
 		Map(uint16_t width, uint16_t height);
 		virtual ~Map();
 
+		void updateMovementMap();   //Berechnet die gesammte Karte neu
+		void updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+		void updateMovementMap(uint32_t position1, uint32_t position2);
+
+		void updateMovementMapWithBorder();
+
 		uint16_t getWidth() const {return width;}
 		uint16_t getHeight() const {return height;}
 
 		inline uint16_t getRawHeight(uint32_t offset) const {return heightMap[offset];}
+		inline uint8_t getRawWay(uint32_t offset) const {return movementMap[offset];}
 
 		std::list<uint32_t> getWay(uint32_t source, uint32_t destination);
 
