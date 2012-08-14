@@ -7,7 +7,7 @@ class Unit : public Entity {
 	private:
 		static const int FLAG_INBUILDING = 1;
 
-		char controlableFlags;
+		uint8_t controlableFlags;
 
 
 	public:

@@ -8,14 +8,15 @@
 #include <iostream>
 #include <cstdlib>
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 int main(int argc, char *argv[]) {
 
 	Map* m = new Map(1024, 1024);
 	bool result = m->loadHeightMapRAW("map1024x1024.bin");
 
-	cout << "Laden der Map: " << result << endl;
+	cout << "Laden der Map " << (result ? "erfolgreich" : "fehlgeschlagen") << endl;
 
 	m->updateMovementMapWithBorder();
 
@@ -33,10 +34,7 @@ int main(int argc, char *argv[]) {
 	UnitChassis unit_LCUCR3(1, "LCUCR3", 27777, 1000000);		//Einheit braucht zum Test 10 seks für eine komplette Drehung
 	UnitChassis unit_EDGRUZ(2, "ed_gruz_mk1", 27777, 1000000);
 
-
-
 	gameServer.run(m);
-
 
 	return EXIT_SUCCESS;
 }

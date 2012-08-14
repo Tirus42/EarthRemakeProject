@@ -12,7 +12,7 @@ class TestServer {
 	private:
 		static const uint32_t BUFFERSIZE = 8192;
 
-		//TestServer(const TestServer&);
+		TestServer(const TestServer&);
 		TestServer operator=(const TestServer&);
 
 		int32_t socket;	 	//TCP-Server socket, hört auf Eingehende Verbindungen

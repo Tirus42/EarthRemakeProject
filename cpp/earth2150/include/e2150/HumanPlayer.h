@@ -34,10 +34,11 @@ class HumanPlayer : public Player {
 		HumanPlayer(const HumanPlayer&);
 		HumanPlayer operator=(const HumanPlayer&);
 
+		TestServer* server;
+
 		int32_t socket;
 		sockaddr_in networkAdress;
 
-		TestServer* server;
 		Map* currentMap;	//Zeigen auf die Spielkarte, worauf der Spieler gerade seine Kamera hat
 
 		std::list<SendBuffer*> sendBuffers;   //Netzwerkbuffer, welche noch an den Spieler gesendet werden müssen
