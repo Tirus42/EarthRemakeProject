@@ -79,7 +79,7 @@ void TestServer::handleNewConnections() {
 		int32_t size = recv(socket, netbuffer, BUFFERSIZE, MSG_PEEK);
 
 		if (size == SOCKET_ERROR) {
-			if (WSAGetLastError() == WSAECONNRESET){
+			if (WSAGetLastError() == WSAECONNRESET) {
 				closesocket(socket);
 				waitingConnections.erase(i);
 				std::cout << "Ungueltige eingehende Verbindung geschlossen\n";

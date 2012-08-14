@@ -27,7 +27,7 @@ class SendBuffer;
 * Jeder über das Netzwerk verbundene Spieler wird in dieser Klasse gespeichert
 * Die Klasse sendet alle (nötigen) Events die an den Player gehen, über das Netzwerk an den Spieler weiter
 */
-class HumanPlayer: public Player {
+class HumanPlayer : public Player {
 	private:
 		HumanPlayer(const HumanPlayer&);
 		HumanPlayer operator=(const HumanPlayer&);
@@ -43,7 +43,7 @@ class HumanPlayer: public Player {
 		HumanPlayer(int32_t socket, const std::string& name, sockaddr_in networkAdress);
 		~HumanPlayer();
 
-		int32_t getSocket() const{return socket;}
+		int32_t getSocket() const {return socket;}
 
 		void sendPacket(char* pointer, uint32_t length);	//Sendet angegebene Daten an den Client (behält Reihenfolge!)
 		void sendBufferContent();   //Sendet ggf. ausstehende Daten an den Client

@@ -32,7 +32,7 @@ void HumanPlayer::sendPacket(char* pointer, uint32_t length) {
 };
 
 void HumanPlayer::sendBufferContent() {
-	for (std::list<SendBuffer*>::iterator i=sendBuffers.begin();i!=sendBuffers.end();/*kein zähler*/){
+	for (std::list<SendBuffer*>::iterator i=sendBuffers.begin();i!=sendBuffers.end();/*kein zähler*/) {
 		if((*i)->sendPacket(socket) == true){
 			delete (*i);	//Buffer wurde gesendet, also kann er wieder freigegeben werden
 			i = sendBuffers.erase(i);
