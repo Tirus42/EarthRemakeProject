@@ -1,7 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <list>
+#include <e2150/MapPosition.h>
 #include <stdint.h>
 #include <vector>
 #include <string>
@@ -9,6 +9,9 @@
 #include "tf/file.h"
 
 #define MAX_HEIGHTDIFF 2000
+
+class Navigator;
+class Unit;
 
 /**
 * Map Klasse
@@ -26,7 +29,6 @@ class Map {
 		static const uint8_t WEST		= (1 << 6);	 //0b01000000;
 		static const uint8_t NORTH_WEST	= (1 << 7);	 //0b10000000;
 
-
 		Map(const Map&);
 		void operator=(const Map&);
 
@@ -34,17 +36,15 @@ class Map {
 
 		std::vector<uint16_t> heightMap;
 		std::vector<uint8_t> movementMap;  //Karte der Bewegungsmöglichkeiten
-
-		int32_t borderWidth; //Die Anzahl an Felder an Rand, die nicht nutzbar für die Spieler ist
+		uint32_t borderWidth; //Die Anzahl an Felder an Rand, die nicht nutzbar für die Spieler ist
+		Navigator *navigator;
 
 		uint32_t getNumberOfMoveableFields() const; //Anzahl der Felder, auf denen sich Bewegt werden kann (Weggitter hat verbindung)
-
 		uint16_t getHeightDiffOnField(uint32_t position) const;
 
 		inline uint32_t position(uint16_t x, uint16_t y) const {return y * width + x;}
 		inline uint16_t positionX(uint32_t position) const {return position % width;}
 		inline uint16_t positionY(uint32_t position) const {return position / width;}
-
 	public:
 		Map(uint16_t width, uint16_t height);
 		virtual ~Map();
@@ -55,13 +55,16 @@ class Map {
 
 		void updateMovementMapWithBorder();
 
-		uint16_t getWidth() const {return width;}
-		uint16_t getHeight() const {return height;}
+		uint16_t getWidth() const{return width;}
+		uint16_t getHeight() const{return height;}
+
+		std::vector<MapPosition> getNeighbourPositions(uint32_t x, uint32_t y) const;
+		uint8_t getDirections(uint32_t x, uint32_t y) const {return movementMap[position(x, y)];}
 
 		inline uint16_t getRawHeight(uint32_t offset) const {return heightMap[offset];}
 		inline uint8_t getRawWay(uint32_t offset) const {return movementMap[offset];}
 
-		std::list<uint32_t> getWay(uint32_t source, uint32_t destination);
+		std::vector<MapPosition> getWay(const Unit& unit, uint32_t destination) const;
 
 		bool loadHeightMapRAW(const std::string& filename);  //Läd eine Heightmap 1:1 aus einer Datei
 };

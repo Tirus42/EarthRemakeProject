@@ -8,8 +8,6 @@ class Unit : public Entity {
 		static const int FLAG_INBUILDING = 1;
 
 		uint8_t controlableFlags;
-
-
 	public:
 		Unit();
 		virtual ~Unit();
