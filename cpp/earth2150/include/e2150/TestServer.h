@@ -12,13 +12,14 @@ class TestServer {
 	private:
 		static const uint32_t BUFFERSIZE = 8192;
 
-		TestServer(const TestServer&);
-		TestServer operator=(const TestServer&);
-
 		int32_t socket;	 	//TCP-Server socket, hört auf Eingehende Verbindungen
 		char* netbuffer;	//Bufferspeicher für das lesen und schreiben von Netzwerknachrichten
-
 		Map* map;		//Jaja unschön, nur zum Test...
+		std::list<int32_t> waitingConnections;  //Speichert alle eingehende Verbindungen, bis eine Anfrage kommt
+		std::list<HumanPlayer*> players;
+
+		TestServer(const TestServer&);
+		TestServer operator=(const TestServer&);
 
 		void acceptNewConnections();
 		void handleNewConnections();
@@ -30,9 +31,6 @@ class TestServer {
 
 		void sendMapDataRaw(Map* map, HumanPlayer* player);
 		void sendMapWaymapRaw(Map* map, HumanPlayer* player);
-
-		std::list<int32_t> waitingConnections;  //Speichert alle eingehende Verbindungen, bis eine Anfrage kommt
-		std::list<HumanPlayer*> players;
 
 		std::string peekString(uint32_t offset); //Liest aus dem netbuffer an angegebenen Offset einen String aus
 

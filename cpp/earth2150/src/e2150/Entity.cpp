@@ -1,9 +1,9 @@
 #include "e2150/Entity.h"
 
-Entity::Entity() {
-	//ctor
+Entity::Entity():
+		id(),
+		mapPosition(){
 }
 
 Entity::~Entity() {
-	//dtor
 }

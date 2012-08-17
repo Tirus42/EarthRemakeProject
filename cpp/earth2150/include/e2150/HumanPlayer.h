@@ -31,18 +31,14 @@ class SendBuffer;
 */
 class HumanPlayer : public Player {
 	private:
-		HumanPlayer(const HumanPlayer&);
-		HumanPlayer operator=(const HumanPlayer&);
-
 		TestServer* server;
-
 		int32_t socket;
 		sockaddr_in networkAdress;
-
 		Map* currentMap;	//Zeigen auf die Spielkarte, worauf der Spieler gerade seine Kamera hat
-
 		std::list<SendBuffer*> sendBuffers;   //Netzwerkbuffer, welche noch an den Spieler gesendet werden müssen
 
+		HumanPlayer(const HumanPlayer&);
+		HumanPlayer operator=(const HumanPlayer&);
 	public:
 		HumanPlayer(TestServer* server, int32_t socket, const std::string& name, sockaddr_in networkAdress);
 		~HumanPlayer();
@@ -51,7 +47,6 @@ class HumanPlayer : public Player {
 
 		void sendPacket(char* pointer, uint32_t length);	//Sendet angegebene Daten an den Client (behält Reihenfolge!)
 		void sendBufferContent();   //Sendet ggf. ausstehende Daten an den Client
-
 
 		void debugPaintFields(std::list<uint32_t>& fields, uint32_t color);	//Zeichnet beim Client die angegebenen Felder farbig
 };

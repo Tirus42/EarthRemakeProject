@@ -1,12 +1,8 @@
 #include "e2150/UnitChassis.h"
 
-UnitChassis::UnitChassis(uint32_t uID, const std::string& name, uint32_t turnRate, uint32_t moveRate) :
-	uID(uID),
-	name(name),
-	turnRate(0),
-	moveRate(0) {
-
-	setTurnRate(turnRate);
-	setMoveRate(moveRate);
+UnitChassis::UnitChassis(const std::string& id, const std::string& name, uint32_t turnRate, uint32_t moveRate) :
+		id(id),
+		name(name),
+		turnRate(turnRate),
+		moveRate(moveRate) {
 }
-

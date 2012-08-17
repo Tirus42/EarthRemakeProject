@@ -4,17 +4,16 @@
 #include "e2150/Map.h"
 #include <iostream>
 
-TestServer::TestServer(int32_t socket) :
+TestServer::TestServer(int32_t socket):
 		socket(socket),
 		netbuffer(new char[BUFFERSIZE]),
-		map(0) {
-
+		map(0),
+		waitingConnections(),
+		players() {
 	std::cout << "Server erstellt!\n";
 }
 
 TestServer::~TestServer() {
-	//dtor
-
 	delete netbuffer;
 }
 

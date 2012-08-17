@@ -8,7 +8,8 @@ HumanPlayer::HumanPlayer(TestServer* server, int32_t socket, const std::string& 
 		server(server),
 		socket(socket),
 		networkAdress(networkAdress),
-		currentMap(0) {
+		currentMap(0),
+		sendBuffers() {
 }
 
 HumanPlayer::~HumanPlayer() {

@@ -77,6 +77,7 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Weffc++" />
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add directory="include" />
@@ -85,7 +86,6 @@
 		<Linker>
 			<Add library="ws2_32" />
 		</Linker>
-		<Unit filename="..\..\include\earth2150\Navigator.h" />
 		<Unit filename="..\tf\include\tf\file.h" />
 		<Unit filename="..\tf\include\tf\network.h" />
 		<Unit filename="..\tf\src\tf\file.cpp" />
