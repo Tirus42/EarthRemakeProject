@@ -6,8 +6,6 @@
 #include <vector>
 #include <string>
 
-#include "tf/file.h"
-
 #define MAX_HEIGHTDIFF 2000
 
 class Navigator;

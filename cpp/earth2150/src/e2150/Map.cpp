@@ -1,6 +1,7 @@
 #include "e2150/Map.h"
 
 #include "e2150/AStar.h"
+#include "tf/file.h"
 #include <fstream>
 #include <iostream>
 
