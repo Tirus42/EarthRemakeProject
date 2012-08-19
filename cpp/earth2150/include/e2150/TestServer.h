@@ -33,8 +33,6 @@ class TestServer {
 		void sendMapWaymapRaw(const MapImpl& map, HumanPlayer* player);
 
 		std::string peekString(uint32_t offset); //Liest aus dem netbuffer an angegebenen Offset einen String aus
-
-
 	public:
 		TestServer(int32_t socket, MapImpl& map);
 		virtual ~TestServer();

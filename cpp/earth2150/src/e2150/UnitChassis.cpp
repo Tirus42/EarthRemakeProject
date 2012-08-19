@@ -5,5 +5,6 @@ UnitChassis::UnitChassis(uint32_t id, const std::string& model, const std::strin
 		model(model),
 		name(name),
 		turnRate(turnRate),
-		moveRate(moveRate) {
+		moveRate(moveRate),
+		buildTime(0) {
 }
