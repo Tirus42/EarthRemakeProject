@@ -15,8 +15,8 @@ class MapPosition {
 
 		bool operator<(const MapPosition& cc) const{return x<cc.getX()?true:(x>cc.getX()?false:(y<cc.getY()));}
 
-		uint32_t getX() const{return x;}
-		uint32_t getY() const{return y;}
+		uint32_t getX() const {return x;}
+		uint32_t getY() const {return y;}
 };
 
 #endif

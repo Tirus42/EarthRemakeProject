@@ -10,11 +10,19 @@
 AStar::AStar(){
 }
 
-std::vector<MapPosition> AStar::getPath(const Map& map, const Unit& unit, uint32_t x, uint32_t y) const{
-	uint32_t expectedSizeOfNodes = std::abs(unit.getX() - x) + std::abs(unit.getY() - y);
+std::vector<MapPosition> AStar::getPath(const Map& map, const Unit& unit, uint32_t x, uint32_t y) const {
+	return getPath(map, unit.getX(), unit.getY(), x, y);
+}
+
+std::vector<MapPosition> AStar::getPath(const Map& map, uint32_t start, uint32_t target) const {
+	return getPath(map, map.positionX(start), map.positionY(start), map.positionX(target), map.positionY(target));
+}
+
+std::vector<MapPosition> AStar::getPath(const Map& map, uint32_t startX, uint32_t startY, uint32_t x, uint32_t y) const {
+	uint32_t expectedSizeOfNodes = std::abs(startX - x) + std::abs(startY - y);
 	AStarBinaryHeap openList(expectedSizeOfNodes);
 	std::set<MapPosition> closedList;
-	openList.add(AStarNode(0, 0, 0, unit.getX(), unit.getY()));
+	openList.add(AStarNode(0, 0, 0, startX, startY));
 	do {
 		AStarNode currentNode = openList.poll();
 		const uint32_t CURRENT_NODE_X = currentNode.getX();

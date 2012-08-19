@@ -1,6 +1,7 @@
 #include "e2150/HumanPlayer.h"
 
 #include "e2150/SendBuffer.h"
+#include "e2150/Utils.h"
 #include <iostream>
 
 HumanPlayer::HumanPlayer(TestServer* server, int32_t socket, const std::string& name, sockaddr_in networkAddress) :
@@ -45,7 +46,7 @@ void HumanPlayer::sendBufferContent() {
 	}
 }
 
-void HumanPlayer::debugPaintFields(std::list<uint32_t>& fields, uint32_t color) {
+void HumanPlayer::debugPaintFields(const std::list<uint32_t>& fields, uint32_t color) {
 	char* netbuffer = server->getNetbufferPtr();
 
 	netbuffer[0] = 255;
@@ -55,7 +56,7 @@ void HumanPlayer::debugPaintFields(std::list<uint32_t>& fields, uint32_t color) 
 
 	uint32_t offset = 9;
 
-	for (std::list<uint32_t>::iterator i=fields.begin(); i != fields.end(); ++i) {
+	for (std::list<uint32_t>::const_iterator i=fields.begin(); i != fields.end(); ++i) {
 		*(uint32_t*)&netbuffer[offset] = *i;
 		offset += 4;
 	}

@@ -48,7 +48,7 @@ class HumanPlayer : public Player {
 		void sendPacket(char* pointer, uint32_t length);	//Sendet angegebene Daten an den Client (behält Reihenfolge!)
 		void sendBufferContent();   //Sendet ggf. ausstehende Daten an den Client
 
-		void debugPaintFields(std::list<uint32_t>& fields, uint32_t color);	//Zeichnet beim Client die angegebenen Felder farbig
+		void debugPaintFields(const std::list<uint32_t>& fields, uint32_t color);	//Zeichnet beim Client die angegebenen Felder farbig
 };
 
 #endif

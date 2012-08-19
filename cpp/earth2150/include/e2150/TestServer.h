@@ -6,7 +6,7 @@
 #include <list>
 
 class HumanPlayer;
-class Map;
+class MapImpl;
 
 class TestServer {
 	private:
@@ -14,7 +14,7 @@ class TestServer {
 
 		int32_t socket;	 	//TCP-Server socket, hört auf Eingehende Verbindungen
 		char* netbuffer;	//Bufferspeicher für das lesen und schreiben von Netzwerknachrichten
-		Map* map;		//Jaja unschön, nur zum Test...
+		MapImpl& map;		//Jaja unschön, nur zum Test...
 		std::list<int32_t> waitingConnections;  //Speichert alle eingehende Verbindungen, bis eine Anfrage kommt
 		std::list<HumanPlayer*> players;
 
@@ -29,18 +29,19 @@ class TestServer {
 
 		void createHumanPlayer();
 
-		void sendMapDataRaw(Map* map, HumanPlayer* player);
-		void sendMapWaymapRaw(Map* map, HumanPlayer* player);
+		void sendMapDataRaw(const MapImpl& map, HumanPlayer* player);
+		void sendMapWaymapRaw(const MapImpl& map, HumanPlayer* player);
 
 		std::string peekString(uint32_t offset); //Liest aus dem netbuffer an angegebenen Offset einen String aus
 
+
 	public:
-		TestServer(int32_t socket);
+		TestServer(int32_t socket, MapImpl& map);
 		virtual ~TestServer();
 
 		char* getNetbufferPtr() const {return netbuffer;}
 
-		void run(Map* m);	//Nur eine Test Impelemtierung!!!!! (nicht verändern / schöner machen!)
+		void run();	//Nur eine Test Impelemtierung!!!!! (nicht verändern / schöner machen!)
 
 };
 

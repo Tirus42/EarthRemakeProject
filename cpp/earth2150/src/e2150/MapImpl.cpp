@@ -1,29 +1,30 @@
-#include "e2150/Map.h"
+#include "e2150/MapImpl.h"
 
 #include "e2150/AStar.h"
 #include "tf/file.h"
 #include <fstream>
 #include <iostream>
 
-Map::Map(uint16_t width, uint16_t height) :
-		MapInterface(width, height),
+MapImpl::MapImpl(uint16_t width, uint16_t height) :
+		Map(width, height),
 		heightMap(width * height),
 		movementMap(width * height),
 		borderWidth(1),
 		navigator(new AStar()) {
 }
 
-Map::~Map() {
+MapImpl::~MapImpl() {
+	delete navigator;
 }
 
-void Map::updateMovementMap() {
+void MapImpl::updateMovementMap() {
 	updateMovementMap(0, 0, width, height);
 	return;
 
 	updateMovementMap(borderWidth, borderWidth, width - borderWidth, height - borderWidth);
 }
 
-void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+void MapImpl::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
 	if (x1 > x2) {
 		return updateMovementMap(x2, y1, x1, y2);
 	}
@@ -87,7 +88,7 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 	delete[] buffer;
 }
 
-void Map::updateMovementMap(uint32_t position1, uint32_t position2) {
+void MapImpl::updateMovementMap(uint32_t position1, uint32_t position2) {
 	uint16_t x1 = positionX(position1);
 	uint16_t y1 = positionY(position1);
 	uint16_t x2 = positionX(position2);
@@ -96,7 +97,7 @@ void Map::updateMovementMap(uint32_t position1, uint32_t position2) {
 	updateMovementMap(x1, y1, x2, y2);
 }
 
-void Map::updateMovementMapWithBorder() {
+void MapImpl::updateMovementMapWithBorder() {
 	bool* buffer = new bool[width * height];
 
 	//Felder definieren, welche nicht "zu schief" sind
@@ -142,7 +143,7 @@ void Map::updateMovementMapWithBorder() {
 	delete[] buffer;
 }
 
-uint32_t Map::getNumberOfMoveableFields() const {
+uint32_t MapImpl::getNumberOfMoveableFields() const {
 	uint32_t moveableFields = 0;
 	for (uint32_t y=0; y<height; ++y) {
 		for (uint32_t x=0; x<width; ++x) {
@@ -155,7 +156,7 @@ uint32_t Map::getNumberOfMoveableFields() const {
 	return moveableFields;
 }
 
-uint16_t Map::getHeightDiffOnField(uint32_t position) const {
+uint16_t MapImpl::getHeightDiffOnField(uint32_t position) const {
 	uint16_t h1 = heightMap[position];
 	uint16_t h2 = heightMap[position + 1];
 	uint16_t h3 = heightMap[position + width];
@@ -167,7 +168,7 @@ uint16_t Map::getHeightDiffOnField(uint32_t position) const {
 	return maxValue - minValue;
 }
 
-std::vector<MapPosition> Map::getNeighbourPositions(uint32_t x, uint32_t y) const {
+std::vector<MapPosition> MapImpl::getNeighbourPositions(uint32_t x, uint32_t y) const {
 	std::vector<MapPosition> _(8);
 	int x0 = x - 1, y0 = y - 1, x1 = x + 1, y1 = y + 1;
 	uint32_t i = 0;
@@ -183,11 +184,11 @@ std::vector<MapPosition> Map::getNeighbourPositions(uint32_t x, uint32_t y) cons
 	return _;
 }
 
-std::vector<MapPosition> Map::getWay(const Unit& unit, uint32_t destination) const {
+std::vector<MapPosition> MapImpl::getWay(const Unit& unit, uint32_t destination) const {
 	return navigator->getPath(*this, unit, positionX(destination), positionY(destination));
 }
 
-bool Map::loadHeightMapRAW(const std::string& filename) {
+bool MapImpl::loadHeightMapRAW(const std::string& filename) {
 	uint32_t fileSize = FileSize(filename);
 	uint32_t dataSize = width * height;
 
