@@ -3,7 +3,7 @@
 AStarBinaryHeap::AStarBinaryHeap(uint32_t spaceForNodes):
 		nodes(),
 		knownPositons(){
-	nodes.push_back(AStarNode(0, 0, 0, 0, 0)); //will never be used
+	nodes.push_back(AStarNode(0, 0, 0, ~0, ~0)); //will never be used
 }
 
 void AStarBinaryHeap::add(const AStarNode& node){
@@ -34,14 +34,14 @@ const AStarNode *AStarBinaryHeap::getNode(const MapPosition& position) const{
 
 AStarNode AStarBinaryHeap::poll(){
 	AStarNode _ = nodes[1];
-	knownPositons.erase(nodes[1].getPosition());
+	knownPositons.erase(_.getPosition());
 	nodes[1] = *(nodes.end()-1);
 	nodes.pop_back();
 	uint32_t v = 1;
 	while (true) {
 		uint32_t u = v;
 		if (2 * u + 1 <= nodes.size()) {
-			if (nodes[u].getOverallCost()>=nodes[2 * u].getOverallCost()) {
+			if (nodes[u].getOverallCost() >= nodes[2 * u].getOverallCost()) {
 				v = 2 * u;
 			}
 			if (nodes[v].getOverallCost() >= nodes[2 * u + 1].getOverallCost()) {
@@ -60,3 +60,4 @@ AStarNode AStarBinaryHeap::poll(){
 	}
 	return _;
 }
+
