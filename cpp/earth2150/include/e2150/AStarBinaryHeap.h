@@ -3,21 +3,21 @@
 
 #include "e2150/AStarNode.h"
 #include "e2150/MapPosition.h"
-#include <set>
+#include <map>
 #include <vector>
 
 class AStarBinaryHeap{
 	private:
-		std::vector<AStarNode> nodes;
-		std::set<MapPosition> knownPositons;
+		std::vector<AStarNode*> nodes;
+		std::map<MapPosition, AStarNode*> positionNodes;
 	public:
 		AStarBinaryHeap(uint32_t spaceForNodes);
 
-		void add(const AStarNode& node);
-		void clear(){nodes.clear(); knownPositons.clear();}
-		const AStarNode *getNode(const MapPosition& position) const;
+		void add(AStarNode *node);
+		void clear(){nodes.clear(); positionNodes.clear();}
+		AStarNode *getNode(const MapPosition& position) const;
 		bool isEmpty() const{return nodes.empty();}
-		AStarNode poll();
+		AStarNode *poll();
 		uint32_t size() const{return nodes.size();}
 };
 

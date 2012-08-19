@@ -7,12 +7,12 @@
 #include <iostream>
 #include <cstdlib>
 
-int main(int argc, char *argv[]) {
-	MapImpl m(1024, 1024);
-	bool result = m.loadHeightMapRAW("map1024x1024.bin");
+int main(int argc, char *argv[]) {
+	MapImpl m(1024, 1024);
+	bool result = m.loadHeightMapRAW("map1024x1024.bin");
 
-	std::cout << "Laden der Map " << (result ? "erfolgreich" : "fehlgeschlagen") << std::endl;
-
+	std::cout << "Laden der Map " << (result ? "erfolgreich" : "fehlgeschlagen") << std::endl;
+
 	m.updateMovementMapWithBorder();
 
 	InitNetwork();

@@ -20,4 +20,3 @@ AStarNode::AStarNode(AStarNode *previousNode, uint32_t spentCost, uint32_t estim
 		x(x),
 		y(y){
 }
-
