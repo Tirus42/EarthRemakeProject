@@ -64,7 +64,7 @@ void TestServer::handleIncommingData(HumanPlayer* player, int32_t size) {
 			uint32_t start = *((uint32_t*)&netbuffer[1]);
 			uint32_t target = *((uint32_t*)&netbuffer[5]);
 
-			std::cout << "Suche Weg von " << map.positionX(start) << " " << map.positionY(start) << "\n";
+			std::cout << "Suche Weg von " << map.positionX(start) << " " << map.positionY(start);
 			std::cout << "zu " << map.positionX(target) << " " << map.positionY(target) << "\n";
 
 			std::list<MapPosition> liste = Utils::vectorToList(
