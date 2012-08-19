@@ -93,10 +93,12 @@
 		<Unit filename="include\e2150\AStar.h" />
 		<Unit filename="include\e2150\AStarBinaryHeap.h" />
 		<Unit filename="include\e2150\AStarNode.h" />
+		<Unit filename="include\e2150\Building.h" />
 		<Unit filename="include\e2150\Entity.h" />
 		<Unit filename="include\e2150\Faction.h" />
 		<Unit filename="include\e2150\HumanPlayer.h" />
 		<Unit filename="include\e2150\Map.h" />
+		<Unit filename="include\e2150\MapImpl.h" />
 		<Unit filename="include\e2150\MapPosition.h" />
 		<Unit filename="include\e2150\Navigator.h" />
 		<Unit filename="include\e2150\Player.h" />
@@ -104,6 +106,7 @@
 		<Unit filename="include\e2150\TestServer.h" />
 		<Unit filename="include\e2150\Unit.h" />
 		<Unit filename="include\e2150\UnitChassis.h" />
+		<Unit filename="include\e2150\Utils.h" />
 		<Unit filename="include\e2150\main.h" />
 		<Unit filename="src\e2150\AStar.cpp" />
 		<Unit filename="src\e2150\AStarBinaryHeap.cpp" />
@@ -111,7 +114,7 @@
 		<Unit filename="src\e2150\Entity.cpp" />
 		<Unit filename="src\e2150\Faction.cpp" />
 		<Unit filename="src\e2150\HumanPlayer.cpp" />
-		<Unit filename="src\e2150\Map.cpp" />
+		<Unit filename="src\e2150\MapImpl.cpp" />
 		<Unit filename="src\e2150\Player.cpp" />
 		<Unit filename="src\e2150\SendBuffer.cpp" />
 		<Unit filename="src\e2150\TestServer.cpp" />
