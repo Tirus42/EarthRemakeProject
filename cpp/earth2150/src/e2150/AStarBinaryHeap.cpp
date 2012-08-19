@@ -36,6 +36,7 @@ AStarNode AStarBinaryHeap::poll(){
 	AStarNode _ = nodes[1];
 	knownPositons.erase(nodes[1].getPosition());
 	nodes[1] = *(nodes.end()-1);
+	nodes.pop_back();
 	uint32_t v = 1;
 	while (true) {
 		uint32_t u = v;
