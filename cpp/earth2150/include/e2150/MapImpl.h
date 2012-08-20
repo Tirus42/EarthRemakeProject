@@ -3,9 +3,11 @@
 
 #include "e2150/Map.h"
 #include "e2150/MapPosition.h"
+#include "e2150/MapViewerManager.h"
 #include <stdint.h>
 #include <vector>
 #include <string>
+#include <map>
 
 class Navigator;
 class Unit;
@@ -23,9 +25,14 @@ class MapImpl : public Map {
 		void operator=(const MapImpl&);
 
 		std::vector<uint16_t> heightMap;
-		std::vector<uint8_t> movementMap;  //Karte der Bewegungsmöglichkeiten
-		uint32_t borderWidth; //Die Anzahl an Felder an Rand, die nicht nutzbar für die Spieler ist
+		std::vector<uint8_t> movementMap;	//Karte der Bewegungsmöglichkeiten
+		std::vector<uint8_t> statusMap;		//Beschreibt den Status eines Feldes (eine Einheit steht drauf z.B.)
+		uint32_t borderWidth; 				//Die Anzahl an Felder an Rand, die nicht nutzbar für die Spieler ist
 		Navigator* navigator;
+
+		std::map<uint32_t, Unit*> units;		//Bedarf ggf. überarbeitung
+
+		MapViewerManager viewerManager;
 
 		uint32_t getNumberOfMoveableFields() const; //Anzahl der Felder, auf denen sich Bewegt werden kann (Weggitter hat verbindung)
 		uint16_t getHeightDiffOnField(uint32_t position) const;
@@ -47,6 +54,17 @@ class MapImpl : public Map {
 
 		virtual std::vector<MapPosition> getNeighbourPositions(uint32_t x, uint32_t y) const;
 		virtual std::vector<MapPosition> getWay(const Unit& unit, uint32_t destination) const;
+
+		virtual bool isFieldFree(uint32_t position) const;
+
+		virtual void setFieldStatusFlag(uint32_t position, uint8_t statusFlag, bool value);
+		virtual bool getFieldStatusFlag(uint32_t position, uint8_t statusFlag) const;
+
+		virtual bool addUnit(Unit& unit, uint16_t x, uint16_t y);
+		virtual void removeUnit(Unit& unit);
+
+
+
 
 		uint8_t getDirections(uint32_t x, uint32_t y) const {return movementMap[position(x, y)];}
 

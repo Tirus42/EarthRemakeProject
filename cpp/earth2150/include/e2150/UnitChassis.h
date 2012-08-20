@@ -17,14 +17,20 @@ class UnitChassis {
 
 		uint32_t buildTime;	//Millisekunden um dieses Chassis zu fertigen (Bauzeit)
 
+		int32_t hitPoints;	// Lebenspunkte einer Einheit (bewusst als signed-int gewählt)
+
 		void setTurnRate(uint32_t timePerDegree) {turnRate = timePerDegree;}
 		void setMoveRate(uint32_t timePerMeter) {moveRate = timePerMeter;}
 		void setBuildTime(uint32_t buildTime) {this->buildTime = buildTime;}
 	public:
-		UnitChassis(uint32_t id, const std::string& model, const std::string& name, uint32_t turnRate, uint32_t moveRate);
+		UnitChassis(uint32_t id, const std::string& model, const std::string& name,
+					uint32_t turnRate, uint32_t moveRate, uint32_t buildTime,
+					uint32_t hitPoints);
 
 		uint32_t getTurnRate() const {return turnRate;}
 		uint32_t getMoveRate() const {return moveRate;}
+
+		uint32_t getHitPoints() const {return hitPoints;}
 };
 
 #endif

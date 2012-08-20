@@ -26,8 +26,8 @@
 
 	TestServer gameServer(server, m);
 
-	UnitChassis unit_LCUCR3(1, "LCUCR3", "Crater III", 27777, 1000000); //Einheit 10s für komplette Drehung
-	UnitChassis unit_EDGRUZ(2, "ed_gruz_mk1", "Gruz Baufahrzeug", 27777, 1000000);
+	UnitChassis unit_LCUCR3(1, "LCUCR3", "Crater III", 27777, 1000000, 0, 1000); //Einheit 10s für komplette Drehung
+	UnitChassis unit_EDGRUZ(2, "ed_gruz_mk1", "Gruz Baufahrzeug", 27777, 1000000, 0, 800);
 
 	gameServer.run();
 

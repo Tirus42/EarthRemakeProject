@@ -9,8 +9,11 @@ MapImpl::MapImpl(uint16_t width, uint16_t height) :
 		Map(width, height),
 		heightMap(width * height),
 		movementMap(width * height),
+		statusMap(width * height),
 		borderWidth(1),
-		navigator(new AStar()) {
+		navigator(new AStar()),
+		units(),
+		viewerManager() {
 }
 
 MapImpl::~MapImpl() {
@@ -108,7 +111,7 @@ void MapImpl::updateMovementMapWithBorder() {
 	}
 
 	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
-	for (uint32_t index = 0; index < width*height-1; ++index) {
+	for (int32_t index = 0; index < width*height-1; ++index) {
 		uint8_t value = 0;
 
 		//Ist dieses Feld begehbar?
@@ -224,4 +227,46 @@ bool MapImpl::loadHeightMapRAW(const std::string& filename) {
 	delete[] data;
 
 	return true;
+}
+
+bool MapImpl::isFieldFree(uint32_t position) const {
+	// Todo: Auf Gebäude und andere Objekte prüfen
+	return getFieldStatusFlag(position, STATUS_UNIT);
+}
+
+void MapImpl::setFieldStatusFlag(uint32_t position, uint8_t statusFlag, bool value) {
+	if (value) {
+		statusMap[position] |= statusFlag;
+	} else {
+		statusMap[position] &= ~statusFlag;
+	}
+}
+
+bool MapImpl::getFieldStatusFlag(uint32_t position, uint8_t statusFlag) const {
+	return statusMap[position] & statusFlag;
+};
+
+bool MapImpl::addUnit(Unit& unit, uint16_t x, uint16_t y) {
+	uint32_t pos = position(x, y);
+
+	//Prüfen ob das Feld frei ist um eine Einheit darauf zu setzen
+	if (!isFieldFree(pos)) {
+		return false;
+	}
+
+	//Einheit auf Spielfeld setzen, und in Liste der Einheiten eintragen
+	units.insert(std::pair<uint32_t, Unit*>(unit.getID(), &unit));
+
+	//Und deren Position setzen
+	unit.setPosition(x, y);
+
+	//Spieler über neue Einheit informieren
+	viewerManager.createEntity(unit);
+	return true;
+}
+
+void MapImpl::removeUnit(Unit& unit) {
+	//Todo: Einheit aus Liste entfernen
+
+	viewerManager.removeEntity(unit);
 }

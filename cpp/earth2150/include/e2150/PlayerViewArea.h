@@ -19,6 +19,8 @@ class PlayerViewArea {
 		MapPosition position;
 		uint32_t radius;
 
+		HumanPlayer& player;
+
 	public:
 		///Erstellt eine neue "Kamera" des Spielers, und weiﬂt der Map diese neue Kamera zu
 		PlayerViewArea(Map* map, MapPosition& position, uint32_t radius);
