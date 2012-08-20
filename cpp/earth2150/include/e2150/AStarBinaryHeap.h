@@ -19,6 +19,8 @@ class AStarBinaryHeap{
 		bool isEmpty() const{return nodes.empty();}
 		AStarNode *poll();
 		uint32_t size() const{return nodes.size();}
+		std::vector<AStarNode*>::const_iterator begin() const{return nodes.begin()+1;}
+		std::vector<AStarNode*>::const_iterator end() const{return nodes.end();}
 };
 
 #endif // ASTARBINARYHEAP_H
