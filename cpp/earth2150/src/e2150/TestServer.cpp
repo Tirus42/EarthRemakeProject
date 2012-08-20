@@ -34,7 +34,7 @@ void TestServer::run() {
 
 void TestServer::checkIncommingData() {
 	for (std::list<HumanPlayer*>::iterator i = players.begin(); i != players.end(); ++i) {
-		int32_t socket = (*i)->getSocket();
+		int32_t socket = (*i)->getConnection().getSocket();
 
 		int32_t size = recv(socket, netbuffer, BUFFERSIZE, MSG_PEEK);
 
@@ -45,7 +45,7 @@ void TestServer::checkIncommingData() {
 }
 
 void TestServer::handleIncommingData(HumanPlayer* player, int32_t size) {
-	int32_t socket = player->getSocket();
+	int32_t socket = player->getConnection().getSocket();
 
 	switch (netbuffer[0]) {
 		case 0x01:	///Anfrage des Clients der ganzen Map
@@ -72,7 +72,7 @@ void TestServer::handleIncommingData(HumanPlayer* player, int32_t size) {
 
 			player->debugPaintFields(
 				Utils::mapPositionToPosition(
-					map, liste), 0x11FFU);
+					map, liste), 0xFFAA00U);
 		}
 		break;
 
@@ -121,7 +121,7 @@ void TestServer::handleNewConnections() {
 
 				//Sende ein Connection-ACK
 				netbuffer[0] = 1;
-				player->sendPacket(netbuffer, 1);
+				player->getConnection().sendPacket(netbuffer, 1);
 
 				std::cout << "Neuer Spieler hinzugefuegt!\n";
 
@@ -157,7 +157,7 @@ void TestServer::sendMapDataRaw(const MapImpl& map, HumanPlayer* player) {
 		buffer[2 + i] = map.getRawHeight(i);
 	}
 
-	player->sendPacket((char*)buffer, 4 + dataSize * 2);
+	player->getConnection().sendPacket((char*)buffer, 4 + dataSize * 2);
 
 	delete[] buffer;
 }
@@ -172,7 +172,7 @@ void TestServer::sendMapWaymapRaw(const MapImpl& map, HumanPlayer* player) {
 		buffer[i] = map.getRawWay(i);
 	}
 
-	player->sendPacket((char*)buffer, dataSize);
+	player->getConnection().sendPacket((char*)buffer, dataSize);
 
 	delete[] buffer;
 }

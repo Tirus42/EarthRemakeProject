@@ -3,27 +3,13 @@
 
 #include "e2150/Player.h"
 #include "e2150/TestServer.h"
-#include "tf/network.h"
-#include <list>
+#include "e2150/PlayerNetworkConnection.h"
+#include <vector>
 
-#ifdef WIN32
-	#include <windows.h>
-#else
-	#include <sys/types.h>
-	#include <sys/socket.h>
-	#include <netinet/in.h>
-
-	#include <fcntl.h>
-	#include <netdb.h>
-	#include <memory.h>
-
-	#define NO_ERROR 0
-	#define SOCKET_ERROR -1
-#endif
 
 class TestServer;
 class Map;
-class SendBuffer;
+class PlayerViewArea;
 
 /**
 * Jeder über das Netzwerk verbundene Spieler wird in dieser Klasse gespeichert
@@ -32,21 +18,21 @@ class SendBuffer;
 class HumanPlayer : public Player {
 	private:
 		TestServer* server;
-		int32_t socket;
-		sockaddr_in networkAdress;
-		Map* currentMap;	//Zeigen auf die Spielkarte, worauf der Spieler gerade seine Kamera hat
-		std::list<SendBuffer*> sendBuffers;   //Netzwerkbuffer, welche noch an den Spieler gesendet werden müssen
+		PlayerNetworkConnection connection;		//Netzwerkverbindung des Spielers
+
+		std::vector<PlayerViewArea*> cameras;	//Kamera Position(en) des Spielers
 
 		HumanPlayer(const HumanPlayer&);
 		HumanPlayer operator=(const HumanPlayer&);
 	public:
-		HumanPlayer(TestServer* server, int32_t socket, const std::string& name, sockaddr_in networkAdress);
+		HumanPlayer(TestServer* server, int32_t socket, const std::string& name, const sockaddr_in& networkAdress);
 		~HumanPlayer();
 
-		int32_t getSocket() const {return socket;}
+		/// Setzt die Spieler-Netzwerkverbindung (kopiert das Objekt)
+		void setConnection(const PlayerNetworkConnection& connection) {this->connection = connection;}
 
-		void sendPacket(char* pointer, uint32_t length);	//Sendet angegebene Daten an den Client (behält Reihenfolge!)
-		void sendBufferContent();   //Sendet ggf. ausstehende Daten an den Client
+		/// Gibt die Spieler-Netzwerkverbindung zurück
+		PlayerNetworkConnection& getConnection() {return connection;}
 
 		void debugPaintFields(const std::list<uint32_t>& fields, uint32_t color);	//Zeichnet beim Client die angegebenen Felder farbig
 };
