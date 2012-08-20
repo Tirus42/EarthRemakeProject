@@ -43,7 +43,7 @@ class Map {
 		inline uint16_t positionY(uint32_t position) const {return position / width;}
 
 		/// Gibt die umliegenden Felder um das angegebene Feld zurück
-		virtual std::vector<MapPosition> getNeighbourPositions(uint32_t x, uint32_t y) const = 0;
+		virtual std::vector<MapPosition> getNeighbourPositions(uint16_t x, uint16_t y) const = 0;
 
 		/// Berechnet den Weg zwischen der Einheit und der Angegebenen Position
 		virtual std::vector<MapPosition> getWay(const Unit& unit, uint32_t destination) const = 0;

@@ -52,7 +52,7 @@ class MapImpl : public Map {
 
 		void updateMovementMapWithBorder();
 
-		virtual std::vector<MapPosition> getNeighbourPositions(uint32_t x, uint32_t y) const;
+		virtual std::vector<MapPosition> getNeighbourPositions(uint16_t x, uint16_t y) const;
 		virtual std::vector<MapPosition> getWay(const Unit& unit, uint32_t destination) const;
 
 		virtual bool isFieldFree(uint32_t position) const;
@@ -62,8 +62,6 @@ class MapImpl : public Map {
 
 		virtual bool addUnit(Unit& unit, uint16_t x, uint16_t y);
 		virtual void removeUnit(Unit& unit);
-
-
 
 
 		uint8_t getDirections(uint32_t x, uint32_t y) const {return movementMap[position(x, y)];}

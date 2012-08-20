@@ -171,20 +171,20 @@ uint16_t MapImpl::getHeightDiffOnField(uint32_t position) const {
 	return maxValue - minValue;
 }
 
-std::vector<MapPosition> MapImpl::getNeighbourPositions(uint32_t x, uint32_t y) const {
-	std::vector<MapPosition> _(8);
-	int x0 = x - 1, y0 = y - 1, x1 = x + 1, y1 = y + 1;
-	uint32_t i = 0;
-	const uint8_t DIRECTIONS=getDirections(x, y);
-	if (DIRECTIONS&NORTH) {_[i++] = MapPosition(x, y0);}
-	if (DIRECTIONS&NORTH_EAST) {_[i++] = MapPosition(x1, y0);}
-	if (DIRECTIONS&EAST) {_[i++] = MapPosition(x1, y);}
-	if (DIRECTIONS&SOUTH_EAST) {_[i++] = MapPosition(x1, y1);}
-	if (DIRECTIONS&SOUTH) {_[i++] = MapPosition(x, y1);}
-	if (DIRECTIONS&SOUTH_WEST) {_[i++] = MapPosition(x0, y1);}
-	if (DIRECTIONS&WEST) {_[i++] = MapPosition(x0, y);}
-	if (DIRECTIONS&NORTH_WEST) {_[i++] = MapPosition(x0, y0);}
-	return _;
+std::vector<MapPosition> MapImpl::getNeighbourPositions(uint16_t x, uint16_t y) const {
+	MapPosition _[8];
+	uint16_t x0=x-1, y0=y-1, x1=x+1, y1=y+1;
+	size_t size = 0;
+	uint8_t directions=getDirections(x, y);
+	if (directions&NORTH)      {_[size++] = MapPosition(x,  y0);}
+	if (directions&NORTH_EAST) {_[size++] = MapPosition(x1, y0);}
+	if (directions&EAST)       {_[size++] = MapPosition(x1, y );}
+	if (directions&SOUTH_EAST) {_[size++] = MapPosition(x1, y1);}
+	if (directions&SOUTH)      {_[size++] = MapPosition(x,  y1);}
+	if (directions&SOUTH_WEST) {_[size++] = MapPosition(x0, y1);}
+	if (directions&WEST)       {_[size++] = MapPosition(x0, y );}
+	if (directions&NORTH_WEST) {_[size++] = MapPosition(x0, y0);}
+	return std::vector<MapPosition>(_, _+size);
 }
 
 std::vector<MapPosition> MapImpl::getWay(const Unit& unit, uint32_t destination) const {
