@@ -21,7 +21,7 @@ class Entity {
 		uint32_t getX() const {return mapPosition.getX();}
 		uint32_t getY() const {return mapPosition.getY();}
 
-		void setPosition(uint16_t x, uint16_t y) {mapPosition.setPosition(x, y);}
+		void setPosition(uint16_t x, uint16_t y) {mapPosition.setXY(x, y);}
 
 		uint32_t getHitPoints() const {return hitPoints;}
 };

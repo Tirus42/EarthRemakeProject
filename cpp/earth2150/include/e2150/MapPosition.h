@@ -10,7 +10,7 @@ class MapPosition {
 	private:
 		uint16_t x, y;
 	public:
-		MapPosition() : x(0), y(0) {};
+		MapPosition() : x(~0), y(~0) {};
 		MapPosition(uint16_t x, uint16_t y) : x(x), y(y) {};
 
 		bool operator<(const MapPosition& cc) const{return x<cc.getX()?true:(x>cc.getX()?false:(y<cc.getY()));}
@@ -20,7 +20,7 @@ class MapPosition {
 
 		void setX(uint16_t x) {this->x = x;}
 		void setY(uint16_t y) {this->y = y;}
-		void setPosition(uint16_t x, uint16_t y) {this->x = x; this->y = y;}
+		void setXY(uint16_t x, uint16_t y) {this->x = x; this->y = y;}
 };
 
 #endif

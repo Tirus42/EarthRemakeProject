@@ -26,7 +26,7 @@ class PlayerViewArea {
 		PlayerViewArea(Map* map, MapPosition& position, uint32_t radius);
 
 		void setRadius(uint32_t radius) {this->radius = radius;}
-		void setPosition(int16_t x, int16_t y) {position.setPosition(x, y);}
+		void setPosition(int16_t x, int16_t y) {position.setXY(x, y);}
 
 		uint32_t getRadius() const {return radius;}
 		uint16_t getX() const {return position.getX();}
