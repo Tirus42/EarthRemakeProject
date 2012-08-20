@@ -11,7 +11,8 @@ PlayerNetworkConnection::PlayerNetworkConnection(int32_t socket, const sockaddr_
 }
 
 PlayerNetworkConnection::~PlayerNetworkConnection() {
-	//Todo: Verbindung trennen
+	closesocket(socket);
+	std::cout << "Netzwerkverbindung zu Spieler getrennt!\n";
 }
 
 void PlayerNetworkConnection::sendPacket(char* pointer, uint32_t length) {

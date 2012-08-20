@@ -3,10 +3,12 @@
 
 #include <stdint.h>
 #include <string>
+#include <vector>
 #include <list>
 
 class HumanPlayer;
 class MapImpl;
+class UnitChassis;
 
 class TestServer {
 	private:
@@ -18,6 +20,8 @@ class TestServer {
 		std::list<int32_t> waitingConnections;  //Speichert alle eingehende Verbindungen, bis eine Anfrage kommt
 		std::list<HumanPlayer*> players;
 
+		std::vector<const UnitChassis*> unitChassis;
+
 		TestServer(const TestServer&);
 		TestServer operator=(const TestServer&);
 
@@ -28,6 +32,7 @@ class TestServer {
 		void handleIncommingData(HumanPlayer* player, int32_t size);
 
 		void createHumanPlayer();
+		void removeHumanPlayer(HumanPlayer& player);
 
 		void sendMapDataRaw(const MapImpl& map, HumanPlayer* player);
 		void sendMapWaymapRaw(const MapImpl& map, HumanPlayer* player);
@@ -36,6 +41,8 @@ class TestServer {
 	public:
 		TestServer(int32_t socket, MapImpl& map);
 		virtual ~TestServer();
+
+		void addUnitChassis(const UnitChassis& chassis);
 
 		char* getNetbufferPtr() const {return netbuffer;}
 

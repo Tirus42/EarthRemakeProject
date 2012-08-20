@@ -6,6 +6,7 @@
 
 class MapPosition;
 class Unit;
+class Faction;
 
 /**
 * (Abstrakte) Map-Oberklasse
@@ -62,6 +63,12 @@ class Map {
 
 		/// Entfernt eine Einheit von dem Spielfeld
 		virtual void removeUnit(Unit& unit) = 0;
+
+		/// Gibt die Anzahl der Player-Spawn-Punkte zurück
+		virtual uint8_t countSpawnPoints() const = 0;
+
+		/// Fügt einen weiteren Player-Spawn-Punkt hinzu
+		virtual void addSpawnPoint(const MapPosition& position, const Faction* faction = NULL) = 0;
 };
 
 #endif // MAPINTERFACE_H_INCLUDED

@@ -12,12 +12,17 @@ TestServer::TestServer(int32_t socket, MapImpl& map):
 		netbuffer(new char[BUFFERSIZE]),
 		map(map),
 		waitingConnections(),
-		players() {
+		players(),
+		unitChassis() {
 	std::cout << "Server erstellt!\n";
 }
 
 TestServer::~TestServer() {
 	delete netbuffer;
+}
+
+void TestServer::addUnitChassis(const UnitChassis& chassis) {
+	unitChassis.push_back(&chassis);
 }
 
 void TestServer::run() {
@@ -64,8 +69,8 @@ void TestServer::handleIncommingData(HumanPlayer* player, int32_t size) {
 			uint32_t start = *((uint32_t*)&netbuffer[1]);
 			uint32_t target = *((uint32_t*)&netbuffer[5]);
 
-			std::cout << "Suche Weg von " << map.positionX(start) << " " << map.positionY(start);
-			std::cout << "zu " << map.positionX(target) << " " << map.positionY(target) << "\n";
+			std::cout << "Suche Weg von (" << map.positionX(start) << " " << map.positionY(start);
+			std::cout << ") zu (" << map.positionX(target) << " " << map.positionY(target) << ")\n";
 
 			std::list<MapPosition> liste = Utils::vectorToList(
 						map.getNavigator()->getPath(map, start, target));

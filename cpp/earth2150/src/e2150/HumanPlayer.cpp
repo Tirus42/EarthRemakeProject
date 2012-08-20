@@ -12,6 +12,7 @@ HumanPlayer::HumanPlayer(TestServer* server, int32_t socket, const std::string& 
 
 HumanPlayer::~HumanPlayer() {
 	//Todo: Alle Kameras entfernen
+	std::cout << "Human Player Destruktor aufgerufen\n";
 }
 
 

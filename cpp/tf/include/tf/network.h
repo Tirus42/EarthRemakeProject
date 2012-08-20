@@ -17,6 +17,8 @@ int OpenTCPStream(const std::string& server, unsigned short port);
 
 int CreateUDPStream(unsigned short port);
 
+void closeSocket(int socket);
+
 void SendUDPMSG(const int socket, const char* data, int dataSize, uint32_t targetIP, unsigned short targetPort);
 void SendUDPMSG(const int socket, const char* data, int dataSize, const sockaddr_in& target);
 

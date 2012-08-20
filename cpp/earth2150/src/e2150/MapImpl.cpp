@@ -13,6 +13,7 @@ MapImpl::MapImpl(uint16_t width, uint16_t height) :
 		borderWidth(1),
 		navigator(new AStar()),
 		units(),
+		spawnPositions(),
 		viewerManager() {
 }
 
@@ -262,6 +263,9 @@ bool MapImpl::addUnit(Unit& unit, uint16_t x, uint16_t y) {
 
 	//Spieler über neue Einheit informieren
 	viewerManager.createEntity(unit);
+
+	std::cout << "Neue Einheit auf die Map gesetzt\n";
+
 	return true;
 }
 
@@ -269,4 +273,10 @@ void MapImpl::removeUnit(Unit& unit) {
 	//Todo: Einheit aus Liste entfernen
 
 	viewerManager.removeEntity(unit);
+}
+
+void MapImpl::addSpawnPoint(const MapPosition& position, const Faction* faction) {
+	spawnPositions.push_back(position);
+
+	//Todo: Faction verwalten
 }

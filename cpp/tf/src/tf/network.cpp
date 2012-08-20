@@ -79,11 +79,8 @@ int OpenTCPStream(const std::string& server, unsigned short port) {
 	//cout << "Socket konnte nicht verbunden werden!\n";
 	//cout << "Error: " << WSAGetLastError() << "\n";
 
-	#ifdef WIN32
-	closesocket(sock);
-	#else
-	close(sock);
-	#endif
+	closeSocket(sock);
+
 	return SOCKET_ERROR;
 }
 
@@ -91,6 +88,14 @@ int CreateUDPStream(unsigned short port) {
 	int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
 	return sock;
+}
+
+void closeSocket(int socket) {
+	#ifdef WIN32
+	closesocket(socket);
+	#else
+	close(socket);
+	#endif
 }
 
 void SendUDPMSG(const int socket, const char* data, int dataSize, uint32_t targetIP, unsigned short targetPort) {

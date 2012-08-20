@@ -32,6 +32,8 @@ class MapImpl : public Map {
 
 		std::map<uint32_t, Unit*> units;		//Bedarf ggf. überarbeitung
 
+		std::vector<MapPosition> spawnPositions;
+
 		MapViewerManager viewerManager;
 
 		uint32_t getNumberOfMoveableFields() const; //Anzahl der Felder, auf denen sich Bewegt werden kann (Weggitter hat verbindung)
@@ -63,6 +65,8 @@ class MapImpl : public Map {
 		virtual bool addUnit(Unit& unit, uint16_t x, uint16_t y);
 		virtual void removeUnit(Unit& unit);
 
+		virtual uint8_t countSpawnPoints() const {return spawnPositions.size();}
+		virtual void addSpawnPoint(const MapPosition& position, const Faction* faction = NULL);
 
 		uint8_t getDirections(uint32_t x, uint32_t y) const {return movementMap[position(x, y)];}
 
