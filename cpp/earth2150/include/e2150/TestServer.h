@@ -29,15 +29,18 @@ class TestServer {
 		void handleNewConnections();
 
 		void checkIncommingData();
-		void handleIncommingData(HumanPlayer* player, int32_t size);
+		void handleIncommingData(HumanPlayer& player, int32_t size);
 
 		void createHumanPlayer();
 		void removeHumanPlayer(HumanPlayer& player);
 
-		void sendMapDataRaw(const MapImpl& map, HumanPlayer* player);
-		void sendMapWaymapRaw(const MapImpl& map, HumanPlayer* player);
+		void sendMapDataRaw(const MapImpl& map, HumanPlayer& player);
+		void sendMapWaymapRaw(const MapImpl& map, HumanPlayer& player);
+
+		void sendChassisList(HumanPlayer& player);
 
 		std::string peekString(uint32_t offset); //Liest aus dem netbuffer an angegebenen Offset einen String aus
+		uint32_t pokeString(const std::string& text, uint32_t offset);
 	public:
 		TestServer(int32_t socket, MapImpl& map);
 		virtual ~TestServer();

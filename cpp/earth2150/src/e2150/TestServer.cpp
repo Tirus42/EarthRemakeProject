@@ -3,9 +3,11 @@
 #include "e2150/Utils.h"
 
 #include "e2150/HumanPlayer.h"
+#include "e2150/UnitChassis.h"
 #include "e2150/MapImpl.h"
 #include "e2150/AStar.h"
 #include <iostream>
+#include <cstring>
 
 TestServer::TestServer(int32_t socket, MapImpl& map):
 		socket(socket),
@@ -55,7 +57,7 @@ void TestServer::checkIncommingData() {
 		int32_t size = recv(socket, netbuffer, BUFFERSIZE, MSG_PEEK);
 
 		if (size > 0) {
-			handleIncommingData(*i, size);
+			handleIncommingData(*(*i), size);
 		}
 
 		//Wenn noch Daten zum senden anstehen, dann senden
@@ -63,8 +65,8 @@ void TestServer::checkIncommingData() {
 	}
 }
 
-void TestServer::handleIncommingData(HumanPlayer* player, int32_t size) {
-	int32_t socket = player->getConnection().getSocket();
+void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
+	int32_t socket = player.getConnection().getSocket();
 
 	switch (netbuffer[0]) {
 		case 0x01:	///Anfrage des Clients der ganzen Map
@@ -89,11 +91,16 @@ void TestServer::handleIncommingData(HumanPlayer* player, int32_t size) {
 			std::list<MapPosition> liste = Utils::vectorToList(
 						map.getNavigator()->getPath(map, start, target));
 
-			player->debugPaintFields(
+			player.debugPaintFields(
 				Utils::mapPositionToPosition(
 					map, liste), 0xFFAA00U);
 		}
 		break;
+
+		case 0x04:
+			socketRecv(socket, netbuffer, 1, false);
+			sendChassisList(player);
+			break;
 
 		default:
 			recv(socket, netbuffer, 1, 0);
@@ -166,7 +173,16 @@ std::string TestServer::peekString (uint32_t offset) {
 	return text;
 }
 
-void TestServer::sendMapDataRaw(const MapImpl& map, HumanPlayer* player) {
+uint32_t TestServer::pokeString(const std::string& text, uint32_t offset) {
+	uint16_t length = text.length();
+
+	*(uint16_t*)(&netbuffer[offset]) = length;
+	memcpy((void*)&netbuffer[offset + 2], text.c_str(), length);
+
+	return offset + length + 2;
+}
+
+void TestServer::sendMapDataRaw(const MapImpl& map, HumanPlayer& player) {
 	std::cout << "Sende Karte\n";
 
 	uint32_t dataSize = map.getWidth() * map.getHeight();
@@ -179,12 +195,12 @@ void TestServer::sendMapDataRaw(const MapImpl& map, HumanPlayer* player) {
 		buffer[2 + i] = map.getRawHeight(i);
 	}
 
-	player->getConnection().sendPacket((char*)buffer, 4 + dataSize * 2);
+	player.getConnection().sendPacket((char*)buffer, 4 + dataSize * 2);
 
 	delete[] buffer;
 }
 
-void TestServer::sendMapWaymapRaw(const MapImpl& map, HumanPlayer* player) {
+void TestServer::sendMapWaymapRaw(const MapImpl& map, HumanPlayer& player) {
 	std::cout << "Sende Wegekarte\n";
 
 	uint32_t dataSize = map.getWidth() * map.getHeight();
@@ -194,7 +210,29 @@ void TestServer::sendMapWaymapRaw(const MapImpl& map, HumanPlayer* player) {
 		buffer[i] = map.getRawWay(i);
 	}
 
-	player->getConnection().sendPacket((char*)buffer, dataSize);
+	player.getConnection().sendPacket((char*)buffer, dataSize);
 
 	delete[] buffer;
+}
+
+void TestServer::sendChassisList(HumanPlayer& player) {
+	std::cout << "Sende Chassis Liste\n";
+
+	*(int32_t*)(&netbuffer[0]) = unitChassis.size();
+
+	int offset = 4;
+	for (std::vector<const UnitChassis*>::const_iterator i = unitChassis.begin(); i != unitChassis.end(); ++i) {
+		*(uint32_t*)(&netbuffer[offset]) = (*i)->getID();
+		offset = pokeString((*i)->getModel(), offset+4);
+		offset = pokeString((*i)->getName(), offset);
+
+		*(uint32_t*)(&netbuffer[offset])	= (*i)->getTurnRate();
+		*(uint32_t*)(&netbuffer[offset+4])	= (*i)->getMoveRate();
+		*(uint32_t*)(&netbuffer[offset+8])	= (*i)->getBuildTime();
+		*(uint32_t*)(&netbuffer[offset+12])	= (*i)->getHitPoints();
+
+		offset += 16;
+	}
+
+	player.getConnection().sendPacket(netbuffer, offset);
 }

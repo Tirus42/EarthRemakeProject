@@ -32,7 +32,8 @@
 		return EXIT_FAILURE;
 	}
 
-	UnitChassis unit_LCUCR3(1, "LCUCR3", "Crater III", 27777, 1000000, 0, 1000); //Einheit 10s für komplette Drehung
+	//Themporär an BB Prog anpassen (dort die unit/test1.txt)
+	UnitChassis unit_LCUCR3(1, "Crather3", "Crater III", 27777, 1000000, 0, 1000); //Einheit 10s für komplette Drehung
 	UnitChassis unit_EDGRUZ(2, "ed_gruz_mk1", "Gruz Baufahrzeug", 27777, 1000000, 0, 800);
 
 

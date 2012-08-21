@@ -28,8 +28,14 @@ class UnitChassis {
 					uint32_t turnRate, uint32_t moveRate, uint32_t buildTime,
 					uint32_t hitPoints);
 
+		uint32_t getID() const {return id;}
+		const std::string& getModel() const {return model;}
+		const std::string& getName() const {return name;}
+
 		uint32_t getTurnRate() const {return turnRate;}
 		uint32_t getMoveRate() const {return moveRate;}
+
+		uint32_t getBuildTime() const {return buildTime;}
 
 		uint32_t getHitPoints() const {return hitPoints;}
 };
