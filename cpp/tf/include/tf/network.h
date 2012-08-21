@@ -6,16 +6,33 @@
 
 class sockaddr_in;
 
-#ifdef WIN32
-bool InitNetwork();
-#else
-bool InitNetwork() {return true;}; //Unix braucht das nicht
+#ifndef WIN32
+    #define NO_ERROR 0
+	#define SOCKET_ERROR -1
+	#define INVALID_SOCKET 0xFFFFFFFF
 #endif
+
+bool InitNetwork();
 
 int CreateTCPServer(unsigned short port, bool nonblock);
 int OpenTCPStream(const std::string& server, unsigned short port);
 
 int CreateUDPStream(unsigned short port);
+
+bool setSocketNonblock(int socket);
+
+/**
+* Sendet Daten an einen (verbundenen) Socket
+* @return Die Anzahl an Bytes die tatsächlich gesendet wurden; -1 Falls ein Fehler auftrat
+*/
+int socketSend(int socket, char* buffer, int size);
+
+/**
+* Liest Daten aus dem Socket
+* @return Größe der gelesenen Daten; -1 Wenn nichts zu lesen war (nonblock); 0 wenn die Verbindung getrennt wurde (TCP)
+*/
+int socketRecv(int socket, char* buffer, int size, bool peekOnly);
+
 
 void closeSocket(int socket);
 

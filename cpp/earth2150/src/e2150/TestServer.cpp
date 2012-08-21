@@ -4,7 +4,7 @@
 
 #include "e2150/HumanPlayer.h"
 #include "e2150/MapImpl.h"
-#include "e2150/Astar.h"
+#include "e2150/AStar.h"
 #include <iostream>
 
 TestServer::TestServer(int32_t socket, MapImpl& map):
@@ -27,12 +27,23 @@ void TestServer::addUnitChassis(const UnitChassis& chassis) {
 
 void TestServer::run() {
 
+    #ifndef WIN32
+    timespec time;
+    time.tv_sec = 0;
+    time.tv_nsec = 50000000L;
+    #endif
+
 	while (true) {
 		acceptNewConnections();
 		handleNewConnections();
 		checkIncommingData();
 
-		Sleep(50);
+        #ifdef WIN32
+            Sleep(50);
+        #else
+            nanosleep(&time, 0);
+        #endif
+
 	}
 
 }
@@ -46,6 +57,9 @@ void TestServer::checkIncommingData() {
 		if (size > 0) {
 			handleIncommingData(*i, size);
 		}
+
+		//Wenn noch Daten zum senden anstehen, dann senden
+		(*i)->getConnection().sendBufferContent();
 	}
 }
 
@@ -95,7 +109,10 @@ void TestServer::acceptNewConnections() {
 		if (accepted != INVALID_SOCKET){
 			std::cout << "Neue Verbindung!\n";
 
-			//F�ge neue Verbindung in Warteliste ein
+            //Setze Verbindung in NonBlock mode (in Windows wird das übernommen, in Linux nicht...)
+            setSocketNonblock(accepted);
+
+			//Füge neue Verbindung in Warteliste ein
 			waitingConnections.push_back(accepted);
 		}
 	} while (accepted != INVALID_SOCKET);
@@ -105,15 +122,15 @@ void TestServer::handleNewConnections() {
 	for (std::list<int32_t>::iterator i = waitingConnections.begin(); i != waitingConnections.end(); ++i) {
 		int32_t socket = (*i);
 
-		int32_t size = recv(socket, netbuffer, BUFFERSIZE, MSG_PEEK);
+		int32_t size = socketRecv(socket, netbuffer, BUFFERSIZE, true);
 
-		if (size == SOCKET_ERROR) {
-			if (WSAGetLastError() == WSAECONNRESET) {
-				closesocket(socket);
-				waitingConnections.erase(i);
-				std::cout << "Ungueltige eingehende Verbindung geschlossen\n";
-				return;
-			}
+        std::cout << "Paket: " << size << std::endl;
+
+		if (size == 0) {
+            closeSocket(socket);
+            waitingConnections.erase(i);
+            std::cout << "Ungueltige eingehende Verbindung geschlossen\n";
+            return;
 		} else if (size >= 4) {
 			//Kleine Test-Header erkennung
 			if (*(unsigned int*)netbuffer == 0xABCDEF01) {

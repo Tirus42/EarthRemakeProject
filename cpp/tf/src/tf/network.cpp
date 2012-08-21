@@ -11,13 +11,10 @@
 	#include <fcntl.h>
 	#include <netdb.h>
 	#include <memory.h>
-
-	#define NO_ERROR 0
-	#define SOCKET_ERROR -1
 #endif
 
-#ifdef WIN32
 bool InitNetwork() {
+    #ifdef WIN32
 	WORD wVersionRequested = MAKEWORD(2, 2);
 	WSADATA wsaData;
 
@@ -26,8 +23,11 @@ bool InitNetwork() {
 		return false;
 	}
 	return true;
+	#else
+    return true;    //Unix braucht das nicht
+	#endif
 }
-#endif
+
 
 int CreateTCPServer(unsigned short port, bool nonblock) {
 	int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -49,12 +49,7 @@ int CreateTCPServer(unsigned short port, bool nonblock) {
 
 	if(nonblock){
 		//Socket in non-Block mode setzen
-		#ifdef WIN32
-		u_long iMode = 1;
-		result = ioctlsocket(sock, FIONBIO, &iMode);
-		#else
-		result = fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK);
-		#endif
+		result = setSocketNonblock(sock);
 		if(result != NO_ERROR){
 			std::cout << "Konnte Socket nicht in nonBlock mode setzen!\n";
 		}
@@ -88,6 +83,34 @@ int CreateUDPStream(unsigned short port) {
 	int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
 	return sock;
+}
+
+bool setSocketNonblock(int socket) {
+    #ifdef WIN32
+        u_long iMode = 1;
+        return ioctlsocket(socket, FIONBIO, &iMode);
+    #else
+        return fcntl(socket, F_SETFL, fcntl(socket, F_GETFL, 0) | O_NONBLOCK);
+    #endif
+}
+
+int socketSend(int socket, char* buffer, int size) {
+	return send(socket, buffer, size, 0);
+}
+
+int socketRecv(int socket, char* buffer, int size, bool peekOnly) {
+    #ifdef WIN32
+        int result = recv(socket, buffer, size, (peekOnly ? MSG_PEEK : 0));
+        if (result == SOCKET_ERROR) {
+			if (WSAGetLastError() == WSAECONNRESET) {
+			    return 0;
+			}
+			return -1;
+        }
+        return result;
+    #else
+        return recv(socket, buffer, size, (peekOnly ? MSG_PEEK : 0));
+    #endif
 }
 
 void closeSocket(int socket) {

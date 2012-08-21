@@ -7,36 +7,43 @@ PlayerNetworkConnection::PlayerNetworkConnection(int32_t socket, const sockaddr_
 	socket(socket),
 	networkAdress(networkAdress),
 	sendBuffers() {
-
 }
 
 PlayerNetworkConnection::~PlayerNetworkConnection() {
-	closesocket(socket);
+	closeSocket(socket);
 	std::cout << "Netzwerkverbindung zu Spieler getrennt!\n";
 }
 
-void PlayerNetworkConnection::sendPacket(char* pointer, uint32_t length) {
+void PlayerNetworkConnection::sendPacket(char* pointer, int32_t length) {
 	std::cout << "Sende " << length << " bytes\n";
 
-	if (sendBuffers.size() != 0) { //Wenn bereits etwas im Buffer liegt, dann hinten dran einfügen
+	if (sendBuffers.size() != 0) { //Wenn bereits etwas im Buffer liegt, dann hinten dran einfÃ¼gen
 		SendBuffer* b = new SendBuffer(pointer, length);
 		sendBuffers.push_back(b);
 		return;
 	}
 
 	//Wenn Buffer leer, dann versuche es direkt zu senden, wenn nicht erfolgreich, schreibe es in den Buffer
-	if (send(socket, pointer, length, 0) == SOCKET_ERROR) {
+	int32_t size = send(socket, pointer, length, 0);
+
+	//Wenn der Inhalt garnicht gesendet werden konnte,
+	if (size == SOCKET_ERROR) {
 		std::cout << "Lagere aus\n";
 		SendBuffer* b = new SendBuffer(pointer, length);
+		sendBuffers.push_back(b);
+	} else if (size < length) { // Schreibe restliche Daten zum Nachsenden in den Buffer
+		std::cout << "Lagere TCP Daten zum nachsenden aus (" << (length - size) << " Bytes)\n";
+		SendBuffer* b = new SendBuffer(pointer + size, length - size);
 		sendBuffers.push_back(b);
 	}
 };
 
 void PlayerNetworkConnection::sendBufferContent() {
-	for (std::list<SendBuffer*>::iterator i=sendBuffers.begin();i!=sendBuffers.end();/*kein zähler*/) {
+	for (std::list<SendBuffer*>::iterator i=sendBuffers.begin();i!=sendBuffers.end();/*kein zÃ¤hler*/) {
 		if((*i)->sendPacket(socket) == true){
 			delete (*i);	//Buffer wurde gesendet, also kann er wieder freigegeben werden
 			i = sendBuffers.erase(i);
+			std::cout << "Erfolgreich (nach)-gesendet!\n";
 		}
 		else{   //Offenbar Limit wieder erreicht, also hier abbrechen
 			return;

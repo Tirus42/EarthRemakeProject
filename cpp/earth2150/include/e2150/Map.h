@@ -68,7 +68,7 @@ class Map {
 		virtual uint8_t countSpawnPoints() const = 0;
 
 		/// Fügt einen weiteren Player-Spawn-Punkt hinzu
-		virtual void addSpawnPoint(const MapPosition& position, const Faction* faction = NULL) = 0;
+		virtual void addSpawnPoint(const MapPosition& position, const Faction* faction = 0) = 0;
 };
 
 #endif // MAPINTERFACE_H_INCLUDED

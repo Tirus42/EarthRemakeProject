@@ -4,16 +4,7 @@
 #ifdef WIN32
 	#include <windows.h>
 #else
-	#include <sys/types.h>
-	#include <sys/socket.h>
 	#include <netinet/in.h>
-
-	#include <fcntl.h>
-	#include <netdb.h>
-	#include <memory.h>
-
-	#define NO_ERROR 0
-	#define SOCKET_ERROR -1
 #endif
 
 #include "tf/network.h"
@@ -37,7 +28,7 @@ class PlayerNetworkConnection {
 
 		int32_t getSocket() const {return socket;}
 
-		void sendPacket(char* pointer, uint32_t length);	//Sendet angegebene Daten an den Client (behält Reihenfolge!)
+		void sendPacket(char* pointer, int32_t length);	//Sendet angegebene Daten an den Client (behält Reihenfolge!)
 		void sendBufferContent();   //Sendet ggf. ausstehende Daten an den Client
 
 };

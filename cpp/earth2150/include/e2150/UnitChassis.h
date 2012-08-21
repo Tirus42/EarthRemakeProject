@@ -1,6 +1,7 @@
 #ifndef UNITCHASSIS_H_INCLUDED
 #define UNITCHASSIS_H_INCLUDED
 
+#include <stdint.h>
 #include <string>
 
 /**
