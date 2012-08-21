@@ -30,20 +30,21 @@ void MapImpl::updateMovementMap() {
 
 void MapImpl::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
 	if (x1 > x2) {
-		return updateMovementMap(x2, y1, x1, y2);
+		std::swap(x1, x2);
 	}
 	if (y1 > y2) {
-		return updateMovementMap(x1, y2, x2, y1);
+		std::swap(y1, y2);
 	}
-	int32_t w = x2 - x1;
-	int32_t h = y2 - y1;
-	bool* buffer = new bool[w * h];
+
+	uint16_t w = x2 - x1;
+	uint16_t h = y2 - y1;
+	bool* passables = new bool[w * h];
 
 	//Felder definieren, welche nicht "zu schief" sind
-	for (uint32_t y = y1; y < y2; ++y) {
-		for (uint32_t x = x1; x < x2; ++x) {
+	for (uint16_t y = y1; y < y2; ++y) {
+		for (uint16_t x = x1; x < x2; ++x) {
 			uint32_t index = position(x, y);
-			buffer[index] = (getHeightDiffOnField(index) < MAX_HEIGHTDIFF);
+			passables[index] = (getHeightDiffOnField(index) < MAX_HEIGHTDIFF);
 		}
 	}
 
@@ -54,42 +55,42 @@ void MapImpl::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t 
 	--y2;
 
 	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
-	for (uint32_t y = y1; y < y2; ++y) {
-		for (uint32_t x = x1; x < x2; ++x) {
+	for (uint16_t y = y1; y < y2; ++y) {
+		for (uint16_t x = x1; x < x2; ++x) {
 			uint32_t index = position(x, y);
 			uint8_t value = 0;
 
 			//Ist dieses Feld begehbar?
-			if (buffer[index]) {
-				if (buffer[index - width]) {
+			if (passables[index]) {
+				if (passables[index - width]) {
 					value |= NORTH;
 				}
-				if (buffer[index + width]) {
+				if (passables[index + width]) {
 					value |= SOUTH;
 				}
-				if (buffer[index + 1]) {
+				if (passables[index + 1]) {
 					value |= EAST;
 				}
-				if (buffer[index - 1]) {
+				if (passables[index - 1]) {
 					value |= WEST;
 				}
-				if (buffer[index + 1 - width]) {
+				if (passables[index + 1 - width]) {
 					value |= NORTH_EAST;
 				}
-				if (buffer[index + 1 + width]) {
+				if (passables[index + 1 + width]) {
 					value |= SOUTH_EAST;
 				}
-				if (buffer[index - 1 + width]) {
+				if (passables[index - 1 + width]) {
 					value |= SOUTH_WEST;
 				}
-				if (buffer[index - 1 - width]) {
+				if (passables[index - 1 - width]) {
 					value |= NORTH_WEST;
 				}
 			}
 			movementMap[index] = value;
 		}
 	}
-	delete[] buffer;
+	delete[] passables;
 }
 
 void MapImpl::updateMovementMap(uint32_t position1, uint32_t position2) {
@@ -97,18 +98,17 @@ void MapImpl::updateMovementMap(uint32_t position1, uint32_t position2) {
 	uint16_t y1 = positionY(position1);
 	uint16_t x2 = positionX(position2);
 	uint16_t y2 = positionY(position2);
-
 	updateMovementMap(x1, y1, x2, y2);
 }
 
 void MapImpl::updateMovementMapWithBorder() {
-	bool* buffer = new bool[width * height];
+	bool* passables = new bool[width * height];
 
 	//Felder definieren, welche nicht "zu schief" sind
 	uint32_t size = (width-1) * (height-1);
 
 	for (uint32_t i = 0; i < size; ++i) {
-		buffer[i] = (getHeightDiffOnField(i) < MAX_HEIGHTDIFF);
+		passables[i] = (getHeightDiffOnField(i) < MAX_HEIGHTDIFF);
 	}
 
 	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
@@ -116,41 +116,41 @@ void MapImpl::updateMovementMapWithBorder() {
 		uint8_t value = 0;
 
 		//Ist dieses Feld begehbar?
-		if (buffer[index]) {
-			if ((index > width-1) && (buffer[index - width])) {
+		if (passables[index]) {
+			if ((index > width-1) && (passables[index - width])) {
 				value |= NORTH;
 			}
-			if (buffer[index + width]) {
+			if (passables[index + width]) {
 				value |= SOUTH;
 			}
-			if ((index % width != width-2) && (buffer[index + 1])) {
+			if ((index % width != width-2) && (passables[index + 1])) {
 				value |= EAST;
 			}
-			if ((index % width > 0) && (buffer[index - 1])) {
+			if ((index % width > 0) && (passables[index - 1])) {
 				value |= WEST;
 			}
-			if (((index % width != width-2) && (index > width-1)) &&(buffer[index + 1 - width])) {
+			if (((index % width != width-2) && (index > width-1)) &&(passables[index + 1 - width])) {
 				value |= NORTH_EAST;
 			}
-			if ((index % width != width-2) && (buffer[index + 1 + width])) {
+			if ((index % width != width-2) && (passables[index + 1 + width])) {
 				value |= SOUTH_EAST;
 			}
-			if ((index % width > 0) && (buffer[index - 1 + width])) {
+			if ((index % width > 0) && (passables[index - 1 + width])) {
 				value |= SOUTH_WEST;
 			}
-			if (((index % width > 0) && (index > width)) && (buffer[index - 1 - width])) {
+			if (((index % width > 0) && (index > width)) && (passables[index - 1 - width])) {
 				value |= NORTH_WEST;
 			}
 		}
 		movementMap[index] = value;
 	}
-	delete[] buffer;
+	delete[] passables;
 }
 
 uint32_t MapImpl::getNumberOfMoveableFields() const {
 	uint32_t moveableFields = 0;
-	for (uint32_t y=0; y<height; ++y) {
-		for (uint32_t x=0; x<width; ++x) {
+	for (uint16_t y = 0; y < height; y++) {
+		for (uint16_t x = 0; x < width; x++) {
 			uint32_t index = position(x, y);
 			if (movementMap[index]) {
 				moveableFields++;
@@ -174,7 +174,7 @@ uint16_t MapImpl::getHeightDiffOnField(uint32_t position) const {
 
 std::vector<MapPosition> MapImpl::getNeighbourPositions(uint16_t x, uint16_t y) const {
 	MapPosition _[8];
-	uint16_t x0=x-1, y0=y-1, x1=x+1, y1=y+1;
+	uint16_t x0 = x - 1, y0 = y - 1, x1 = x + 1, y1 = y + 1;
 	size_t size = 0;
 	uint8_t directions=getDirections(x, y);
 	if (directions&NORTH)      {_[size++] = MapPosition(x,  y0);}
