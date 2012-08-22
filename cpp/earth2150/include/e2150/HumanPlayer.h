@@ -26,7 +26,7 @@ class HumanPlayer : public Player {
 		HumanPlayer operator=(const HumanPlayer&);
 	public:
 		HumanPlayer(TestServer* server, int32_t socket, const std::string& name, const sockaddr_in& networkAdress);
-		~HumanPlayer();
+		virtual ~HumanPlayer();
 
 		/// Setzt die Spieler-Netzwerkverbindung (kopiert das Objekt)
 		void setConnection(const PlayerNetworkConnection& connection) {this->connection = connection;}

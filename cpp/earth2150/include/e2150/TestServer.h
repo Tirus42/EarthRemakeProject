@@ -34,7 +34,7 @@ class TestServer {
 		void checkIncommingData();
 		void handleIncommingData(HumanPlayer& player, int32_t size);
 
-		void createHumanPlayer();
+		/// Entfernt einen Spieler aus dem Spiel
 		void removeHumanPlayer(HumanPlayer& player);
 
 		void sendMapDataRaw(const MapImpl& map, HumanPlayer& player) const;

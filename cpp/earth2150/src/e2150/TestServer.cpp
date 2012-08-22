@@ -81,8 +81,12 @@ void TestServer::checkIncommingData() {
 
 		int32_t size = socketRecv(socket, netbuffer, BUFFERSIZE, true);
 
+		// Bei -1 keine neuen Daten, bei 0 Verbindung getrennt
 		if (size > 0) {
 			handleIncommingData(*(*i), size);
+		} else if (size == 0) {
+			removeHumanPlayer(*(*i));
+			return;
 		}
 
 		//Wenn noch Daten zum senden anstehen, dann senden
@@ -162,6 +166,11 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 			socketRecv(socket, netbuffer, 1, false);
 			std::cout << "Unbekanntes Paket eingegangen! (" << (int)netbuffer[0] << ")\n";
 	}
+}
+
+void TestServer::removeHumanPlayer(HumanPlayer& player) {
+	players.remove(&player);
+	delete &player;
 }
 
 void TestServer::acceptNewConnections() {
