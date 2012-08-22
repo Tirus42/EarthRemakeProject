@@ -152,6 +152,12 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 		}
 		break;
 
+		case 0x06: {	///Anfrage der Einheiten auf der ganzen Karte
+			socketRecv(socket, netbuffer, 1, false);
+			sendUnitList(player);
+			break;
+		}
+
 		default:
 			socketRecv(socket, netbuffer, 1, false);
 			std::cout << "Unbekanntes Paket eingegangen! (" << (int)netbuffer[0] << ")\n";
@@ -232,7 +238,7 @@ uint32_t TestServer::pokeString(const std::string& text, uint32_t offset) {
 	return offset + length + 2;
 }
 
-void TestServer::sendMapDataRaw(const MapImpl& map, HumanPlayer& player) {
+void TestServer::sendMapDataRaw(const MapImpl& map, HumanPlayer& player) const {
 	std::cout << "Sende Karte\n";
 
 	uint32_t dataSize = map.getWidth() * map.getHeight();
@@ -250,7 +256,7 @@ void TestServer::sendMapDataRaw(const MapImpl& map, HumanPlayer& player) {
 	delete[] buffer;
 }
 
-void TestServer::sendMapWaymapRaw(const MapImpl& map, HumanPlayer& player) {
+void TestServer::sendMapWaymapRaw(const MapImpl& map, HumanPlayer& player) const {
 	std::cout << "Sende Wegekarte\n";
 
 	uint32_t dataSize = map.getWidth() * map.getHeight();
@@ -270,7 +276,7 @@ void TestServer::sendChassisList(HumanPlayer& player) {
 
 	*(int32_t*)(&netbuffer[0]) = unitChassis.size();
 
-	int offset = 4;
+	int32_t offset = 4;
 	for (std::map<uint32_t, const UnitChassis*>::const_iterator i = unitChassis.begin(); i != unitChassis.end(); ++i) {
 		const UnitChassis* c = (*i).second;
 
@@ -284,6 +290,25 @@ void TestServer::sendChassisList(HumanPlayer& player) {
 		*(uint32_t*)(&netbuffer[offset+12])	= c->getHitPoints();
 
 		offset += 16;
+	}
+
+	player.getConnection().sendPacket(netbuffer, offset);
+}
+
+void TestServer::sendUnitList(HumanPlayer& player) {
+	std::cout << "Sende Einheiten Liste\n";
+
+	const std::map<uint32_t, Unit*> units = map.getUnits();
+
+	*(uint32_t*)(&netbuffer[0]) = units.size();
+
+	// Todo: Prüfen ob Speicher wirklich groß genug für alle und ggf. neuen anlegen
+
+	int32_t offset = 4;
+	for (std::map<uint32_t, Unit*>::const_iterator i = units.begin(); i != units.end(); ++i) {
+		const Unit* u = (*i).second;
+
+		offset += u->dumpData(&netbuffer[offset]);
 	}
 
 	player.getConnection().sendPacket(netbuffer, offset);

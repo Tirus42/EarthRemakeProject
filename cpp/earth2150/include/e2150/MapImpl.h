@@ -68,10 +68,15 @@ class MapImpl : public Map {
 		virtual uint8_t countSpawnPoints() const {return spawnPositions.size();}
 		virtual void addSpawnPoint(const MapPosition& position, const Faction* faction = NULL);
 
-		uint8_t getDirections(uint16_t x, uint16_t y) const {return movementMap[position(x, y)];}
+		inline uint8_t getDirections(uint16_t x, uint16_t y) const {return movementMap[position(x, y)];}
 
 		inline uint16_t getRawHeight(uint32_t offset) const {return heightMap[offset];}
 		inline uint8_t getRawWay(uint32_t offset) const {return movementMap[offset];}
+
+		virtual uint32_t getUnitCount() const {return units.size();}
+
+		/// Gibt die Liste der Einheiten auf dem Spielfeld zurück
+		const std::map<uint32_t, Unit*> getUnits() const {return units;}
 
 		const Navigator* getNavigator() const {return navigator;}
 

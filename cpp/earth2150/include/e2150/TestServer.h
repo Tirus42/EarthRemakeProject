@@ -37,9 +37,12 @@ class TestServer {
 		void createHumanPlayer();
 		void removeHumanPlayer(HumanPlayer& player);
 
-		void sendMapDataRaw(const MapImpl& map, HumanPlayer& player);
-		void sendMapWaymapRaw(const MapImpl& map, HumanPlayer& player);
+		void sendMapDataRaw(const MapImpl& map, HumanPlayer& player) const;
+		void sendMapWaymapRaw(const MapImpl& map, HumanPlayer& player) const;
 		void sendChassisList(HumanPlayer& player);
+
+		/// Sendet die Liste aller Einheiten auf der Karte an den Spieler
+		void sendUnitList(HumanPlayer& player);
 
 		/// Sendet ein Spawn Paket an alle Spieler
 		void sendUnitSpawn(const Unit& unit);

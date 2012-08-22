@@ -64,6 +64,9 @@ class Map {
 		/// Entfernt eine Einheit von dem Spielfeld
 		virtual void removeUnit(Unit& unit) = 0;
 
+		/// Gibt an, wie viele Einheiten z.Z. auf dem Spielfeld sind
+		virtual uint32_t getUnitCount() const = 0;
+
 		/// Gibt die Anzahl der Player-Spawn-Punkte zurück
 		virtual uint8_t countSpawnPoints() const = 0;
 
