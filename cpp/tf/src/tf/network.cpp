@@ -39,12 +39,15 @@ int CreateTCPServer(unsigned short port, bool nonblock) {
 	service.sin_port = htons(port);
 
 	int result = bind(sock, (sockaddr *) &service, sizeof(service));
-	if(result == SOCKET_ERROR){
-		return SOCKET_ERROR;
+	if(result == SOCKET_ERROR) {
+		closeSocket(sock);
+		return 0;
 	}
 
 	if(listen(sock, SOMAXCONN) == SOCKET_ERROR){
 		std::cout << "Socket konnte nicht in listen mode gesetzt werden!";
+		closesocket(sock);
+		return 0;
 	}
 
 	if(nonblock){
