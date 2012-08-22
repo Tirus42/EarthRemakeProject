@@ -33,14 +33,16 @@
 	}
 
 	//Themporär an BB Prog anpassen (dort die unit/test1.txt)
-	UnitChassis unit_LCUCR3(1, "Crather3", "Crater III", 27777, 1000000, 0, 1000); //Einheit 10s für komplette Drehung
-	UnitChassis unit_EDGRUZ(2, "ed_gruz_mk1", "Gruz Baufahrzeug", 27777, 1000000, 0, 800);
+	UnitChassis unit_LCUCR3(1, "Crather3", "Crater III", 27, 1000, 0, 1000); //Einheit 10s für komplette Drehung
+	UnitChassis unit_EDGRUZ(2, "ed_gruz_mk1", "Gruz Baufahrzeug", 27, 1000, 0, 800);
+	UnitChassis unit_TESTBOX(3, "testbox", "Testbox", 3, 250, 0, 10);
 
 
 	TestServer gameServer(server, m);
 
 	gameServer.addUnitChassis(unit_LCUCR3);
 	gameServer.addUnitChassis(unit_EDGRUZ);
+	gameServer.addUnitChassis(unit_TESTBOX);
 
 	gameServer.run();
 

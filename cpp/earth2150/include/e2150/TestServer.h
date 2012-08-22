@@ -52,6 +52,7 @@ class TestServer {
 		TestServer(int32_t socket, MapImpl& map);
 		virtual ~TestServer();
 
+		/// Fügt eine weitere UnitChassis zu den Spawnmöglichkeiten hinzu
 		void addUnitChassis(const UnitChassis& chassis);
 
 		/// Erstellt (wenn möglich) eine neue Einheit auf der Karte

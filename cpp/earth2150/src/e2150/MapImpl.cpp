@@ -261,10 +261,13 @@ bool MapImpl::addUnit(Unit& unit, uint16_t x, uint16_t y) {
 	//Und deren Position setzen
 	unit.setPosition(x, y);
 
+	//Auf der Karte verzeichnen, dass hier nun eine Einheit steht
+	setFieldStatusFlag(position(x, y), STATUS_UNIT, true);
+
 	//Spieler über neue Einheit informieren
 	viewerManager.createEntity(unit);
 
-	std::cout << "Neue Einheit auf die Map gesetzt\n";
+	std::cout << "Neue Einheit auf die Karte gesetzt (" << x << ":" << y << ")\n";
 
 	return true;
 }

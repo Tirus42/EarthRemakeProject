@@ -79,7 +79,7 @@ void TestServer::checkIncommingData() {
 	for (std::list<HumanPlayer*>::iterator i = players.begin(); i != players.end(); ++i) {
 		int32_t socket = (*i)->getConnection().getSocket();
 
-		int32_t size = recv(socket, netbuffer, BUFFERSIZE, MSG_PEEK);
+		int32_t size = socketRecv(socket, netbuffer, BUFFERSIZE, true);
 
 		if (size > 0) {
 			handleIncommingData(*(*i), size);
@@ -95,23 +95,23 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 
 	switch (netbuffer[0]) {
 		case 0x01:	///Anfrage des Clients der ganzen Map
-			recv(socket, netbuffer, 1, 0);
+			socketRecv(socket, netbuffer, 1, false);
 			sendMapDataRaw(map, player);
 			break;
 
 		case 0x02:	///Anfrage des Clients nach der Wegekarte
-			recv(socket, netbuffer, 1, 0);
+			socketRecv(socket, netbuffer, 1, false);
 			sendMapWaymapRaw(map, player);
 			break;
 
 		case 0x03: {	///Anfrage des Clients nach einer Wegberechnung
-			recv(socket, netbuffer, 9, 0);
+			socketRecv(socket, netbuffer, 9, 0);
 
 			uint32_t start = *((uint32_t*)&netbuffer[1]);
 			uint32_t target = *((uint32_t*)&netbuffer[5]);
 
-			std::cout << "Suche Weg von (" << map.positionX(start) << " " << map.positionY(start);
-			std::cout << ") zu (" << map.positionX(target) << " " << map.positionY(target) << ")\n";
+			std::cout << "Suche Weg von (" << map.positionX(start) << ":" << map.positionY(start);
+			std::cout << ") zu (" << map.positionX(target) << ":" << map.positionY(target) << ")\n";
 
 
 			int32_t time = MilliSecs();
@@ -153,7 +153,7 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 		break;
 
 		default:
-			recv(socket, netbuffer, 1, 0);
+			socketRecv(socket, netbuffer, 1, false);
 			std::cout << "Unbekanntes Paket eingegangen! (" << (int)netbuffer[0] << ")\n";
 	}
 }
@@ -192,7 +192,7 @@ void TestServer::handleNewConnections() {
 			//Kleine Test-Header erkennung
 			if (*(unsigned int*)netbuffer == 0xABCDEF01) {
 				//Nachricht komplett lesen
-				recv(socket, netbuffer, 4, 0);
+				socketRecv(socket, netbuffer, 4, false);
 
 				HumanPlayer* player = new HumanPlayer(this, socket, std::string("Player"), sockaddr_in());
 
