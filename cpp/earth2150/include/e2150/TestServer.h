@@ -3,12 +3,13 @@
 
 #include <stdint.h>
 #include <string>
-#include <vector>
+#include <map>
 #include <list>
 
 class HumanPlayer;
 class MapImpl;
 class UnitChassis;
+class Unit;
 
 class TestServer {
 	private:
@@ -20,7 +21,9 @@ class TestServer {
 		std::list<int32_t> waitingConnections;  //Speichert alle eingehende Verbindungen, bis eine Anfrage kommt
 		std::list<HumanPlayer*> players;
 
-		std::vector<const UnitChassis*> unitChassis;
+		std::map<uint32_t, const UnitChassis*> unitChassis;
+		uint32_t lastGivenEntityID;
+
 
 		TestServer(const TestServer&);
 		TestServer operator=(const TestServer&);
@@ -36,8 +39,12 @@ class TestServer {
 
 		void sendMapDataRaw(const MapImpl& map, HumanPlayer& player);
 		void sendMapWaymapRaw(const MapImpl& map, HumanPlayer& player);
-
 		void sendChassisList(HumanPlayer& player);
+
+		/// Sendet ein Spawn Paket an alle Spieler
+		void sendUnitSpawn(const Unit& unit);
+
+		uint32_t getFreeEntityID();
 
 		std::string peekString(uint32_t offset); //Liest aus dem netbuffer an angegebenen Offset einen String aus
 		uint32_t pokeString(const std::string& text, uint32_t offset);
@@ -46,6 +53,9 @@ class TestServer {
 		virtual ~TestServer();
 
 		void addUnitChassis(const UnitChassis& chassis);
+
+		/// Erstellt (wenn möglich) eine neue Einheit auf der Karte
+		bool createUnit(const UnitChassis& chassis, uint16_t x, uint16_t y);
 
 		char* getNetbufferPtr() const {return netbuffer;}
 

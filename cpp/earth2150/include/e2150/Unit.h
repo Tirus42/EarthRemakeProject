@@ -10,11 +10,10 @@ class Unit : public Entity {
 		static const int FLAG_INBUILDING = 1;
 
 		uint8_t controlableFlags;
-
+		const UnitChassis& chassis;
 
 
 	public:
-		Unit();
 		Unit(uint32_t id, const UnitChassis& chassis);
 		virtual ~Unit();
 
@@ -23,6 +22,8 @@ class Unit : public Entity {
 		* Nicht der fall wenn Einheit aus Werkshalle fährt, unter einfluss von Signalstörern steht ect
 		*/
 		bool isControlable() const {return !controlableFlags;}
+
+		int32_t dumpData(char* buffer) const;
 };
 
 #endif

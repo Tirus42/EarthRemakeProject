@@ -16,6 +16,7 @@
 				</Compiler>
 				<Linker>
 					<Add library="ws2_32" />
+					<Add library="winmm" />
 				</Linker>
 			</Target>
 			<Target title="Server - Release">
@@ -29,6 +30,7 @@
 				<Linker>
 					<Add option="-s" />
 					<Add library="ws2_32" />
+					<Add library="winmm" />
 				</Linker>
 			</Target>
 			<Target title="Server - VS - Debug">
@@ -45,6 +47,7 @@
 				<Linker>
 					<Add option="/DEBUG" />
 					<Add library="ws2_32" />
+					<Add library="winmm" />
 				</Linker>
 			</Target>
 			<Target title="Server - VS - Release">
@@ -62,6 +65,7 @@
 				</Compiler>
 				<Linker>
 					<Add library="ws2_32" />
+					<Add library="winmm" />
 				</Linker>
 			</Target>
 			<Target title="VS - Debug">
@@ -82,6 +86,7 @@
 					<Add library="msvcrtd.lib" />
 					<Add library="msvcprtd.lib" />
 					<Add library="ws2_32" />
+					<Add library="winmm" />
 				</Linker>
 			</Target>
 			<Target title="Linux - Debug">
@@ -103,8 +108,10 @@
 		</Compiler>
 		<Unit filename="..\tf\include\tf\file.h" />
 		<Unit filename="..\tf\include\tf\network.h" />
+		<Unit filename="..\tf\include\tf\time.h" />
 		<Unit filename="..\tf\src\tf\file.cpp" />
 		<Unit filename="..\tf\src\tf\network.cpp" />
+		<Unit filename="..\tf\src\tf\time.cpp" />
 		<Unit filename="include\e2150\AStar.h" />
 		<Unit filename="include\e2150\AStarBinaryHeap.h" />
 		<Unit filename="include\e2150\AStarNode.h" />

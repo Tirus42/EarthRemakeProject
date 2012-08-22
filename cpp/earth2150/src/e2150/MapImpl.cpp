@@ -232,7 +232,7 @@ bool MapImpl::loadHeightMapRAW(const std::string& filename) {
 
 bool MapImpl::isFieldFree(uint32_t position) const {
 	// Todo: Auf Gebäude und andere Objekte prüfen
-	return getFieldStatusFlag(position, STATUS_UNIT);
+	return !getFieldStatusFlag(position, STATUS_UNIT);
 }
 
 void MapImpl::setFieldStatusFlag(uint32_t position, uint8_t statusFlag, bool value) {

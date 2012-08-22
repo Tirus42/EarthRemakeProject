@@ -6,6 +6,7 @@
 #include "e2150/UnitChassis.h"
 #include "e2150/MapImpl.h"
 #include "e2150/AStar.h"
+#include "tf/time.h"
 #include <iostream>
 #include <cstring>
 
@@ -15,7 +16,8 @@ TestServer::TestServer(int32_t socket, MapImpl& map):
 		map(map),
 		waitingConnections(),
 		players(),
-		unitChassis() {
+		unitChassis(),
+		lastGivenEntityID(0) {
 	std::cout << "Server erstellt!\n";
 }
 
@@ -24,7 +26,30 @@ TestServer::~TestServer() {
 }
 
 void TestServer::addUnitChassis(const UnitChassis& chassis) {
-	unitChassis.push_back(&chassis);
+	unitChassis.insert(std::pair<uint32_t, const UnitChassis*>(chassis.getID(), &chassis));
+}
+
+bool TestServer::createUnit(const UnitChassis& chassis, uint16_t x, uint16_t y) {
+	std::cout << "Erstelle neue Einheit " << chassis.getName() << "\n";
+
+	Unit* unit = new Unit(getFreeEntityID(), chassis);
+
+	if (!map.addUnit(*unit, x, y)) {
+		delete unit;
+		return false;
+	}
+
+	sendUnitSpawn(*unit);
+	return true;
+}
+
+void TestServer::sendUnitSpawn(const Unit& unit) {
+	netbuffer[0] = 200;
+	int32_t size = unit.dumpData(&netbuffer[1]);
+
+	for (std::list<HumanPlayer*>::iterator i = players.begin(); i != players.end(); ++i) {
+		(*i)->getConnection().sendPacket(netbuffer, size + 1);
+	}
 }
 
 void TestServer::run() {
@@ -88,8 +113,14 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 			std::cout << "Suche Weg von (" << map.positionX(start) << " " << map.positionY(start);
 			std::cout << ") zu (" << map.positionX(target) << " " << map.positionY(target) << ")\n";
 
+
+			int32_t time = MilliSecs();
 			std::list<MapPosition> liste = Utils::vectorToList(
 						map.getNavigator()->getPath(map, start, target));
+			time = MilliSecs() - time;
+
+			std::cout << "Die Wegsuche dauerte " << time << "ms"
+				<< " und hat einen Weg ueber " << liste.size() << " Felder gefunden!\n";
 
 			player.debugPaintFields(
 				Utils::mapPositionToPosition(
@@ -97,10 +128,29 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 		}
 		break;
 
-		case 0x04:
+		case 0x04:		///Anfrage des Clients nach der Chassis Liste
 			socketRecv(socket, netbuffer, 1, false);
 			sendChassisList(player);
 			break;
+
+		case 0x05: {		///Client möchte eine Unit spawnen
+			socketRecv(socket, netbuffer, 9, false);
+
+			uint32_t chassisID = *((uint32_t*)&netbuffer[1]);
+			uint32_t position = *((uint32_t*)&netbuffer[5]);
+
+			int16_t x = map.positionX(position);
+			int16_t y = map.positionY(position);
+
+			std::cout << "Erhalte spawn Befehl!\n";
+
+			const UnitChassis* chassis = unitChassis[chassisID];
+
+			if (chassis != 0) {
+				createUnit(*chassis, x, y);
+			}
+		}
+		break;
 
 		default:
 			recv(socket, netbuffer, 1, 0);
@@ -221,18 +271,24 @@ void TestServer::sendChassisList(HumanPlayer& player) {
 	*(int32_t*)(&netbuffer[0]) = unitChassis.size();
 
 	int offset = 4;
-	for (std::vector<const UnitChassis*>::const_iterator i = unitChassis.begin(); i != unitChassis.end(); ++i) {
-		*(uint32_t*)(&netbuffer[offset]) = (*i)->getID();
-		offset = pokeString((*i)->getModel(), offset+4);
-		offset = pokeString((*i)->getName(), offset);
+	for (std::map<uint32_t, const UnitChassis*>::const_iterator i = unitChassis.begin(); i != unitChassis.end(); ++i) {
+		const UnitChassis* c = (*i).second;
 
-		*(uint32_t*)(&netbuffer[offset])	= (*i)->getTurnRate();
-		*(uint32_t*)(&netbuffer[offset+4])	= (*i)->getMoveRate();
-		*(uint32_t*)(&netbuffer[offset+8])	= (*i)->getBuildTime();
-		*(uint32_t*)(&netbuffer[offset+12])	= (*i)->getHitPoints();
+		*(uint32_t*)(&netbuffer[offset]) = c->getID();
+		offset = pokeString(c->getModel(), offset+4);
+		offset = pokeString(c->getName(), offset);
+
+		*(uint32_t*)(&netbuffer[offset])	= c->getTurnRate();
+		*(uint32_t*)(&netbuffer[offset+4])	= c->getMoveRate();
+		*(uint32_t*)(&netbuffer[offset+8])	= c->getBuildTime();
+		*(uint32_t*)(&netbuffer[offset+12])	= c->getHitPoints();
 
 		offset += 16;
 	}
 
 	player.getConnection().sendPacket(netbuffer, offset);
+}
+
+uint32_t TestServer::getFreeEntityID() {
+	return ++lastGivenEntityID;
 }

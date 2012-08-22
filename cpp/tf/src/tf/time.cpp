@@ -1,6 +1,4 @@
-#include "time.h"
-
-///Wenn man das Hier drin lässt, macht das keine solche Probleme :)
+#include "tf/time.h"
 
 #ifdef WIN32
 	#include <windows.h>
@@ -10,7 +8,7 @@
 
 unsigned int MilliSecs(){
 	#ifdef WIN32
-        return timeGetTime();   ///THX.. wenn so fehler kommen fehlt ne lib.. und lib*.a kannste kürzer schreiben.. wo haste das mingw verz?
+        return timeGetTime();
 	#else
 		struct timeval tv;
 		gettimeofday(&tv, 0);
