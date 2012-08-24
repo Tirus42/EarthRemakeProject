@@ -54,23 +54,36 @@ void TestServer::sendUnitSpawn(const Unit& unit) {
 
 void TestServer::run() {
 
-    #ifndef WIN32
+	const uint32_t frameTime = 50;	//20FPS == 50ms pro Frame
+
+	// Tirus: Da ich leider noch keine "Timer" Funktion unter Linux finden konnte
+	// hier diese Fallunterscheidung, unter Linux ist die FrameZeit daher z.Z. nicht garantiert
+    #ifdef WIN32
+    int32_t timer = CreateTimer(frameTime);
+    #else
     timespec time;
     time.tv_sec = 0;
-    time.tv_nsec = 50000000L;
+    time.tv_nsec = frameTime * 1000000L;
     #endif
 
+	uint32_t rTime;
+
 	while (true) {
+		rTime = MilliSecs();
+
 		acceptNewConnections();
 		handleNewConnections();
 		checkIncommingData();
 
+		if (MilliSecs() - rTime > frameTime) {
+			std::cout << "Warnung: Frame Time dauerte " << (MilliSecs() - rTime) << "ms\n";
+		}
+
         #ifdef WIN32
-            Sleep(50);
+            WaitTimer(timer);
         #else
             nanosleep(&time, 0);
         #endif
-
 	}
 
 }

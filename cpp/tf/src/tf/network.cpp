@@ -46,7 +46,7 @@ int CreateTCPServer(unsigned short port, bool nonblock) {
 
 	if(listen(sock, SOMAXCONN) == SOCKET_ERROR){
 		std::cout << "Socket konnte nicht in listen mode gesetzt werden!";
-		closesocket(sock);
+		closeSocket(sock);
 		return 0;
 	}
 
