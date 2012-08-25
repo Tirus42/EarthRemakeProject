@@ -1,15 +1,24 @@
-#ifdef false
 #ifndef ASTAR_H
 #define ASTAR_H
 
+#include "e2150/AStarNodeComparator.h"
 #include "e2150/Navigator.h"
+#include <deque>
+#include <queue>
+
+class AStarNode;
 
 class AStar: public Navigator{
 	public:
-		AStar();
+		AStar(const Map& map): Navigator(map){}
 
-		std::vector<MapPosition> getPath(const Map& map, uint16_t startX, uint16_t startY, uint16_t x, uint16_t y) const;
+		bool getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_t>& path_list) const;
+		bool buildPathAndEraseRAM(
+			AStarNode *currentNode,
+			std::priority_queue<AStarNode*, std::vector<AStarNode*>, AStarNodeComparator>& openList,
+			std::deque<AStarNode*>& gc,
+			std::list<uint32_t>& path_list
+		) const;
 };
 
 #endif // ASTAR_H
-#endif

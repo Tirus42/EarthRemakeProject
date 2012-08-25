@@ -1,45 +1,41 @@
 #ifndef MAPINTERFACE_H_INCLUDED
 #define MAPINTERFACE_H_INCLUDED
 
-#include <stdint.h>
-#include <vector>
-#include <memory>
-#include <map>
-
 #include "e2150/MapPosition.h"
 #include "e2150/MapViewerManager.h"
+#include <stdint.h>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
 
 class Unit;
 class Faction;
 class Navigator;
 
 /**
-* Map Klasse
 * Beinhaltet die HeightMap sowie die Wegemap
 * und Verwaltet alle Spielobjekte auf der Karte
 */
 class Map {
 	private:
-		Map(const Map&);
-		void operator=(const Map&);
-
 		/// Breite der Karte
 		uint16_t width;
-		
+
 		/// Höhe der Karte
 		uint16_t height;
 
+		/// Die Anzahl an Felder am Rand, die nicht nutzbar für die Spieler ist
+		uint16_t borderWidth;
+
 		/// Array mit Höheninformationen, wird Zeilenweise gespeichert.
 		uint16_t* heightMap;
-		
+
 		/// Karte der Bewegungsmöglichkeiten.
 		uint8_t* movementMap;
-		
+
 		/// Beschreibt den Status eines Feldes (eine Einheit steht drauf z.B.).
 		uint8_t* statusMap;
-
-		/// Die Anzahl an Felder am Rand, die nicht nutzbar für die Spieler ist
-		uint32_t borderWidth;
 
 		Navigator* navigator;
 
@@ -53,6 +49,8 @@ class Map {
 		uint32_t getNumberOfMoveableFields() const;
 		uint16_t getHeightDiffOnField(uint32_t position) const;
 
+		Map(const Map& cc);
+		Map& operator=(const Map& cc);
 	public:
 		// Maximale höhendifferenz bei der ein Weg noch als begehbar gilt.
 		const static uint16_t MAX_HEIGHTDIFF = 2000;
@@ -74,19 +72,22 @@ class Map {
 		/// Erstellt eine neue map und allokiert den für die
 		/// angegebene Größe notwendigen Speicher.
 		Map(uint16_t width, uint16_t height);
-		virtual ~Map();
+		~Map();
 
 		/// Gibt die Breite der Karte zurück
-		inline uint16_t getWidth() const {return width;}
+		uint16_t getWidth() const{return width;}
 
 		/// Gibt die Höhe der Karte zurück
-		inline uint16_t getHeight() const {return height;}
+		uint16_t getHeight() const{return height;}
 
-		/// Berechnet aus x und y Koordinaten den Arrayindex des Feldes.
-		inline uint32_t position(uint16_t x, uint16_t y) const {
-			return y * width + x;
-		}
-		
+		uint16_t getBorderWidth() const{return borderWidth;}
+
+		uint16_t getMinX() const{return borderWidth;}
+		uint16_t getMinY() const{return borderWidth;}
+		uint16_t getMaxX() const{return width-borderWidth;}
+		uint16_t getMaxY() const{return height-borderWidth;}
+
+		inline uint32_t position(uint16_t x, uint16_t y) const {return y * width + x;}
 		inline uint16_t positionX(uint32_t position) const {return position % width;}
 		inline uint16_t positionY(uint32_t position) const {return position / width;}
 
@@ -100,18 +101,15 @@ class Map {
 
 		/// Gibt die möglichen Bewegungsrichtungen
 		/// des angegebenen Index aus zurück.
-		uint8_t getDirections(uint32_t index) const {
-			return movementMap[index];
-		}
+		uint8_t getDirections(uint32_t index) const{return movementMap[index];}
 
 		/// Gibt true zurück, falls dieses Feld frei ist.
 		/// (Weder ein Gebäude noch eine Einheit darauf)
 		bool isFieldFree(uint32_t position) const;
-		
+
 		/// Prüft, ob man von der angegebenen Position in die gegebene Richtung gehen kann.
 		/// Macht keine Prüfung, ob die Quellkoordinate gültig ist
-		inline bool isFieldWalkable(uint32_t from_index,
-                                    uint8_t map_direction) const {
+		inline bool isFieldWalkable(uint32_t from_index, uint8_t map_direction) const {
 			return (getDirections(from_index) & map_direction);
 		}
 
@@ -135,13 +133,13 @@ class Map {
 
 		/// Fügt einen weiteren Player-Spawn-Punkt hinzu
 		void addSpawnPoint(const MapPosition& position, const Faction* faction = 0);
-		
+
 		inline uint16_t getRawHeight(uint32_t offset) const {return heightMap[offset];}
 		inline uint8_t getRawWay(uint32_t offset) const {return movementMap[offset];}
 
 		/// Gibt die Liste der Einheiten auf dem Spielfeld zurück
 		const std::map<uint32_t, Unit*> getUnits() const {return units;}
-		
+
 		/// Berechnet die Bewegungsmöglichkeiten von jedem Feld auf der Map neu
 		void updateMovementMap();
 
@@ -155,7 +153,7 @@ class Map {
 
 		/// Läd eine Heightmap 1:1 aus einer Datei
 		bool loadHeightMapRAW(const std::string& filename);
-		
+
 		const Navigator* getNavigator() { return navigator; }
 };
 

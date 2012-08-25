@@ -1,5 +1,6 @@
-#include "e2150/map.h"
-#include "e2150/Navigator.h"
+#include "e2150/Map.h"
+
+#include "e2150/AStar.h"
 #include "e2150/JPSNavigator.h"
 #include "tf/file.h"
 
@@ -7,17 +8,19 @@
 #include <fstream>
 
 Map::Map(uint16_t width, uint16_t height) :
-		width(width), height(height),
+		width(width),
+		height(height),
+		borderWidth(1),
 		heightMap(new uint16_t[width * height]),
 		movementMap(new uint8_t[width * height]),
 		statusMap(new uint8_t[width * height]),
-		borderWidth(1),
-		//navigator(new AStar()),
+		//navigator(new AStar(*this)),
 		navigator(new JPSNavigator(*this)),
 		units(),
 		spawnPositions(),
-		viewerManager() {}
-		
+		viewerManager() {
+}
+
 Map::~Map() {
 	delete navigator;
 	delete[] statusMap;
@@ -41,8 +44,7 @@ std::vector<MapPosition> Map::getNeighbourPositions(uint16_t x, uint16_t y) cons
 	return std::vector<MapPosition>(_, _+size);
 }
 
-bool Map::getWay(uint32_t start_index, uint32_t goal_index,
-			     std::list<uint32_t>& path_list) const {
+bool Map::getWay(uint32_t start_index, uint32_t goal_index, std::list<uint32_t>& path_list) const {
 	return navigator->getPath(start_index, goal_index, path_list);
 }
 
@@ -61,7 +63,7 @@ bool Map::getFieldStatusFlag(uint32_t position, uint8_t statusFlag) const {
 bool Map::addUnit(Unit& unit, uint16_t x, uint16_t y) {
 	uint32_t pos = position(x, y);
 
-	//Prüfen ob das Feld frei ist um eine Einheit darauf zu setzen
+	//PrÃ¼fen ob das Feld frei ist um eine Einheit darauf zu setzen
 	if (!isFieldFree(pos)) {
 		return false;
 	}
@@ -75,7 +77,7 @@ bool Map::addUnit(Unit& unit, uint16_t x, uint16_t y) {
 	//Auf der Karte verzeichnen, dass hier nun eine Einheit steht
 	setFieldStatusFlag(position(x, y), STATUS_UNIT, true);
 
-	//Spieler über neue Einheit informieren
+	//Spieler Ã¼ber neue Einheit informieren
 	viewerManager.createEntity(unit);
 
 	std::cout << "Neue Einheit auf die Karte gesetzt (" << x << ":" << y << std::endl;
@@ -127,7 +129,7 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 	++y1;
 	--y2;
 
-	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
+	//Nun Komplette Map durchgehen, und in prÃ¼fen, welche Nachbarfelder auch begehbar sind
 	for (uint16_t y = y1; y < y2; ++y) {
 		for (uint16_t x = x1; x < x2; ++x) {
 			uint32_t index = position(x, y);
@@ -184,7 +186,7 @@ void Map::updateMovementMapWithBorder() {
 		passables[i] = (getHeightDiffOnField(i) < MAX_HEIGHTDIFF);
 	}
 
-	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
+	//Nun Komplette Map durchgehen, und in prÃ¼fen, welche Nachbarfelder auch begehbar sind
 	for (int32_t index = 0; index < width*height-1; ++index) {
 		uint8_t value = 0;
 
@@ -240,7 +242,7 @@ bool Map::loadHeightMapRAW(const std::string& filename) {
 	//Daten einlesen
 	file.read((char*)heightMap, fileSize);
 
-	//Datei wieder schließen
+	//Datei wieder schlieÃŸen
 	file.close();
 
 	return true;
@@ -259,6 +261,7 @@ uint16_t Map::getHeightDiffOnField(uint32_t position) const {
 }
 
 bool Map::isFieldFree(uint32_t position) const {
-	// Todo: Auf Gebäude und andere Objekte prüfen
+	// Todo: Auf GebÃ¤ude und andere Objekte prÃ¼fen
 	return !getFieldStatusFlag(position, STATUS_UNIT);
 }
+

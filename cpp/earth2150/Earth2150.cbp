@@ -109,9 +109,7 @@
 		</Compiler>
 		<Unit filename="..\ff\include\ff\JumpPointSearch.h" />
 		<Unit filename="..\ff\include\ff\MinHeap.h" />
-		<Unit filename="..\ff\include\ff\MovementIslands.h" />
 		<Unit filename="..\ff\src\ff\JumpPointSearch.cpp" />
-		<Unit filename="..\ff\src\ff\MovementIslands.cpp" />
 		<Unit filename="..\tf\include\tf\file.h" />
 		<Unit filename="..\tf\include\tf\network.h" />
 		<Unit filename="..\tf\include\tf\time.h" />
@@ -119,14 +117,15 @@
 		<Unit filename="..\tf\src\tf\network.cpp" />
 		<Unit filename="..\tf\src\tf\time.cpp" />
 		<Unit filename="include\e2150\AStar.h" />
-		<Unit filename="include\e2150\AStarBinaryHeap.h" />
 		<Unit filename="include\e2150\AStarNode.h" />
+		<Unit filename="include\e2150\AStarNodeComparator.h" />
 		<Unit filename="include\e2150\Building.h" />
 		<Unit filename="include\e2150\Entity.h" />
 		<Unit filename="include\e2150\Faction.h" />
 		<Unit filename="include\e2150\HumanPlayer.h" />
 		<Unit filename="include\e2150\JPSNavigator.h" />
 		<Unit filename="include\e2150\Map.h" />
+		<Unit filename="include\e2150\MapBitLayer.h" />
 		<Unit filename="include\e2150\MapPosition.h" />
 		<Unit filename="include\e2150\MapViewerManager.h" />
 		<Unit filename="include\e2150\Navigator.h" />
@@ -140,13 +139,13 @@
 		<Unit filename="include\e2150\Utils.h" />
 		<Unit filename="include\e2150\main.h" />
 		<Unit filename="src\e2150\AStar.cpp" />
-		<Unit filename="src\e2150\AStarBinaryHeap.cpp" />
 		<Unit filename="src\e2150\AStarNode.cpp" />
 		<Unit filename="src\e2150\Entity.cpp" />
 		<Unit filename="src\e2150\Faction.cpp" />
 		<Unit filename="src\e2150\HumanPlayer.cpp" />
 		<Unit filename="src\e2150\JPSNavigator.cpp" />
 		<Unit filename="src\e2150\Map.cpp" />
+		<Unit filename="src\e2150\MapBitLayer.cpp" />
 		<Unit filename="src\e2150\MapViewerManager.cpp" />
 		<Unit filename="src\e2150\Player.cpp" />
 		<Unit filename="src\e2150\PlayerNetworkConnection.cpp" />
