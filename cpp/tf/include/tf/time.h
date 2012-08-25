@@ -15,4 +15,7 @@ int CreateTimer(int ms);
 /// Wartet so lange bis der Timer einen "Tick" auslöst
 void WaitTimer(int hTimer);
 
+/// Gibt einen Timer wieder frei
+void FreeTimer(int hTimer);
+
 #endif // TIME_H

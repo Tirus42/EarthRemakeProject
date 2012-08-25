@@ -39,3 +39,9 @@ void WaitTimer(int hTimer) {
 	WaitForSingleObject((void*)hTimer, INFINITE);
 	#endif
 }
+
+void FreeTimer(int hTimer) {
+	#ifdef WIN32
+	CancelWaitableTimer((void*)hTimer);
+	#endif
+}
