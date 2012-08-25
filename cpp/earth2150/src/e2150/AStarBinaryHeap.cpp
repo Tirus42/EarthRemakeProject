@@ -27,7 +27,7 @@ AStarNode *AStarBinaryHeap::getNode(const MapPosition& position) const{
 	return (foundNode!=positionNodes.end())?foundNode->second:0;
 }
 
-AStarNode *AStarBinaryHeap::poll(){
+AStarNode *AStarBinaryHeap::poll() {
 	AStarNode *_ = nodes[1];
 	positionNodes.erase(_->getPosition());
 	nodes[1] = *(nodes.end()-1);

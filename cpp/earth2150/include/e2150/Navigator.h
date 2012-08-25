@@ -4,22 +4,27 @@
 #include "e2150/Map.h"
 #include "e2150/Unit.h"
 
+#include <list>
+
 class Map;
-class MapPosition;
 
 class Navigator {
+	protected:
+		const Map& map;
+
 	public:
-		virtual ~Navigator(){}
+		Navigator(const Map& map) : map(map) {}
+		virtual ~Navigator() {}
 
-		std::vector<MapPosition> getPath(const Map& map, const Unit& unit, uint16_t x, uint16_t y) const{
-			return getPath(map, unit.getX(), unit.getY(), x, y);
-		}
-
-		std::vector<MapPosition> getPath(const Map& map, uint32_t start, uint32_t target) const {
-			return getPath(map, map.positionX(start), map.positionY(start), map.positionX(target), map.positionY(target));
-		}
-
-		virtual std::vector<MapPosition> getPath(const Map& map, uint16_t startX, uint16_t startY, uint16_t x, uint16_t y) const = 0;
+		/// Generiert den Pfad zwischen den angegebenen Punkten und schreibt ihn
+		/// in die Liste, gibt true zurück, wenn der Pfad erfolgreich gefunden
+		/// und generiert wurde.
+		virtual bool getPath(uint32_t start_index, uint32_t goal_index,
+                             std::list<uint32_t>& path_list) const = 0;
+		
+		/// Wird aufgerufen, wenn sich Bereiche der Höhenkarte in der
+		/// Map ändern.
+		virtual void mapDataChanged(uint32_t top_left, uint16_t width, uint16_t height) {}
 };
 
 #endif // NAVIGATOR_H

@@ -1,3 +1,4 @@
+#ifdef false
 #ifndef ASTAR_H
 #define ASTAR_H
 
@@ -11,3 +12,4 @@ class AStar: public Navigator{
 };
 
 #endif // ASTAR_H
+#endif

@@ -2,17 +2,15 @@
 
 #include "ff/JumpPointSearch.h"
 
-std::vector<MapPosition> JPSNavigator::getPath(const Map& map,
-                                               uint16_t startX, uint16_t startY,
-                                               uint16_t x, uint16_t y) const {
-  ff::JumpPointSearch jps(map);
-  std::vector<MapPosition> path;
-  std::list<ff::coord_t> path_list;
+JPSNavigator::JPSNavigator(const Map& map) :
+	Navigator(map),
+	jps(new ff::JumpPointSearch(map)) {}
+	
+JPSNavigator::~JPSNavigator() {
+	delete jps;
+}
 
-  if (jps.Solve(path_list, startX, startY, x, y)) {
-    for (std::list<ff::coord_t>::iterator i = path_list.begin(); i != path_list.end(); i++) {
-      path.push_back(MapPosition(i->x, i->y));
-    }
-  }
-  return path;
+bool JPSNavigator::getPath(uint32_t start_index, uint32_t goal_index,
+			 std::list<uint32_t>& path_list) const {
+	return jps->Solve(start_index, goal_index, path_list);
 }

@@ -1,6 +1,6 @@
 #include "e2150/main.h"
 
-#include "e2150/MapImpl.h"
+#include "e2150/Map.h"
 #include "e2150/TestServer.h"
 #include "e2150/UnitChassis.h"
 #include "tf/network.h"
@@ -8,7 +8,7 @@
 #include <cstdlib>
 
 int main(int argc, char *argv[]) {
-	MapImpl m(1024, 1024);
+	Map m(1024, 1024);
 	bool result = m.loadHeightMapRAW("map1024x1024.bin");
 	std::cout << "Laden der Map " << (result ? "erfolgreich" : "fehlgeschlagen") << std::endl;
 

@@ -3,20 +3,60 @@
 
 #include <stdint.h>
 #include <vector>
+#include <memory>
+#include <map>
 
-class MapPosition;
+#include "e2150/MapPosition.h"
+#include "e2150/MapViewerManager.h"
+
 class Unit;
 class Faction;
+class Navigator;
 
 /**
-* (Abstrakte) Map-Oberklasse
-* Stellt alle (abstrakte-) Methoden bereit, welche eine Map implementieren muss
+* Map Klasse
+* Beinhaltet die HeightMap sowie die Wegemap
+* und Verwaltet alle Spielobjekte auf der Karte
 */
 class Map {
-	protected:
-		uint16_t width, height;	 //Breite und Höhe der Karte
+	private:
+		Map(const Map&);
+		void operator=(const Map&);
+
+		/// Breite der Karte
+		uint16_t width;
+		
+		/// Höhe der Karte
+		uint16_t height;
+
+		/// Array mit Höheninformationen, wird Zeilenweise gespeichert.
+		uint16_t* heightMap;
+		
+		/// Karte der Bewegungsmöglichkeiten.
+		uint8_t* movementMap;
+		
+		/// Beschreibt den Status eines Feldes (eine Einheit steht drauf z.B.).
+		uint8_t* statusMap;
+
+		/// Die Anzahl an Felder am Rand, die nicht nutzbar für die Spieler ist
+		uint32_t borderWidth;
+
+		Navigator* navigator;
+
+		std::map<uint32_t, Unit*> units;		//Bedarf ggf. überarbeitung
+
+		std::vector<MapPosition> spawnPositions;
+
+		MapViewerManager viewerManager;
+
+		/// Anzahl der Felder, auf denen sich Bewegt werden kann (Weggitter hat verbindung)
+		uint32_t getNumberOfMoveableFields() const;
+		uint16_t getHeightDiffOnField(uint32_t position) const;
 
 	public:
+		// Maximale höhendifferenz bei der ein Weg noch als begehbar gilt.
+		const static uint16_t MAX_HEIGHTDIFF = 2000;
+
 		static const uint8_t NORTH		= (1 << 0);	 //0b00000001;
 		static const uint8_t NORTH_EAST	= (1 << 1);	 //0b00000010;
 		static const uint8_t EAST		= (1 << 2);	 //0b00000100;
@@ -26,61 +66,97 @@ class Map {
 		static const uint8_t WEST		= (1 << 6);	 //0b01000000;
 		static const uint8_t NORTH_WEST	= (1 << 7);	 //0b10000000;
 
-		static const uint8_t STATUS_UNIT = (1 << 0);	//Auf diesem Feld steht eine Einheit
-		static const uint8_t STATUS_MINE = (1 << 1);	//Auf diesem Feld liegt eine Mine
+		// Auf diesem Feld steht eine Einheit
+		static const uint8_t STATUS_UNIT = (1 << 0);
+		// Auf diesem Feld liegt eine Mine
+		static const uint8_t STATUS_MINE = (1 << 1);
 
-
-		Map(uint16_t width, uint16_t height) : width(width), height(height) {};
-		virtual ~Map() {};
+		/// Erstellt eine neue map und allokiert den für die
+		/// angegebene Größe notwendigen Speicher.
+		Map(uint16_t width, uint16_t height);
+		virtual ~Map();
 
 		/// Gibt die Breite der Karte zurück
-		uint16_t getWidth() const {return width;}
+		inline uint16_t getWidth() const {return width;}
 
 		/// Gibt die Höhe der Karte zurück
-		uint16_t getHeight() const {return height;}
+		inline uint16_t getHeight() const {return height;}
 
-		inline uint32_t position(uint16_t x, uint16_t y) const {return y * width + x;}
+		/// Berechnet aus x und y Koordinaten den Arrayindex des Feldes.
+		inline uint32_t position(uint16_t x, uint16_t y) const {
+			return y * width + x;
+		}
+		
 		inline uint16_t positionX(uint32_t position) const {return position % width;}
 		inline uint16_t positionY(uint32_t position) const {return position / width;}
 
 		/// Gibt die umliegenden Felder um das angegebene Feld zurück
-		virtual std::vector<MapPosition> getNeighbourPositions(uint16_t x, uint16_t y) const = 0;
+		std::vector<MapPosition> getNeighbourPositions(uint16_t x, uint16_t y) const;
 
-		/// Berechnet den Weg zwischen der Einheit und der Angegebenen Position
-		virtual std::vector<MapPosition> getWay(const Unit& unit, uint32_t destination) const = 0;
+		/// Berechnet den Weg zwischen zwei Punkten und speichert den Weg
+		/// in die Liste. Gibt true zurück, wenn der Weg gefunden wurde.
+		bool getWay(uint32_t start_index, uint32_t goal_index,
+					std::list<uint32_t>& path_list) const;
 
-    /// Gibt die möglichen Bewegungsrichtungen der angegebenen Position aus an
-		virtual uint8_t getDirections(uint16_t x, uint16_t y) const = 0;
+		/// Gibt die möglichen Bewegungsrichtungen
+		/// des angegebenen Index aus zurück.
+		uint8_t getDirections(uint32_t index) const {
+			return movementMap[index];
+		}
 
-		/// Prüft ob dieses Feld frei ist (Weder ein Gebäude noch eine Einheit darauf)
-		virtual bool isFieldFree(uint32_t position) const = 0;
+		/// Gibt true zurück, falls dieses Feld frei ist.
+		/// (Weder ein Gebäude noch eine Einheit darauf)
+		bool isFieldFree(uint32_t position) const;
 		
-		/// Prüft, ob mal von der angegebenen Position in die gegebene Richtung gehen kann.
-		/// Macht keine Pruefung, ob die Quellkoordinate gültig ist
-		inline bool isFieldWalkable(uint16_t from_x, uint16_t from_y, uint8_t map_direction) const {
-      return (getDirections(from_x, from_y) & map_direction);
+		/// Prüft, ob man von der angegebenen Position in die gegebene Richtung gehen kann.
+		/// Macht keine Prüfung, ob die Quellkoordinate gültig ist
+		inline bool isFieldWalkable(uint32_t from_index,
+                                    uint8_t map_direction) const {
+			return (getDirections(from_index) & map_direction);
 		}
 
 		/// Setzt ein Status-Bit für das angegebene Feld
-		virtual void setFieldStatusFlag(uint32_t position, uint8_t statusFlag, bool value) = 0;
+		void setFieldStatusFlag(uint32_t position, uint8_t statusFlag, bool value);
 
 		/// Gibt das Status-Bit des angegebenen Feldes zurück
-		virtual bool getFieldStatusFlag(uint32_t position, uint8_t statusFlag) const = 0;
+		bool getFieldStatusFlag(uint32_t position, uint8_t statusFlag) const;
 
 		/// Fügt eine Einheit in das Spielfeld ein
-		virtual bool addUnit(Unit& unit, uint16_t x, uint16_t y) = 0;
+		bool addUnit(Unit& unit, uint16_t x, uint16_t y);
 
 		/// Entfernt eine Einheit von dem Spielfeld
-		virtual void removeUnit(Unit& unit) = 0;
+		void removeUnit(Unit& unit);
 
 		/// Gibt an, wie viele Einheiten z.Z. auf dem Spielfeld sind
-		virtual uint32_t getUnitCount() const = 0;
+		uint32_t getUnitCount() const { return units.size(); }
 
 		/// Gibt die Anzahl der Player-Spawn-Punkte zurück
-		virtual uint8_t countSpawnPoints() const = 0;
+		uint8_t countSpawnPoints() const { return spawnPositions.size(); }
 
 		/// Fügt einen weiteren Player-Spawn-Punkt hinzu
-		virtual void addSpawnPoint(const MapPosition& position, const Faction* faction = 0) = 0;
+		void addSpawnPoint(const MapPosition& position, const Faction* faction = 0);
+		
+		inline uint16_t getRawHeight(uint32_t offset) const {return heightMap[offset];}
+		inline uint8_t getRawWay(uint32_t offset) const {return movementMap[offset];}
+
+		/// Gibt die Liste der Einheiten auf dem Spielfeld zurück
+		const std::map<uint32_t, Unit*> getUnits() const {return units;}
+		
+		/// Berechnet die Bewegungsmöglichkeiten von jedem Feld auf der Map neu
+		void updateMovementMap();
+
+		///Berechnet die Bewegungsmöglichkeiten innerhalb der angegebenen Felder auf der Map neu
+		void updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+
+		///Berechnet die Bewegungsmöglichkeiten innerhalb der angegebenen Felder auf der Map neu
+		void updateMovementMap(uint32_t position1, uint32_t position2);
+
+		void updateMovementMapWithBorder();
+
+		/// Läd eine Heightmap 1:1 aus einer Datei
+		bool loadHeightMapRAW(const std::string& filename);
+		
+		const Navigator* getNavigator() { return navigator; }
 };
 
 #endif // MAPINTERFACE_H_INCLUDED

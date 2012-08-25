@@ -1,0 +1,264 @@
+#include "e2150/map.h"
+#include "e2150/Navigator.h"
+#include "e2150/JPSNavigator.h"
+#include "tf/file.h"
+
+#include <iostream>
+#include <fstream>
+
+Map::Map(uint16_t width, uint16_t height) :
+		width(width), height(height),
+		heightMap(new uint16_t[width * height]),
+		movementMap(new uint8_t[width * height]),
+		statusMap(new uint8_t[width * height]),
+		borderWidth(1),
+		//navigator(new AStar()),
+		navigator(new JPSNavigator(*this)),
+		units(),
+		spawnPositions(),
+		viewerManager() {}
+		
+Map::~Map() {
+	delete navigator;
+	delete[] statusMap;
+	delete[] movementMap;
+	delete[] heightMap;
+}
+
+std::vector<MapPosition> Map::getNeighbourPositions(uint16_t x, uint16_t y) const {
+	MapPosition _[8];
+	uint16_t x0 = x - 1, y0 = y - 1, x1 = x + 1, y1 = y + 1;
+	size_t size = 0;
+	uint8_t directions=getDirections(position(x, y));
+	if (directions&NORTH)      {_[size++] = MapPosition(x,  y0);}
+	if (directions&NORTH_EAST) {_[size++] = MapPosition(x1, y0);}
+	if (directions&EAST)       {_[size++] = MapPosition(x1, y );}
+	if (directions&SOUTH_EAST) {_[size++] = MapPosition(x1, y1);}
+	if (directions&SOUTH)      {_[size++] = MapPosition(x,  y1);}
+	if (directions&SOUTH_WEST) {_[size++] = MapPosition(x0, y1);}
+	if (directions&WEST)       {_[size++] = MapPosition(x0, y );}
+	if (directions&NORTH_WEST) {_[size++] = MapPosition(x0, y0);}
+	return std::vector<MapPosition>(_, _+size);
+}
+
+bool Map::getWay(uint32_t start_index, uint32_t goal_index,
+			     std::list<uint32_t>& path_list) const {
+	return navigator->getPath(start_index, goal_index, path_list);
+}
+
+void Map::setFieldStatusFlag(uint32_t position, uint8_t statusFlag, bool value) {
+	if (value) {
+		statusMap[position] |= statusFlag;
+	} else {
+		statusMap[position] &= ~statusFlag;
+	}
+}
+
+bool Map::getFieldStatusFlag(uint32_t position, uint8_t statusFlag) const {
+	return statusMap[position] & statusFlag;
+}
+
+bool Map::addUnit(Unit& unit, uint16_t x, uint16_t y) {
+	uint32_t pos = position(x, y);
+
+	//Prüfen ob das Feld frei ist um eine Einheit darauf zu setzen
+	if (!isFieldFree(pos)) {
+		return false;
+	}
+
+	//Einheit auf Spielfeld setzen, und in Liste der Einheiten eintragen
+	units.insert(std::pair<uint32_t, Unit*>(unit.getID(), &unit));
+
+	//Und deren Position setzen
+	unit.setPosition(x, y);
+
+	//Auf der Karte verzeichnen, dass hier nun eine Einheit steht
+	setFieldStatusFlag(position(x, y), STATUS_UNIT, true);
+
+	//Spieler über neue Einheit informieren
+	viewerManager.createEntity(unit);
+
+	std::cout << "Neue Einheit auf die Karte gesetzt (" << x << ":" << y << std::endl;
+
+	return true;
+}
+
+void Map::removeUnit(Unit& unit) {
+	//Todo: Einheit aus Liste entfernen
+
+	viewerManager.removeEntity(unit);
+}
+
+void Map::addSpawnPoint(const MapPosition& position, const Faction* faction) {
+	spawnPositions.push_back(position);
+
+	//Todo: Faction verwalten
+}
+void Map::updateMovementMap() {
+	updateMovementMap(0, 0, width, height);
+	return;
+
+	updateMovementMap(borderWidth, borderWidth, width - borderWidth, height - borderWidth);
+}
+
+void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+	if (x1 > x2) {
+		std::swap(x1, x2);
+	}
+	if (y1 > y2) {
+		std::swap(y1, y2);
+	}
+
+	uint16_t w = x2 - x1;
+	uint16_t h = y2 - y1;
+	bool* passables = new bool[w * h];
+
+	//Felder definieren, welche nicht "zu schief" sind
+	for (uint16_t y = y1; y < y2; ++y) {
+		for (uint16_t x = x1; x < x2; ++x) {
+			uint32_t index = position(x, y);
+			passables[index] = (getHeightDiffOnField(index) < MAX_HEIGHTDIFF);
+		}
+	}
+
+	//Feld um eines "Einengen"
+	++x1;
+	--x2;
+	++y1;
+	--y2;
+
+	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
+	for (uint16_t y = y1; y < y2; ++y) {
+		for (uint16_t x = x1; x < x2; ++x) {
+			uint32_t index = position(x, y);
+			uint8_t value = 0;
+
+			//Ist dieses Feld begehbar?
+			if (passables[index]) {
+				if (passables[index - width]) {
+					value |= NORTH;
+				}
+				if (passables[index + width]) {
+					value |= SOUTH;
+				}
+				if (passables[index + 1]) {
+					value |= EAST;
+				}
+				if (passables[index - 1]) {
+					value |= WEST;
+				}
+				if (passables[index + 1 - width]) {
+					value |= NORTH_EAST;
+				}
+				if (passables[index + 1 + width]) {
+					value |= SOUTH_EAST;
+				}
+				if (passables[index - 1 + width]) {
+					value |= SOUTH_WEST;
+				}
+				if (passables[index - 1 - width]) {
+					value |= NORTH_WEST;
+				}
+			}
+			movementMap[index] = value;
+		}
+	}
+	delete[] passables;
+}
+
+void Map::updateMovementMap(uint32_t position1, uint32_t position2) {
+	uint16_t x1 = positionX(position1);
+	uint16_t y1 = positionY(position1);
+	uint16_t x2 = positionX(position2);
+	uint16_t y2 = positionY(position2);
+	updateMovementMap(x1, y1, x2, y2);
+}
+
+void Map::updateMovementMapWithBorder() {
+	bool* passables = new bool[width * height];
+
+	//Felder definieren, welche nicht "zu schief" sind
+	uint32_t size = (width-1) * (height-1);
+
+	for (uint32_t i = 0; i < size; ++i) {
+		passables[i] = (getHeightDiffOnField(i) < MAX_HEIGHTDIFF);
+	}
+
+	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
+	for (int32_t index = 0; index < width*height-1; ++index) {
+		uint8_t value = 0;
+
+		//Ist dieses Feld begehbar?
+		if (passables[index]) {
+			if ((index > width-1) && (passables[index - width])) {
+				value |= NORTH;
+			}
+			if (passables[index + width]) {
+				value |= SOUTH;
+			}
+			if ((index % width != width-2) && (passables[index + 1])) {
+				value |= EAST;
+			}
+			if ((index % width > 0) && (passables[index - 1])) {
+				value |= WEST;
+			}
+			if (((index % width != width-2) && (index > width-1)) &&(passables[index + 1 - width])) {
+				value |= NORTH_EAST;
+			}
+			if ((index % width != width-2) && (passables[index + 1 + width])) {
+				value |= SOUTH_EAST;
+			}
+			if ((index % width > 0) && (passables[index - 1 + width])) {
+				value |= SOUTH_WEST;
+			}
+			if (((index % width > 0) && (index > width)) && (passables[index - 1 - width])) {
+				value |= NORTH_WEST;
+			}
+		}
+		movementMap[index] = value;
+	}
+	delete[] passables;
+}
+
+bool Map::loadHeightMapRAW(const std::string& filename) {
+	uint32_t fileSize = FileSize(filename);
+	uint32_t dataSize = width * height;
+
+	if (fileSize > dataSize * 2) {
+		fileSize = dataSize * 2;  //Wir arbeiten mit Shorts (2 Byte)
+
+		std::cout << "Warnung: Map Datei ist groeser als erwartet, lese nur " << fileSize << " bytes ein!\n";
+	}
+
+	std::ifstream file(filename.c_str(), std::ifstream::in | std::ifstream::binary);
+
+	if(!file.good()) {
+		std::cout << "Konnte Map-Datei nicht lesen! (" << filename << ")\n";
+		return false;
+	}
+
+	//Daten einlesen
+	file.read((char*)heightMap, fileSize);
+
+	//Datei wieder schließen
+	file.close();
+
+	return true;
+}
+
+uint16_t Map::getHeightDiffOnField(uint32_t position) const {
+	uint16_t h1 = heightMap[position];
+	uint16_t h2 = heightMap[position + 1];
+	uint16_t h3 = heightMap[position + width];
+	uint16_t h4 = heightMap[position + width + 1];
+
+	uint16_t maxValue = std::max(std::max(h1, h2), std::max(h3, h4));
+	uint16_t minValue = std::min(std::min(h1, h2), std::min(h3, h4));
+
+	return maxValue - minValue;
+}
+
+bool Map::isFieldFree(uint32_t position) const {
+	// Todo: Auf Gebäude und andere Objekte prüfen
+	return !getFieldStatusFlag(position, STATUS_UNIT);
+}

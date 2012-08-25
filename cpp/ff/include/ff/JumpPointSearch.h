@@ -11,21 +11,6 @@
 
 namespace ff {
 
-// C structure for easy and fast conversation between a node index and a position
-struct coord_t {
-  coord_t() : index((uint32_t) -1) {}
-  coord_t(uint32_t _index) : index(_index) {}
-  coord_t(uint16_t _x, uint16_t _y) : x(_x), y(_y) {}
-  
-  union {
-    struct {
-      uint16_t x;
-      uint16_t y;
-    };
-    uint32_t index;
-  };
-};
-
 // Uses the following bit order:
 // North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest
 typedef uint8_t dir_t;
@@ -35,10 +20,8 @@ class JumpPointSearch {
  public:
   JumpPointSearch(const Map& _map) : map(_map) {}
   
-  bool Solve(std::list<coord_t>& out_list,
-             uint16_t start_x, uint16_t start_y,
-             uint16_t goal_x, uint16_t goal_y,
-             bool use_astar = false);
+  bool Solve(uint32_t start_index, uint32_t goal_index,
+             std::list<uint32_t>& path_list);
 
  private:
   // Use the "9th" direction to indicate an invalid direction.
@@ -47,21 +30,23 @@ class JumpPointSearch {
 
   // Calculates an estimated distance from one point to another
   // Using the Chebyshev distance.
-  inline static float EstDistance(coord_t from, coord_t to) {
-    return fmaxf(abs(from.x - to.x), abs(from.y - to.y));
+  inline static float EstDistance(uint16_t from_x, uint16_t from_y,
+                                  uint16_t to_x, uint16_t to_y) {
+    return fmaxf(abs(from_x - to_x), abs(from_y - to_y));
   }
   
   // Calculates the precise distance between two points assuming there are
   // only streight and 45deg diagonale moves.
-  inline static float PrecDistance(coord_t from, coord_t to) {
-    if (from.x != to.x && from.y != to.y) {
+  inline static float PrecDistance(uint16_t from_x, uint16_t from_y,
+                                   uint16_t to_x, uint16_t to_y) {
+    if (from_x != to_x && from_y != to_y) {
       // It is a diagonal move, so calculate the number of moves and
-      // multiply it with sqrt(2) ~ 1.14142
-      return (abs(from.x - to.x) * 1.14142f);
+      // multiply it with sqrt(2) ~ 1.4142
+      return (abs(from_x - to_x) * 1.4142f);
     } else {
       // Add the differences between the x and y coordinates.
       // 1 of them is always zero but we don't have to add an additional if.
-      return (abs(from.x - to.x) + abs(from.y - to.y));
+      return (abs(from_x - to_x) + abs(from_y - to_y));
     }
   }
 
@@ -97,34 +82,35 @@ class JumpPointSearch {
   }
 
   // Moves one step in the given direction
-  inline static coord_t Move(coord_t coord, dir_t dir) {
+  inline uint32_t Move(uint32_t coord, dir_t dir) {
     switch (dir) {
-      case Map::NORTH: return coord_t(coord.x, coord.y - 1);
-      case Map::NORTH_EAST: return coord_t(coord.x + 1, coord.y - 1);
-      case Map::EAST: return coord_t(coord.x + 1, coord.y);
-      case Map::SOUTH_EAST: return coord_t(coord.x + 1, coord.y + 1);
-      case Map::SOUTH: return coord_t(coord.x, coord.y + 1);
-      case Map::SOUTH_WEST: return coord_t(coord.x - 1, coord.y + 1);
-      case Map::WEST: return coord_t(coord.x - 1, coord.y);
-      case Map::NORTH_WEST: return coord_t(coord.x - 1, coord.y - 1);
+      case Map::NORTH: return (coord - map.getWidth());
+      case Map::NORTH_EAST: return (coord - map.getWidth() + 1);
+      case Map::EAST: return (coord + 1);
+      case Map::SOUTH_EAST: return (coord + map.getWidth() + 1);
+      case Map::SOUTH: return (coord + map.getWidth());
+      case Map::SOUTH_WEST: return (coord + map.getWidth() - 1);
+      case Map::WEST: return (coord - 1);
+      case Map::NORTH_WEST: return (coord - map.getWidth() - 1);
     }
 
-    return coord_t(NO_COORD);
+    return NO_COORD;
   }
 
   // Returns the direction of move.
-  inline static dir_t GetDirection(coord_t from, coord_t to) {
-    if (from.x == to.x) {
-      if (from.y == to.y) { return NO_DIRECTION; }
-      else if (from.y < to.y) { return Map::SOUTH; }
+  inline static dir_t GetDirection(uint16_t from_x, uint16_t from_y,
+                                   uint16_t to_x, uint16_t to_y) {
+    if (from_x == to_x) {
+      if (from_y == to_y) { return NO_DIRECTION; }
+      else if (from_y < to_y) { return Map::SOUTH; }
       else { return Map::NORTH; }
-    } else if (from.x < to.x) {
-      if (from.y == to.y) { return Map::EAST; }
-      else if (from.y < to.y) { return Map::SOUTH_EAST; }
+    } else if (from_x < to_x) {
+      if (from_y == to_y) { return Map::EAST; }
+      else if (from_y < to_y) { return Map::SOUTH_EAST; }
       else { return Map::NORTH_EAST; }
     } else {
-      if (from.y == to.y) { return Map::WEST; }
-      else if (from.y < to.y) { return Map::SOUTH_WEST; }
+      if (from_y == to_y) { return Map::WEST; }
+      else if (from_y < to_y) { return Map::SOUTH_WEST; }
       else { return Map::NORTH_WEST; }
     }
   }
@@ -137,16 +123,16 @@ class JumpPointSearch {
 
   // Returns the forced neighbours of the position with the
   // given direction.
-  dir_set_t ForcedNeighbours(coord_t coord, dir_t dir);
+  dir_set_t ForcedNeighbours(uint32_t coord, dir_t dir);
 
   // Returns the natural neighbours of the position with the
   // given direction. Natural neighborus can't be pruned
   // and are therforce forced to check.
-  dir_set_t NaturalNeighbours(coord_t coord, dir_t dir);
+  dir_set_t NaturalNeighbours(uint32_t coord, dir_t dir);
 
   // The Jump algorithm.
   // It will jump into one direction as long as no jump point has been reached.
-  coord_t Jump(coord_t coord, dir_t dir, coord_t goal);
+  uint32_t Jump(uint32_t coord, dir_t dir, uint32_t goal);
 
   // The map we operate on.
   const Map& map;

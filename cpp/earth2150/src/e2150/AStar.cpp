@@ -1,3 +1,4 @@
+#ifdef falsesdfasdf
 #include "e2150/AStar.h"
 
 #include "e2150/AStarBinaryHeap.h"
@@ -60,3 +61,5 @@ std::vector<MapPosition> AStar::getPath(const Map& map, uint16_t startX, uint16_
 	} while (!openList.isEmpty());
 	return buildPathAndEraseRAM(0, openList, gc);
 }
+
+#endif

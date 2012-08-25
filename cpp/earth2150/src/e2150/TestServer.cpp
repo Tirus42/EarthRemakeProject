@@ -4,13 +4,16 @@
 
 #include "e2150/HumanPlayer.h"
 #include "e2150/UnitChassis.h"
-#include "e2150/MapImpl.h"
+#include "e2150/Map.h"
 #include "e2150/AStar.h"
+#include "e2150/Unit.h"
+#include "e2150/Navigator.h"
 #include "tf/time.h"
+
 #include <iostream>
 #include <cstring>
 
-TestServer::TestServer(int32_t socket, MapImpl& map):
+TestServer::TestServer(int32_t socket, Map& map):
 		socket(socket),
 		netbuffer(new char[BUFFERSIZE]),
 		map(map),
@@ -132,16 +135,14 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 
 
 			int32_t time = MilliSecs();
-			std::list<MapPosition> liste = Utils::vectorToList(
-						map.getNavigator()->getPath(map, start, target));
+			std::list<uint32_t> liste;
+			map.getWay(start, target, liste);
 			time = MilliSecs() - time;
 
 			std::cout << "Die Wegsuche dauerte " << time << "ms"
 				<< " und hat einen Weg ueber " << liste.size() << " Felder gefunden!\n";
 
-			player.debugPaintFields(
-				Utils::mapPositionToPosition(
-					map, liste), 0xFFAA00U);
+			player.debugPaintFields(liste, 0xFFAA00U);
 		}
 		break;
 
@@ -150,7 +151,7 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 			sendChassisList(player);
 			break;
 
-		case 0x05: {		///Client mÃ¶chte eine Unit spawnen
+		case 0x05: {		///Client möchte eine Unit spawnen
 			socketRecv(socket, netbuffer, 9, false);
 
 			uint32_t chassisID = *((uint32_t*)&netbuffer[1]);
@@ -194,10 +195,10 @@ void TestServer::acceptNewConnections() {
 		if (accepted != INVALID_SOCKET){
 			std::cout << "Neue Verbindung!\n";
 
-            //Setze Verbindung in NonBlock mode (in Windows wird das Ã¼bernommen, in Linux nicht...)
+            //Setze Verbindung in NonBlock mode (in Windows wird das übernommen, in Linux nicht...)
             setSocketNonblock(accepted);
 
-			//FÃ¼ge neue Verbindung in Warteliste ein
+			//Füge neue Verbindung in Warteliste ein
 			waitingConnections.push_back(accepted);
 		}
 	} while (accepted != INVALID_SOCKET);
@@ -260,7 +261,7 @@ uint32_t TestServer::pokeString(const std::string& text, uint32_t offset) {
 	return offset + length + 2;
 }
 
-void TestServer::sendMapDataRaw(const MapImpl& map, HumanPlayer& player) const {
+void TestServer::sendMapDataRaw(const Map& map, HumanPlayer& player) const {
 	std::cout << "Sende Karte\n";
 
 	uint32_t dataSize = map.getWidth() * map.getHeight();
@@ -278,7 +279,7 @@ void TestServer::sendMapDataRaw(const MapImpl& map, HumanPlayer& player) const {
 	delete[] buffer;
 }
 
-void TestServer::sendMapWaymapRaw(const MapImpl& map, HumanPlayer& player) const {
+void TestServer::sendMapWaymapRaw(const Map& map, HumanPlayer& player) const {
 	std::cout << "Sende Wegekarte\n";
 
 	uint32_t dataSize = map.getWidth() * map.getHeight();
@@ -324,7 +325,7 @@ void TestServer::sendUnitList(HumanPlayer& player) {
 
 	*(uint32_t*)(&netbuffer[0]) = units.size();
 
-	// Todo: PrÃ¼fen ob Speicher wirklich groÃŸ genug fÃ¼r alle und ggf. neuen anlegen
+	// Todo: Prüfen ob Speicher wirklich groß genug für alle und ggf. neuen anlegen
 
 	int32_t offset = 4;
 	for (std::map<uint32_t, Unit*>::const_iterator i = units.begin(); i != units.end(); ++i) {

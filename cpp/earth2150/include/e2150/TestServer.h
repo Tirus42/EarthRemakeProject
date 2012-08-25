@@ -7,7 +7,7 @@
 #include <list>
 
 class HumanPlayer;
-class MapImpl;
+class Map;
 class UnitChassis;
 class Unit;
 
@@ -17,7 +17,7 @@ class TestServer {
 
 		int32_t socket;	 	//TCP-Server socket, hört auf Eingehende Verbindungen
 		char* netbuffer;	//Bufferspeicher für das lesen und schreiben von Netzwerknachrichten
-		MapImpl& map;		//Jaja unschön, nur zum Test...
+		Map& map;		//Jaja unschön, nur zum Test...
 		std::list<int32_t> waitingConnections;  //Speichert alle eingehende Verbindungen, bis eine Anfrage kommt
 		std::list<HumanPlayer*> players;
 
@@ -37,8 +37,8 @@ class TestServer {
 		/// Entfernt einen Spieler aus dem Spiel
 		void removeHumanPlayer(HumanPlayer& player);
 
-		void sendMapDataRaw(const MapImpl& map, HumanPlayer& player) const;
-		void sendMapWaymapRaw(const MapImpl& map, HumanPlayer& player) const;
+		void sendMapDataRaw(const Map& map, HumanPlayer& player) const;
+		void sendMapWaymapRaw(const Map& map, HumanPlayer& player) const;
 		void sendChassisList(HumanPlayer& player);
 
 		/// Sendet die Liste aller Einheiten auf der Karte an den Spieler
@@ -52,7 +52,7 @@ class TestServer {
 		std::string peekString(uint32_t offset); //Liest aus dem netbuffer an angegebenen Offset einen String aus
 		uint32_t pokeString(const std::string& text, uint32_t offset);
 	public:
-		TestServer(int32_t socket, MapImpl& map);
+		TestServer(int32_t socket, Map& map);
 		virtual ~TestServer();
 
 		/// Fügt eine weitere UnitChassis zu den Spawnmöglichkeiten hinzu
