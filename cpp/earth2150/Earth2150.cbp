@@ -105,7 +105,11 @@
 			<Add option="-fexceptions" />
 			<Add directory="include" />
 			<Add directory="..\tf\include" />
+			<Add directory="..\ff\include" />
 		</Compiler>
+		<Unit filename="..\ff\include\ff\JumpPointSearch.h" />
+		<Unit filename="..\ff\include\ff\MinHeap.h" />
+		<Unit filename="..\ff\src\ff\JumpPointSearch.cpp" />
 		<Unit filename="..\tf\include\tf\file.h" />
 		<Unit filename="..\tf\include\tf\network.h" />
 		<Unit filename="..\tf\include\tf\time.h" />
@@ -119,6 +123,7 @@
 		<Unit filename="include\e2150\Entity.h" />
 		<Unit filename="include\e2150\Faction.h" />
 		<Unit filename="include\e2150\HumanPlayer.h" />
+		<Unit filename="include\e2150\JPSNavigator.h" />
 		<Unit filename="include\e2150\Map.h" />
 		<Unit filename="include\e2150\MapImpl.h" />
 		<Unit filename="include\e2150\MapPosition.h" />
@@ -139,6 +144,7 @@
 		<Unit filename="src\e2150\Entity.cpp" />
 		<Unit filename="src\e2150\Faction.cpp" />
 		<Unit filename="src\e2150\HumanPlayer.cpp" />
+		<Unit filename="src\e2150\JPSNavigator.cpp" />
 		<Unit filename="src\e2150\MapImpl.cpp" />
 		<Unit filename="src\e2150\MapViewerManager.cpp" />
 		<Unit filename="src\e2150\Player.cpp" />

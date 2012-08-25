@@ -2,6 +2,10 @@
 
 #include <cmath>
 
+#ifndef M_SQRT2
+#define M_SQRT2 1.414
+#endif
+
 const uint16_t AStarNode::MULTIPLICATOR = 5741; // 985, 169, 99, 29
 const uint16_t AStarNode::SQRT_1 = MULTIPLICATOR;
 const uint16_t AStarNode::SQRT_2 = M_SQRT2 * MULTIPLICATOR;

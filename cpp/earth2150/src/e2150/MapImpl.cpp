@@ -1,6 +1,7 @@
 #include "e2150/MapImpl.h"
 
 #include "e2150/AStar.h"
+#include "e2150/JPSNavigator.h"
 #include "tf/file.h"
 #include <fstream>
 #include <iostream>
@@ -12,6 +13,7 @@ MapImpl::MapImpl(uint16_t width, uint16_t height) :
 		statusMap(width * height),
 		borderWidth(1),
 		navigator(new AStar()),
+		//navigator(new JPSNavigator()),
 		units(),
 		spawnPositions(),
 		viewerManager() {
