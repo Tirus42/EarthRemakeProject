@@ -68,7 +68,7 @@ class MapImpl : public Map {
 		virtual uint8_t countSpawnPoints() const {return spawnPositions.size();}
 		virtual void addSpawnPoint(const MapPosition& position, const Faction* faction = NULL);
 
-		inline uint8_t getDirections(uint16_t x, uint16_t y) const {return movementMap[position(x, y)];}
+		uint8_t getDirections(uint16_t x, uint16_t y) const {return movementMap[position(x, y)];}
 
 		inline uint16_t getRawHeight(uint32_t offset) const {return heightMap[offset];}
 		inline uint8_t getRawWay(uint32_t offset) const {return movementMap[offset];}

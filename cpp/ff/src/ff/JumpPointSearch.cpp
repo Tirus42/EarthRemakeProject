@@ -1,11 +1,11 @@
 #include "ff/JumpPointSearch.h"
 
+#include <iostream>
 #include <list>
 #include <map>
 #include <set>
 
 #include "ff/MinHeap.h"
-#include "e2150/Map.h"
 
 namespace ff {
 
@@ -26,33 +26,26 @@ dir_set_t JumpPointSearch::ForcedNeighbours(coord_t coord, dir_t dir) {
 
   dir_set_t dirs = 0;
   if (DirectionIsDiagonal(dir)) {
-    coord_t new_coord_1 = Move(coord, Rotate(dir, 6));
-    coord_t new_coord_2 = Move(coord, Rotate(dir, 5));
-    if (!Implies(map.isFieldFree(map.position(new_coord_1.x, new_coord_1.y)),
-                 map.isFieldFree(map.position(new_coord_2.x, new_coord_2.y)))) {
+    if (!Implies(map.isFieldWalkable(coord.x, coord.y, Rotate(dir, 6)),
+                 map.isFieldWalkable(coord.x, coord.y, Rotate(dir, 5)))) {
       AddDirectionToSet(dirs, Rotate(dir, 6));
     }
-    new_coord_1 = Move(coord, Rotate(dir, 2));
-    new_coord_2 = Move(coord, Rotate(dir, 3));
-    if (!Implies(map.isFieldFree(map.position(new_coord_1.x, new_coord_1.y)),
-                 map.isFieldFree(map.position(new_coord_2.x, new_coord_2.y)))) {
+    if (!Implies(map.isFieldWalkable(coord.x, coord.y, Rotate(dir, 2)),
+                 map.isFieldWalkable(coord.x, coord.y, Rotate(dir, 3)))) {
       AddDirectionToSet(dirs, Rotate(dir, 2));
     }
   } else {
-    coord_t new_coord_1 = Move(coord, Rotate(dir, 7));
-    coord_t new_coord_2 = Move(coord, Rotate(dir, 6));
-    if (!Implies(map.isFieldFree(map.position(new_coord_1.x, new_coord_1.y)),
-                 map.isFieldFree(map.position(new_coord_2.x, new_coord_2.y)))) {
+    if (!Implies(map.isFieldWalkable(coord.x, coord.y, Rotate(dir, 7)),
+                 map.isFieldWalkable(coord.x, coord.y, Rotate(dir, 6)))) {
       AddDirectionToSet(dirs, Rotate(dir, 7));
     }
-    new_coord_1 = Move(coord, Rotate(dir, 1));
-    new_coord_2 = Move(coord, Rotate(dir, 2));
-    if (!Implies(map.isFieldFree(map.position(new_coord_1.x, new_coord_1.y)),
-                 map.isFieldFree(map.position(new_coord_2.x, new_coord_2.y)))) {
+    if (!Implies(map.isFieldWalkable(coord.x, coord.y, Rotate(dir, 1)),
+                 map.isFieldWalkable(coord.x, coord.y, Rotate(dir, 2)))) {
       AddDirectionToSet(dirs, Rotate(dir, 1));
     }
   }
   
+  //std::cout << "Forced neighbours: " << std::hex << (int) dirs << std::dec << std::endl;
   return dirs;
 }
 
@@ -74,41 +67,45 @@ dir_set_t JumpPointSearch::NaturalNeighbours(coord_t coord, dir_t dir) {
   
   dir_set_t dirs = 0;
   
-  coord_t new_coord = Move(coord, dir);
-  if (map.isFieldFree(map.position(new_coord.x, new_coord.y))) {
+  if (map.isFieldWalkable(coord.x, coord.y, dir)) {
     AddDirectionToSet(dirs, dir);
   }
   if (DirectionIsDiagonal(dir)) {
-    new_coord = Move(coord, Rotate(dir, 1));
-    if (map.isFieldFree(map.position(new_coord.x, new_coord.y))) {
-      AddDirectionToSet(dirs, Rotate(dir, 1));
+    dir_t new_dir = Rotate(dir, 1);
+    if (map.isFieldWalkable(coord.x, coord.y, new_dir)) {
+      AddDirectionToSet(dirs, new_dir);
     }
-    new_coord = Move(coord, Rotate(dir, 7));
-    if (map.isFieldFree(map.position(new_coord.x, new_coord.y))) {
-      AddDirectionToSet(dirs, Rotate(dir, 7));
+    new_dir = Rotate(dir, 7);
+    if (map.isFieldWalkable(coord.x, coord.y, new_dir)) {
+      AddDirectionToSet(dirs, new_dir);
     }
   }
   
+  //std::cout << "Natural neighbours: " << std::hex << (int) dirs << std::dec << std::endl;
   return dirs;
 }
 
 coord_t JumpPointSearch::Jump(coord_t pos, dir_t dir, coord_t goal) {
   coord_t new_pos = Move(pos, dir);
+  //std::cout << std::endl << "Trying jump to " << new_pos.x << ":" << new_pos.y << " ";
 
   // Reached a wall or the end of the grid.
-  if (map.isFieldFree(map.position(new_pos.x, new_pos.y))) {
+  if (!map.isFieldWalkable(pos.x, pos.y, dir)) {
+    //std::cout << "wall!" << std::endl;
     return -1;
   }
 
   // Check if this node has one or more forced neighbour.
   // If so this is a jump point.
   if (ForcedNeighbours(new_pos, dir)) {
-    //std::cout << "Blubb: " << (int) ForcedNeighbours(new_pos, dir) << std::endl;
     return new_pos;
   }
 
   // Check if we reached the goal.
-  if (new_pos.index == goal.index) { return new_pos; }
+  if (new_pos.index == goal.index) {
+    //std::cout << "goal!" << std::endl;
+    return new_pos;
+  }
 
   //if (grid_->GetFieldColor(new_pos.x, new_pos.y) == sf::Color::Black)
   //  grid_->SetFieldColor(new_pos.x, new_pos.y, sf::Color(0, 0, 125));
@@ -131,6 +128,7 @@ coord_t JumpPointSearch::Jump(coord_t pos, dir_t dir, coord_t goal) {
 bool JumpPointSearch::Solve(std::list<coord_t>& out_list,
                             uint16_t start_x, uint16_t start_y,
                             uint16_t goal_x, uint16_t goal_y, bool use_astar) {
+  //use_astar = fal;
   BinaryMinHeap open_list;
   std::set<uint32_t> closed_list;
   std::map<uint32_t, uint32_t> parent;
@@ -143,6 +141,7 @@ bool JumpPointSearch::Solve(std::list<coord_t>& out_list,
   while (!open_list.IsEmpty()) {
     float cost = open_list.MinCost();
     coord_t coord = open_list.ExtractMin();
+    //std::cout << "Checking field " << coord.x << ":" << coord.y << std::endl;
 
     if (last_pos.index != start.index) {
       last_direction = GetDirection(coord_t(parent[coord.index]), coord);
@@ -174,6 +173,8 @@ bool JumpPointSearch::Solve(std::list<coord_t>& out_list,
     } else {
       dirs = 0xff;
     }
+    
+    //std::cout << "Directions to check: " << std::hex << (int) dirs << std::dec << std::endl;
                       
     dir_t dir = NextDirectionInSet(dirs);
     while (dir != NO_DIRECTION) {
@@ -182,11 +183,14 @@ bool JumpPointSearch::Solve(std::list<coord_t>& out_list,
         jump_point = Jump(coord, dir, goal);
       } else {
         jump_point = Move(coord, dir);
-        if (!map.isFieldFree(map.position(jump_point.x, jump_point.y))) {
+        if (!map.isFieldWalkable(coord.x, coord.y, dir)) {
           dir = NextDirectionInSet(dirs);
           continue;
         }
       }
+
+      //std::cout << "Jumped into direction " << std::hex << (int) dir << std::dec << " to point " << jump_point.x << ":" << jump_point.y << std::endl;
+
       // Check for valid jump point.
       if (jump_point.index != NO_COORD) {
         if (closed_list.find(jump_point.index) != closed_list.end()) {

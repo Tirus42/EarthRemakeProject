@@ -12,8 +12,8 @@ MapImpl::MapImpl(uint16_t width, uint16_t height) :
 		movementMap(width * height),
 		statusMap(width * height),
 		borderWidth(1),
-		navigator(new AStar()),
-		//navigator(new JPSNavigator()),
+		//navigator(new AStar()),
+		navigator(new JPSNavigator()),
 		units(),
 		spawnPositions(),
 		viewerManager() {

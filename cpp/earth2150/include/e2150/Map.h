@@ -49,8 +49,17 @@ class Map {
 		/// Berechnet den Weg zwischen der Einheit und der Angegebenen Position
 		virtual std::vector<MapPosition> getWay(const Unit& unit, uint32_t destination) const = 0;
 
+    /// Gibt die möglichen Bewegungsrichtungen der angegebenen Position aus an
+		virtual uint8_t getDirections(uint16_t x, uint16_t y) const = 0;
+
 		/// Prüft ob dieses Feld frei ist (Weder ein Gebäude noch eine Einheit darauf)
 		virtual bool isFieldFree(uint32_t position) const = 0;
+		
+		/// Prüft, ob mal von der angegebenen Position in die gegebene Richtung gehen kann.
+		/// Macht keine Pruefung, ob die Quellkoordinate gültig ist
+		inline bool isFieldWalkable(uint16_t from_x, uint16_t from_y, uint8_t map_direction) const {
+      return (getDirections(from_x, from_y) & map_direction);
+		}
 
 		/// Setzt ein Status-Bit für das angegebene Feld
 		virtual void setFieldStatusFlag(uint32_t position, uint8_t statusFlag, bool value) = 0;
