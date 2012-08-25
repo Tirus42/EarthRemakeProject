@@ -18,19 +18,19 @@ HumanPlayer::~HumanPlayer() {
 
 
 void HumanPlayer::debugPaintFields(const std::list<uint32_t>& fields, uint32_t color) {
-	char* netbuffer = server->getNetbufferPtr();
+	char* buffer = new char[9 + fields.size()*4];
 
-	netbuffer[0] = 255;
+	buffer[0] = 255;
 
-	*(uint32_t*)&netbuffer[1] = color;
-	*(uint32_t*)&netbuffer[5] = fields.size();
+	*(uint32_t*)&buffer[1] = color;
+	*(uint32_t*)&buffer[5] = fields.size();
 
 	uint32_t offset = 9;
 
 	for (std::list<uint32_t>::const_iterator i=fields.begin(); i != fields.end(); ++i) {
-		*(uint32_t*)&netbuffer[offset] = *i;
+		*(uint32_t*)&buffer[offset] = *i;
 		offset += 4;
 	}
 
-	connection.sendPacket(netbuffer, 4 + offset);
+	connection.sendPacket(buffer, offset);
 }
