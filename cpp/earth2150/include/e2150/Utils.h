@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <list>
+#include <stdlib.h>
 #include <stdint.h>
 
 #include "e2150/Map.h"
@@ -24,6 +25,12 @@ class Utils {
 				 outputList.push_back(map.position(i->getX(), i->getY()));
 			}
 			return outputList;
+		}
+
+		/// Gibt den kleineren Winkel zwischen 2 Ausrichtungen zurück (Wertebereich 0 - 7)
+		static uint8_t getAngleDifference(int8_t a, int8_t b) {
+			int8_t var = abs(a-b);
+			return (var > 4) ? (8 - var) : var;
 		}
 
 };

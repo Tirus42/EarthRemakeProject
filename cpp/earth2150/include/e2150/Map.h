@@ -5,11 +5,13 @@
 #include "e2150/MapViewerManager.h"
 #include <stdint.h>
 #include <map>
+#include <set>
 #include <memory>
 #include <string>
 #include <vector>
 
 class Unit;
+class MovingUnit;
 class Faction;
 class Navigator;
 
@@ -41,20 +43,28 @@ class Map {
 
 		std::map<uint32_t, Unit*> units;		//Bedarf ggf. überarbeitung
 
+		/// Speichert alle sich in Bewegung befindenden Einheiten in der Reihenfolge
+		/// ihrer Ankunft
+		std::multiset<MovingUnit*> movingUnits;
+
 		std::vector<MapPosition> spawnPositions;
 
 		MapViewerManager viewerManager;
 
 		/// Anzahl der Felder, auf denen sich Bewegt werden kann (Weggitter hat verbindung)
 		uint32_t getNumberOfMoveableFields() const;
+
+		/// Gibt den Höhenunterschied auf einem Feld zurück (Unterschied zwischen höchster und tiefster Ecke)
 		uint16_t getHeightDiffOnField(uint32_t position) const;
 
 		Map(const Map& cc);
 		Map& operator=(const Map& cc);
+
 	public:
-		// Maximale höhendifferenz bei der ein Weg noch als begehbar gilt.
+		/// Maximale Höhendifferenz, bei dem ein Weg noch als begehbar gilt.
 		const static uint16_t MAX_HEIGHTDIFF = 2000;
 
+		/// Richtungskonstanten um Bewegungsmöglichkeiten auf einem Feld zu speichern.
 		static const uint8_t NORTH		= (1 << 0);	 //0b00000001;
 		static const uint8_t NORTH_EAST	= (1 << 1);	 //0b00000010;
 		static const uint8_t EAST		= (1 << 2);	 //0b00000100;
@@ -63,6 +73,16 @@ class Map {
 		static const uint8_t SOUTH_WEST	= (1 << 5);	 //0b00100000;
 		static const uint8_t WEST		= (1 << 6);	 //0b01000000;
 		static const uint8_t NORTH_WEST	= (1 << 7);	 //0b10000000;
+
+		/// Richtungskonstanten um die Ausrichtung eines Objektes anzugeben (nur 4-Bit nötig)
+		static const uint8_t DIRECTION_NORTH		= 0;
+		static const uint8_t DIRECTION_NORTH_EAST 	= 1;
+		static const uint8_t DIRECTION_EAST			= 2;
+		static const uint8_t DIRECTION_SOUTH_EAST	= 3;
+		static const uint8_t DIRECTION_SOUTH		= 4;
+		static const uint8_t DIRECTION_SOUTH_WEST	= 5;
+		static const uint8_t DIRECTION_WEST			= 6;
+		static const uint8_t DIRECTION_NORTH_WEST	= 7;
 
 		// Auf diesem Feld steht eine Einheit
 		static const uint8_t STATUS_UNIT = (1 << 0);
@@ -155,6 +175,9 @@ class Map {
 		bool loadHeightMapRAW(const std::string& filename);
 
 		const Navigator* getNavigator() { return navigator; }
+
+		/// Berechnet alle Veränderungen die in der zwischenzeit geschehen sind
+		void updateGameField(uint32_t currentTime);
 };
 
 #endif // MAPINTERFACE_H_INCLUDED

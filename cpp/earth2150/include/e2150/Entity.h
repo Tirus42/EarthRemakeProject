@@ -8,6 +8,9 @@ class Entity {
 		uint32_t id;
 		MapPosition mapPosition;
 
+		/// Ausrichtung des Objekts
+		uint8_t direction;
+
 		int32_t hitPoints;		// Lebenspunkte (bewusst als signed-int gewählt)
 		int32_t hitPointsMax;	//Maximale Lebenspunkte des Objekts
 
@@ -23,8 +26,16 @@ class Entity {
 		uint32_t getX() const {return mapPosition.getX();}
 		uint32_t getY() const {return mapPosition.getY();}
 
+		/// Gibt die Ausrichtung zurück
+		uint8_t getDirection() const {return direction;}
+
 		/// Setzt die Position auf der Karte
 		void setPosition(uint16_t x, uint16_t y) {mapPosition.setXY(x, y);}
+		void setPosition(uint16_t x, uint16_t y, uint8_t direction) {mapPosition.setXY(x, y);
+																	this->direction = direction;}
+
+		/// Setzt nur die Ausrichtung des Objekts
+		void setDirection(uint8_t direction) {this->direction = direction;}
 
 		/// Gibt den aktuellen HP-Wert zurück
 		int32_t getHitPoints() const {return hitPoints;}

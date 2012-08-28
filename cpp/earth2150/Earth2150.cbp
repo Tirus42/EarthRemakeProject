@@ -128,6 +128,7 @@
 		<Unit filename="include\e2150\MapBitLayer.h" />
 		<Unit filename="include\e2150\MapPosition.h" />
 		<Unit filename="include\e2150\MapViewerManager.h" />
+		<Unit filename="include\e2150\MovingUnit.h" />
 		<Unit filename="include\e2150\Navigator.h" />
 		<Unit filename="include\e2150\Player.h" />
 		<Unit filename="include\e2150\PlayerNetworkConnection.h" />
@@ -147,6 +148,7 @@
 		<Unit filename="src\e2150\Map.cpp" />
 		<Unit filename="src\e2150\MapBitLayer.cpp" />
 		<Unit filename="src\e2150\MapViewerManager.cpp" />
+		<Unit filename="src\e2150\MovingUnit.cpp" />
 		<Unit filename="src\e2150\Player.cpp" />
 		<Unit filename="src\e2150\PlayerNetworkConnection.cpp" />
 		<Unit filename="src\e2150\PlayerViewArea.cpp" />

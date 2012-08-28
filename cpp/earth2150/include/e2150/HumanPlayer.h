@@ -24,6 +24,7 @@ class HumanPlayer : public Player {
 
 		HumanPlayer(const HumanPlayer&);
 		HumanPlayer operator=(const HumanPlayer&);
+
 	public:
 		HumanPlayer(TestServer* server, int32_t socket, const std::string& name, const sockaddr_in& networkAdress);
 		virtual ~HumanPlayer();
@@ -34,6 +35,7 @@ class HumanPlayer : public Player {
 		/// Gibt die Spieler-Netzwerkverbindung zurück
 		PlayerNetworkConnection& getConnection() {return connection;}
 
+		/// Sendet eine Liste an Feldern an den Client, welche "angemalt" werden sollen
 		void debugPaintFields(const std::list<uint32_t>& fields, uint32_t color);	//Zeichnet beim Client die angegebenen Felder farbig
 };
 

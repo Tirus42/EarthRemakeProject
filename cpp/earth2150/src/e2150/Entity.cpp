@@ -3,6 +3,7 @@
 Entity::Entity() :
 		id(),
 		mapPosition(),
+		direction(0),
 		hitPoints(),
 		hitPointsMax() {
 }
@@ -10,6 +11,7 @@ Entity::Entity() :
 Entity::Entity(uint32_t id, int32_t hitPointsMax) :
 		id(id),
 		mapPosition(),
+		direction(0),
 		hitPoints(hitPointsMax),
 		hitPointsMax(hitPointsMax) {
 

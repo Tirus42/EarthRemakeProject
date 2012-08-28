@@ -17,6 +17,7 @@ Map::Map(uint16_t width, uint16_t height) :
 		//navigator(new AStar(*this)),
 		navigator(new JPSNavigator(*this)),
 		units(),
+		movingUnits(),
 		spawnPositions(),
 		viewerManager() {
 }
@@ -86,6 +87,7 @@ bool Map::addUnit(Unit& unit, uint16_t x, uint16_t y) {
 }
 
 void Map::removeUnit(Unit& unit) {
+	//Todo: Moving Unit Eintrag entfernen
 	//Todo: Einheit aus Liste entfernen
 
 	viewerManager.removeEntity(unit);
@@ -265,3 +267,6 @@ bool Map::isFieldFree(uint32_t position) const {
 	return !getFieldStatusFlag(position, STATUS_UNIT);
 }
 
+void Map::updateGameField(uint32_t currentTime) {
+
+}
