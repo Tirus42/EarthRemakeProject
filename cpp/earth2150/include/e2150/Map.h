@@ -184,6 +184,12 @@ class Map {
 
 		/// Berechnet alle Veränderungen die in der zwischenzeit geschehen sind
 		void updateGameField(uint32_t currentTime);
+
+		/// Prüft ob ein Feld wirklich auf der Karte ist (und nicht außerhalb)
+		/// (Für Asserts gedacht)
+		bool fieldOnMap(const MapPosition& position) const {return fieldOnMap(position.getX(), position.getY());}
+		bool fieldOnMap(uint16_t x, uint16_t y) const {return (x < width) && (y < height);}
+		bool fieldOnMap(uint32_t position) const {return (position < uint32_t(width * height));}
 };
 
 #endif // MAPINTERFACE_H_INCLUDED

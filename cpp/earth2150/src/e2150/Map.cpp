@@ -10,6 +10,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <cassert>
+
 Map::Map(uint16_t width, uint16_t height) :
 		width(width),
 		height(height),
@@ -49,10 +51,15 @@ std::vector<MapPosition> Map::getNeighbourPositions(uint16_t x, uint16_t y) cons
 }
 
 bool Map::getWay(uint32_t start_index, uint32_t goal_index, std::list<uint32_t>& path_list) const {
+	assert(fieldOnMap(start_index));
+	assert(fieldOnMap(goal_index));
+
 	return navigator->getPath(start_index, goal_index, path_list);
 }
 
 void Map::setFieldStatusFlag(uint32_t position, uint8_t statusFlag, bool value) {
+	assert(fieldOnMap(position));
+
 	if (value) {
 		statusMap[position] |= statusFlag;
 	} else {
@@ -61,10 +68,14 @@ void Map::setFieldStatusFlag(uint32_t position, uint8_t statusFlag, bool value) 
 }
 
 bool Map::getFieldStatusFlag(uint32_t position, uint8_t statusFlag) const {
+	assert(fieldOnMap(position));
+
 	return statusMap[position] & statusFlag;
 }
 
 bool Map::addUnit(Unit& unit, uint16_t x, uint16_t y) {
+	assert(fieldOnMap(x, y));
+
 	uint32_t pos = position(x, y);
 
 	//Prüfen ob das Feld frei ist um eine Einheit darauf zu setzen
@@ -98,6 +109,8 @@ void Map::removeUnit(Unit& unit) {
 }
 
 void Map::UnitDriveTo(Unit& unit, uint32_t target) {
+	assert(fieldOnMap(target));
+
 	std::list<uint32_t> way;
 
 	uint32_t startPos = position(unit.getX(), unit.getY());
@@ -115,6 +128,8 @@ void Map::UnitDriveTo(Unit& unit, uint32_t target) {
 }
 
 void Map::addSpawnPoint(const MapPosition& position, const Faction* faction) {
+	assert(fieldOnMap(position));
+
 	spawnPositions.push_back(position);
 
 	//Todo: Faction verwalten
