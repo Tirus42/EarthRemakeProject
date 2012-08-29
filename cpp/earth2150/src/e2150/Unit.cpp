@@ -5,7 +5,8 @@
 Unit::Unit(uint32_t id, const UnitChassis& chassis) :
 	Entity(id, chassis.getHitPoints()),
 	statusFlags(0),
-	chassis(chassis) {
+	chassis(chassis),
+	wayPoints() {
 
 }
 

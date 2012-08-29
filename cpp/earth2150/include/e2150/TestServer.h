@@ -61,6 +61,9 @@ class TestServer {
 		/// Erstellt (wenn möglich) eine neue Einheit auf der Karte
 		bool createUnit(const UnitChassis& chassis, uint16_t x, uint16_t y);
 
+		/// Gibt einer Einheit den Befehl zu einem Ziel zu fahren
+		void sendUnitToPosition(uint32_t unitID, uint32_t position);
+
 		char* getNetbufferPtr() const {return netbuffer;}
 
 		void run();	//Nur eine Test Impelemtierung!!!!! (nicht verändern / schöner machen!)

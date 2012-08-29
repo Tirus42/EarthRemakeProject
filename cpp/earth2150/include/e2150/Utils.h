@@ -33,6 +33,29 @@ class Utils {
 			return (var > 4) ? (8 - var) : var;
 		}
 
+		/// Gibt den Winkel zurück, in dem das 2te Feld in relation zum ersten steht
+		/// (Felder müssen benachbart sein!)
+		static uint8_t getAngle(const Map& map, uint32_t position1, uint32_t position2) {
+			if (position2 == position1 - map.getWidth())
+				return Map::DIRECTION_NORTH;
+			if (position2 == position1 - map.getWidth() + 1)
+				return Map::DIRECTION_NORTH_EAST;
+			if (position2 == position1 + 1)
+				return Map::DIRECTION_EAST;
+			if (position2 == position1 + map.getWidth() + 1)
+				return Map::DIRECTION_SOUTH_EAST;
+			if (position2 == position1 + map.getWidth())
+				return Map::DIRECTION_SOUTH;
+			if (position2 == position1 + map.getWidth() - 1)
+				return Map::DIRECTION_SOUTH_WEST;
+			if (position2 == position1 - 1)
+				return Map::DIRECTION_WEST;
+			if (position2 == position1 - map.getWidth() -1)
+				return Map::DIRECTION_NORTH_WEST;
+
+			return 0xFF;	// Dieser Fall kann/darf nie eintreten!
+		}
+
 };
 
 

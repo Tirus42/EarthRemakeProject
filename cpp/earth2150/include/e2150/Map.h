@@ -148,6 +148,12 @@ class Map {
 		/// Gibt an, wie viele Einheiten z.Z. auf dem Spielfeld sind
 		uint32_t getUnitCount() const { return units.size(); }
 
+		Unit* getUnit(uint32_t unitID) {return units[unitID];}
+
+		/// Lässt eine Einheit zur angegebenen Position fahren (falls ein Weg gefunden wird)
+		/// (Diese Einheit muss in der Liste der Einheiten stehen!)
+		void UnitDriveTo(Unit& unit, uint32_t target);
+
 		/// Gibt die Anzahl der Player-Spawn-Punkte zurück
 		uint8_t countSpawnPoints() const { return spawnPositions.size(); }
 

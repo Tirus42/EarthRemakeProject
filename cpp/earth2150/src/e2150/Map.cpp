@@ -2,7 +2,10 @@
 
 #include "e2150/AStar.h"
 #include "e2150/JPSNavigator.h"
+#include "e2150/MovingUnit.h"
 #include "tf/file.h"
+#include "tf/time.h"
+#include "e2150/Utils.h"
 
 #include <iostream>
 #include <fstream>
@@ -64,7 +67,7 @@ bool Map::getFieldStatusFlag(uint32_t position, uint8_t statusFlag) const {
 bool Map::addUnit(Unit& unit, uint16_t x, uint16_t y) {
 	uint32_t pos = position(x, y);
 
-	//PrÃ¼fen ob das Feld frei ist um eine Einheit darauf zu setzen
+	//Prüfen ob das Feld frei ist um eine Einheit darauf zu setzen
 	if (!isFieldFree(pos)) {
 		return false;
 	}
@@ -78,10 +81,11 @@ bool Map::addUnit(Unit& unit, uint16_t x, uint16_t y) {
 	//Auf der Karte verzeichnen, dass hier nun eine Einheit steht
 	setFieldStatusFlag(position(x, y), STATUS_UNIT, true);
 
-	//Spieler Ã¼ber neue Einheit informieren
+	//Spieler über neue Einheit informieren
 	viewerManager.createEntity(unit);
 
-	std::cout << "Neue Einheit auf die Karte gesetzt (" << x << ":" << y << std::endl;
+	std::cout << "Neue Einheit (ID: " << unit.getID() << ") auf die Karte gesetzt ("
+	<< x << ":" << y << ")" << std::endl;
 
 	return true;
 }
@@ -91,6 +95,23 @@ void Map::removeUnit(Unit& unit) {
 	//Todo: Einheit aus Liste entfernen
 
 	viewerManager.removeEntity(unit);
+}
+
+void Map::UnitDriveTo(Unit& unit, uint32_t target) {
+	std::list<uint32_t> way;
+
+	uint32_t startPos = position(unit.getX(), unit.getY());
+	if (getWay(startPos, target, way)) {
+
+		unit.setWay(way);
+
+		uint32_t position = unit.getNextWaypoint();
+
+		MovingUnit* m = new MovingUnit(unit, Utils::getAngle(*this, startPos, position), MilliSecs(), *this);
+		movingUnits.insert(m);
+
+		std::cout << "Einheit startet Bewegung!\n";
+	}
 }
 
 void Map::addSpawnPoint(const MapPosition& position, const Faction* faction) {
@@ -131,7 +152,7 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 	++y1;
 	--y2;
 
-	//Nun Komplette Map durchgehen, und in prÃ¼fen, welche Nachbarfelder auch begehbar sind
+	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
 	for (uint16_t y = y1; y < y2; ++y) {
 		for (uint16_t x = x1; x < x2; ++x) {
 			uint32_t index = position(x, y);
@@ -188,7 +209,7 @@ void Map::updateMovementMapWithBorder() {
 		passables[i] = (getHeightDiffOnField(i) < MAX_HEIGHTDIFF);
 	}
 
-	//Nun Komplette Map durchgehen, und in prÃ¼fen, welche Nachbarfelder auch begehbar sind
+	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
 	for (int32_t index = 0; index < width*height-1; ++index) {
 		uint8_t value = 0;
 
@@ -244,7 +265,7 @@ bool Map::loadHeightMapRAW(const std::string& filename) {
 	//Daten einlesen
 	file.read((char*)heightMap, fileSize);
 
-	//Datei wieder schlieÃŸen
+	//Datei wieder schließen
 	file.close();
 
 	return true;
@@ -263,7 +284,7 @@ uint16_t Map::getHeightDiffOnField(uint32_t position) const {
 }
 
 bool Map::isFieldFree(uint32_t position) const {
-	// Todo: Auf GebÃ¤ude und andere Objekte prÃ¼fen
+	// Todo: Auf Gebäude und andere Objekte prüfen
 	return !getFieldStatusFlag(position, STATUS_UNIT);
 }
 

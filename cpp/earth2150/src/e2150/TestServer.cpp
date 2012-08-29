@@ -33,8 +33,6 @@ void TestServer::addUnitChassis(const UnitChassis& chassis) {
 }
 
 bool TestServer::createUnit(const UnitChassis& chassis, uint16_t x, uint16_t y) {
-	std::cout << "Erstelle neue Einheit " << chassis.getName() << "\n";
-
 	Unit* unit = new Unit(getFreeEntityID(), chassis);
 
 	if (!map.addUnit(*unit, x, y)) {
@@ -43,7 +41,20 @@ bool TestServer::createUnit(const UnitChassis& chassis, uint16_t x, uint16_t y) 
 	}
 
 	sendUnitSpawn(*unit);
+
 	return true;
+}
+
+void TestServer::sendUnitToPosition(uint32_t unitID, uint32_t position) {
+	Unit* unit = map.getUnit(unitID);
+
+	std::cout << "Unit: " << unit << "\n";
+
+	if (unit == 0)
+		return;
+
+	map.UnitDriveTo(*unit, position);
+
 }
 
 void TestServer::sendUnitSpawn(const Unit& unit) {
@@ -114,17 +125,17 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 	int32_t socket = player.getConnection().getSocket();
 
 	switch (netbuffer[0]) {
-		case 0x01:	///Anfrage des Clients der ganzen Map
+		case 0x01:	/// Anfrage des Clients der ganzen Map
 			socketRecv(socket, netbuffer, 1, false);
 			sendMapDataRaw(map, player);
 			break;
 
-		case 0x02:	///Anfrage des Clients nach der Wegekarte
+		case 0x02:	/// Anfrage des Clients nach der Wegekarte
 			socketRecv(socket, netbuffer, 1, false);
 			sendMapWaymapRaw(map, player);
 			break;
 
-		case 0x03: {	///Anfrage des Clients nach einer Wegberechnung
+		case 0x03: {	/// Anfrage des Clients nach einer Wegberechnung
 			socketRecv(socket, netbuffer, 9, 0);
 
 			uint32_t start = *((uint32_t*)&netbuffer[1]);
@@ -146,12 +157,12 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 		}
 		break;
 
-		case 0x04:		///Anfrage des Clients nach der Chassis Liste
+		case 0x04:		/// Anfrage des Clients nach der Chassis Liste
 			socketRecv(socket, netbuffer, 1, false);
 			sendChassisList(player);
 			break;
 
-		case 0x05: {		///Client möchte eine Unit spawnen
+		case 0x05: {		/// Client möchte eine Unit spawnen
 			socketRecv(socket, netbuffer, 9, false);
 
 			uint32_t chassisID = *((uint32_t*)&netbuffer[1]);
@@ -170,9 +181,17 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 		}
 		break;
 
-		case 0x06: {	///Anfrage der Einheiten auf der ganzen Karte
+		case 0x06: {	/// Anfrage der Einheiten auf der ganzen Karte
 			socketRecv(socket, netbuffer, 1, false);
 			sendUnitList(player);
+			break;
+		}
+
+		case 0x07: {	/// Eine Einheit soll zu einer Position fahren
+			socketRecv(socket, netbuffer, 9, false);
+			uint32_t unitID = *((uint32_t*)&netbuffer[1]);
+			uint32_t position = *((uint32_t*)&netbuffer[5]);
+			sendUnitToPosition(unitID, position);
 			break;
 		}
 
