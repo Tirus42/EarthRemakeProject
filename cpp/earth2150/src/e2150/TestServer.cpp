@@ -136,6 +136,9 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 			break;
 
 		case 0x03: {	/// Anfrage des Clients nach einer Wegberechnung
+			if (socketRecv(socket, netbuffer, 9, true) != 9)
+				return;
+
 			socketRecv(socket, netbuffer, 9, 0);
 
 			uint32_t start = *((uint32_t*)&netbuffer[1]);
@@ -163,10 +166,18 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 			break;
 
 		case 0x05: {		/// Client möchte eine Unit spawnen
+			if (socketRecv(socket, netbuffer, 9, true) != 9)
+				return;
+
 			socketRecv(socket, netbuffer, 9, false);
 
 			uint32_t chassisID = *((uint32_t*)&netbuffer[1]);
 			uint32_t position = *((uint32_t*)&netbuffer[5]);
+
+			if (!map.fieldOnMap(position)) {
+				std::cout << "Client sendete Ungültige Karten-Position!\n";
+				return;
+			}
 
 			int16_t x = map.positionX(position);
 			int16_t y = map.positionY(position);
@@ -188,6 +199,9 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 		}
 
 		case 0x07: {	/// Eine Einheit soll zu einer Position fahren
+			if (socketRecv(socket, netbuffer, 9, true) != 9)
+				return;
+
 			socketRecv(socket, netbuffer, 9, false);
 			uint32_t unitID = *((uint32_t*)&netbuffer[1]);
 			uint32_t position = *((uint32_t*)&netbuffer[5]);
