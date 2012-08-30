@@ -34,14 +34,14 @@ Map::~Map() {
 size_t Map::getNeighbours(uint32_t position, uint32_t *neighbours) const {
 	size_t numberOfNeighbours = 0;
 	uint8_t directions = getDirections(position);
-	if (directions & NORTH)      {neighbours[numberOfNeighbours++] = position - width;}
-	if (directions & NORTH_EAST) {neighbours[numberOfNeighbours++] = position - width + 1;}
-	if (directions & EAST)       {neighbours[numberOfNeighbours++] = position + 1;}
-	if (directions & SOUTH_EAST) {neighbours[numberOfNeighbours++] = position + width + 1;}
-	if (directions & SOUTH)      {neighbours[numberOfNeighbours++] = position + width;}
-	if (directions & SOUTH_WEST) {neighbours[numberOfNeighbours++] = position + width - 1;}
-	if (directions & WEST)       {neighbours[numberOfNeighbours++] = position - 1;}
-	if (directions & NORTH_WEST) {neighbours[numberOfNeighbours++] = position - width - 1;}
+	if (directions & NORTH)      {neighbours[numberOfNeighbours++] = addNorth(position);}
+	if (directions & NORTH_EAST) {neighbours[numberOfNeighbours++] = addNorthEast(position);}
+	if (directions & EAST)       {neighbours[numberOfNeighbours++] = addEast(position);}
+	if (directions & SOUTH_EAST) {neighbours[numberOfNeighbours++] = addSouthEast(position);}
+	if (directions & SOUTH)      {neighbours[numberOfNeighbours++] = addSouth(position);}
+	if (directions & SOUTH_WEST) {neighbours[numberOfNeighbours++] = addSouthWest(position);}
+	if (directions & WEST)       {neighbours[numberOfNeighbours++] = addWest(position);}
+	if (directions & NORTH_WEST) {neighbours[numberOfNeighbours++] = addNorthWest(position);}
 	return numberOfNeighbours;
 }
 
@@ -170,28 +170,28 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 
 			//Ist dieses Feld begehbar?
 			if (passables[index]) {
-				if (passables[index - width]) {
+				if (passables[addNorth(index)]) {
 					value |= NORTH;
 				}
-				if (passables[index + width]) {
-					value |= SOUTH;
-				}
-				if (passables[index + 1]) {
-					value |= EAST;
-				}
-				if (passables[index - 1]) {
-					value |= WEST;
-				}
-				if (passables[index + 1 - width]) {
+				if (passables[addNorthEast(index)]) {
 					value |= NORTH_EAST;
 				}
-				if (passables[index + 1 + width]) {
+				if (passables[addEast(index)]) {
+					value |= EAST;
+				}
+				if (passables[addSouthEast(index)]) {
 					value |= SOUTH_EAST;
 				}
-				if (passables[index - 1 + width]) {
+				if (passables[addSouth(index)]) {
+					value |= SOUTH;
+				}
+				if (passables[addSouthWest(index)]) {
 					value |= SOUTH_WEST;
 				}
-				if (passables[index - 1 - width]) {
+				if (passables[addWest(index)]) {
+					value |= WEST;
+				}
+				if (passables[addNorthWest(index)]) {
 					value |= NORTH_WEST;
 				}
 			}
@@ -225,28 +225,28 @@ void Map::updateMovementMapWithBorder() {
 
 		//Ist dieses Feld begehbar?
 		if (passables[index]) {
-			if ((index > width-1) && (passables[index - width])) {
+			if ((index > width-1) && (passables[addNorth(index)])) {
 				value |= NORTH;
 			}
-			if (passables[index + width]) {
+			if (passables[addSouth(index)]) {
 				value |= SOUTH;
 			}
-			if ((index % width != width-2) && (passables[index + 1])) {
+			if ((index % width != width-2) && (passables[addEast(index)])) {
 				value |= EAST;
 			}
-			if ((index % width > 0) && (passables[index - 1])) {
+			if ((index % width > 0) && (passables[addWest(index)])) {
 				value |= WEST;
 			}
-			if (((index % width != width-2) && (index > width-1)) &&(passables[index + 1 - width])) {
+			if (((index % width != width-2) && (index > width-1)) && (passables[addNorthEast(index)])) {
 				value |= NORTH_EAST;
 			}
-			if ((index % width != width-2) && (passables[index + 1 + width])) {
+			if ((index % width != width-2) && (passables[addSouthEast(index)])) {
 				value |= SOUTH_EAST;
 			}
-			if ((index % width > 0) && (passables[index - 1 + width])) {
+			if ((index % width > 0) && (passables[addSouthWest(index)])) {
 				value |= SOUTH_WEST;
 			}
-			if (((index % width > 0) && (index > width)) && (passables[index - 1 - width])) {
+			if (((index % width > 0) && (index > width)) && (passables[addNorthWest(index)])) {
 				value |= NORTH_WEST;
 			}
 		}
@@ -283,9 +283,9 @@ bool Map::loadHeightMapRAW(const std::string& filename) {
 
 uint16_t Map::getHeightDiffOnField(uint32_t position) const {
 	uint16_t h1 = heightMap[position];
-	uint16_t h2 = heightMap[position + 1];
-	uint16_t h3 = heightMap[position + width];
-	uint16_t h4 = heightMap[position + width + 1];
+	uint16_t h2 = heightMap[addEast(position)];
+	uint16_t h3 = heightMap[addSouth(position)];
+	uint16_t h4 = heightMap[addSouthEast(position)];
 
 	uint16_t maxValue = std::max(std::max(h1, h2), std::max(h3, h4));
 	uint16_t minValue = std::min(std::min(h1, h2), std::min(h3, h4));

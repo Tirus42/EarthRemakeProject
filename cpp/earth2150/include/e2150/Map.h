@@ -85,6 +85,15 @@ class Map {
 		static const uint8_t DIRECTION_WEST			= 6;
 		static const uint8_t DIRECTION_NORTH_WEST	= 7;
 
+		inline uint32_t addNorth(uint32_t position) const{return position-width;}
+		inline uint32_t addNorthEast(uint32_t position) const{return position-width+1;}
+		static inline uint32_t addEast(uint32_t position){return position+1;}
+		inline uint32_t addSouthEast(uint32_t position) const{return position+width+1;}
+		inline uint32_t addSouth(uint32_t position) const{return position+width;}
+		inline uint32_t addSouthWest(uint32_t position) const{return position+width-1;}
+		static inline uint32_t addWest(uint32_t position){return position-1;}
+		inline uint32_t addNorthWest(uint32_t position) const{return position-width-1;}
+
 		// Auf diesem Feld steht eine Einheit
 		static const uint8_t STATUS_UNIT = (1 << 0);
 		// Auf diesem Feld liegt eine Mine

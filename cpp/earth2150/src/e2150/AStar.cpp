@@ -11,18 +11,18 @@
 #include <queue>
 
 bool AStar::buildPathAndEraseRAM(AStarNode *currentNode, std::priority_queue<AStarNode*, std::vector<AStarNode*>, AStarNodeComparator>& openList, std::deque<AStarNode*>& gc, std::list<uint32_t>& path_list) const{
-	for(AStarNode *node=currentNode;node;node=node->getPreviousNode()){
+	for (AStarNode *node=currentNode;node;node=node->getPreviousNode()){
 		assert(!currentNode->isOld());
 		path_list.push_front(node->getPosition());
 	}
-	while(!openList.empty()){
+	while (!openList.empty()){
 		delete openList.top();
 		openList.pop();
 	}
 	for (std::deque<AStarNode*>::const_iterator node=gc.begin();node!=gc.end();node++) {
 		delete *node;
 	}
-	if(currentNode){
+	if (currentNode){
 		delete currentNode;
 		return true;
 	}
