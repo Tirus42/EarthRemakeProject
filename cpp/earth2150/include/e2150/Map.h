@@ -39,6 +39,7 @@ class Map {
 		/// Beschreibt den Status eines Feldes (eine Einheit steht drauf z.B.).
 		uint8_t* statusMap;
 
+		///z.B. die A* oder JPS Implementierung
 		Navigator* navigator;
 
 		std::map<uint32_t, Unit*> units;		//Bedarf ggf. überarbeitung
@@ -106,13 +107,15 @@ class Map {
 		uint16_t getMinY() const{return borderWidth;}
 		uint16_t getMaxX() const{return width-borderWidth;}
 		uint16_t getMaxY() const{return height-borderWidth;}
+		uint16_t getInnerWidth() const{return width-2*borderWidth;}
+		uint16_t getInnerHeight() const{return height-2*borderWidth;}
 
 		inline uint32_t position(uint16_t x, uint16_t y) const {return y * width + x;}
 		inline uint16_t positionX(uint32_t position) const {return position % width;}
 		inline uint16_t positionY(uint32_t position) const {return position / width;}
 
-		/// Gibt die umliegenden Felder um das angegebene Feld zurück
-		std::vector<MapPosition> getNeighbourPositions(uint16_t x, uint16_t y) const;
+		/// Gibt die anzahl der begehbaren Nachbarn zurück und speichert diese in neighbours
+		size_t getNeighbours(uint32_t position, uint32_t *neighbours) const;
 
 		/// Berechnet den Weg zwischen zwei Punkten und speichert den Weg
 		/// in die Liste. Gibt true zurück, wenn der Weg gefunden wurde.

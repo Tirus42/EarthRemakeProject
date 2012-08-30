@@ -19,8 +19,8 @@ Map::Map(uint16_t width, uint16_t height) :
 		heightMap(new uint16_t[width * height]),
 		movementMap(new uint8_t[width * height]),
 		statusMap(new uint8_t[width * height]),
-		//navigator(new AStar(*this)),
-		navigator(new JPSNavigator(*this)),
+		navigator(new AStar(*this)),
+		//navigator(new JPSNavigator(*this)),
 		units(),
 		movingUnits(),
 		spawnPositions(),
@@ -34,20 +34,18 @@ Map::~Map() {
 	delete[] heightMap;
 }
 
-std::vector<MapPosition> Map::getNeighbourPositions(uint16_t x, uint16_t y) const {
-	MapPosition _[8];
-	uint16_t x0 = x - 1, y0 = y - 1, x1 = x + 1, y1 = y + 1;
-	size_t size = 0;
-	uint8_t directions=getDirections(position(x, y));
-	if (directions&NORTH)      {_[size++] = MapPosition(x,  y0);}
-	if (directions&NORTH_EAST) {_[size++] = MapPosition(x1, y0);}
-	if (directions&EAST)       {_[size++] = MapPosition(x1, y );}
-	if (directions&SOUTH_EAST) {_[size++] = MapPosition(x1, y1);}
-	if (directions&SOUTH)      {_[size++] = MapPosition(x,  y1);}
-	if (directions&SOUTH_WEST) {_[size++] = MapPosition(x0, y1);}
-	if (directions&WEST)       {_[size++] = MapPosition(x0, y );}
-	if (directions&NORTH_WEST) {_[size++] = MapPosition(x0, y0);}
-	return std::vector<MapPosition>(_, _+size);
+size_t Map::getNeighbours(uint32_t position, uint32_t *neighbours) const {
+	size_t numberOfNeighbours = 0;
+	uint8_t directions = getDirections(position);
+	if (directions & NORTH)      {neighbours[numberOfNeighbours++] = position - width;}
+	if (directions & NORTH_EAST) {neighbours[numberOfNeighbours++] = position + width + 1;}
+	if (directions & EAST)       {neighbours[numberOfNeighbours++] = position + 1;}
+	if (directions & SOUTH_EAST) {neighbours[numberOfNeighbours++] = position + width + 1;}
+	if (directions & SOUTH)      {neighbours[numberOfNeighbours++] = position + width;}
+	if (directions & SOUTH_WEST) {neighbours[numberOfNeighbours++] = position + width - 1;}
+	if (directions & WEST)       {neighbours[numberOfNeighbours++] = position - 1;}
+	if (directions & NORTH_WEST) {neighbours[numberOfNeighbours++] = position - width - 1;}
+	return numberOfNeighbours;
 }
 
 bool Map::getWay(uint32_t start_index, uint32_t goal_index, std::list<uint32_t>& path_list) const {
