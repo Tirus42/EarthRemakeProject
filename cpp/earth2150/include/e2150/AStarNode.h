@@ -29,7 +29,6 @@ class AStarNode{
 		}
 
 		uint32_t getOverallCost() const{return overallCost;}
-		//MapPosition getPosition() const{return MapPosition(x, y);}
 		AStarNode *getPreviousNode() const{return previousNode;}
 		uint32_t getSpentCost() const{return spentCost;}
 		uint32_t getPosition() const{return position;}

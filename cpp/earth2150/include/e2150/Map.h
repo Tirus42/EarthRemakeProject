@@ -85,14 +85,14 @@ class Map {
 		static const uint8_t DIRECTION_WEST			= 6;
 		static const uint8_t DIRECTION_NORTH_WEST	= 7;
 
-		inline uint32_t addNorth(uint32_t position) const{return position-width;}
-		inline uint32_t addNorthEast(uint32_t position) const{return position-width+1;}
-		static inline uint32_t addEast(uint32_t position){return position+1;}
-		inline uint32_t addSouthEast(uint32_t position) const{return position+width+1;}
-		inline uint32_t addSouth(uint32_t position) const{return position+width;}
-		inline uint32_t addSouthWest(uint32_t position) const{return position+width-1;}
-		static inline uint32_t addWest(uint32_t position){return position-1;}
-		inline uint32_t addNorthWest(uint32_t position) const{return position-width-1;}
+		uint32_t addNorth(uint32_t position) const{return position-width;}
+		uint32_t addNorthEast(uint32_t position) const{return position-width+1;}
+		static uint32_t addEast(uint32_t position){return position+1;}
+		uint32_t addSouthEast(uint32_t position) const{return position+width+1;}
+		uint32_t addSouth(uint32_t position) const{return position+width;}
+		uint32_t addSouthWest(uint32_t position) const{return position+width-1;}
+		static uint32_t addWest(uint32_t position){return position-1;}
+		uint32_t addNorthWest(uint32_t position) const{return position-width-1;}
 
 		// Auf diesem Feld steht eine Einheit
 		static const uint8_t STATUS_UNIT = (1 << 0);
@@ -119,9 +119,9 @@ class Map {
 		uint16_t getInnerWidth() const{return width-2*borderWidth;}
 		uint16_t getInnerHeight() const{return height-2*borderWidth;}
 
-		inline uint32_t position(uint16_t x, uint16_t y) const {return y * width + x;}
-		inline uint16_t positionX(uint32_t position) const {return position % width;}
-		inline uint16_t positionY(uint32_t position) const {return position / width;}
+		uint32_t position(uint16_t x, uint16_t y) const {return y * width + x;}
+		uint16_t positionX(uint32_t position) const {return position % width;}
+		uint16_t positionY(uint32_t position) const {return position / width;}
 
 		/// Gibt die anzahl der begehbaren Nachbarn zurück und speichert diese in neighbours
 		size_t getNeighbours(uint32_t position, uint32_t *neighbours) const;
@@ -141,8 +141,8 @@ class Map {
 
 		/// Prüft, ob man von der angegebenen Position in die gegebene Richtung gehen kann.
 		/// Macht keine Prüfung, ob die Quellkoordinate gültig ist
-		inline bool isFieldWalkable(uint32_t from_index, uint8_t map_direction) const {
-			return (getDirections(from_index) & map_direction);
+		bool isFieldWalkable(uint32_t from_index, uint8_t map_direction) const {
+			return getDirections(from_index) & map_direction;
 		}
 
 		/// Setzt ein Status-Bit für das angegebene Feld
@@ -172,8 +172,8 @@ class Map {
 		/// Fügt einen weiteren Player-Spawn-Punkt hinzu
 		void addSpawnPoint(const MapPosition& position, const Faction* faction = 0);
 
-		inline uint16_t getRawHeight(uint32_t offset) const {return heightMap[offset];}
-		inline uint8_t getRawWay(uint32_t offset) const {return movementMap[offset];}
+		uint16_t getRawHeight(uint32_t offset) const {return heightMap[offset];}
+		uint8_t getRawWay(uint32_t offset) const {return movementMap[offset];}
 
 		/// Gibt die Liste der Einheiten auf dem Spielfeld zurück
 		const std::map<uint32_t, Unit*> getUnits() const {return units;}
