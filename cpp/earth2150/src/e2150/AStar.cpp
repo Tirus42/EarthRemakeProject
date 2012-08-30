@@ -30,57 +30,57 @@ bool AStar::buildPathAndEraseRAM(AStarNode *currentNode, std::priority_queue<ASt
 }
 
 bool AStar::getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_t>& path_list) const {
-	uint16_t destinationX=map.positionX(goal_index);
-	uint16_t destinationY=map.positionY(goal_index);
+	uint16_t destinationX = map.positionX(goal_index);
+	uint16_t destinationY = map.positionY(goal_index);
 	std::priority_queue<AStarNode*, std::vector<AStarNode*>, AStarNodeComparator> openList;
-	const uint16_t MAP_WIDTH=map.getWidth();
-	const uint16_t MAP_HEIGHT=map.getHeight();
+	const uint16_t MAP_WIDTH = map.getWidth();
+	const uint16_t MAP_HEIGHT = map.getHeight();
 
-	AStarNode **nodePositions=new AStarNode*[MAP_WIDTH*MAP_HEIGHT];
-	std::memset(nodePositions, 0, MAP_WIDTH*MAP_HEIGHT*2);
+	AStarNode **nodePositions = new AStarNode*[MAP_WIDTH*MAP_HEIGHT];
+	std::memset(nodePositions, 0, MAP_WIDTH * MAP_HEIGHT * 2);
 	MapBitLayer closedList(0, 0, MAP_WIDTH, MAP_HEIGHT); //map.getMinX(), map.getMinY()
 	std::deque<AStarNode*> gc; //garbage collector
 
-	AStarNode *firstNode=new AStarNode(0, 0, 0, start_index);
+	AStarNode *firstNode = new AStarNode(0, 0, 0, start_index);
 	openList.push(firstNode);
-	nodePositions[start_index]=firstNode;
+	nodePositions[start_index] = firstNode;
 
 	do {
-		AStarNode *currentNode=openList.top();
+		AStarNode *currentNode = openList.top();
 		openList.pop();
 		if (!currentNode->isOld()){
-			const uint32_t CURRENT_POSITION=currentNode->getPosition();
-			if (CURRENT_POSITION==goal_index) {
+			const uint32_t CURRENT_POSITION = currentNode->getPosition();
+			if (CURRENT_POSITION == goal_index) {
 				delete[] nodePositions;
 				return buildPathAndEraseRAM(currentNode, openList, gc, path_list);
 			}
-			const uint16_t CURRENT_X=map.positionX(CURRENT_POSITION);
-			const uint16_t CURRENT_Y=map.positionY(CURRENT_POSITION);
+			const uint16_t CURRENT_X = map.positionX(CURRENT_POSITION);
+			const uint16_t CURRENT_Y = map.positionY(CURRENT_POSITION);
 			closedList.set(CURRENT_X, CURRENT_Y);
 
 			uint32_t neighbours[8];
-			size_t numberOfNeighbours=map.getNeighbours(CURRENT_POSITION, neighbours);
+			size_t numberOfNeighbours = map.getNeighbours(CURRENT_POSITION, neighbours);
 			for (size_t i=0;i!=numberOfNeighbours;i++) {
 				const uint32_t neighbour = neighbours[i];
-				const uint16_t NEIGHBOUR_X=map.positionX(neighbour);
-				const uint16_t NEIGHBOUR_Y=map.positionY(neighbour);
+				const uint16_t NEIGHBOUR_X = map.positionX(neighbour);
+				const uint16_t NEIGHBOUR_Y = map.positionY(neighbour);
 				if(closedList.isSet(NEIGHBOUR_X, NEIGHBOUR_Y)) {
 					continue;
 				}
-				uint32_t neighbourSpentCost=currentNode->getSpentCost()+AStarNode::nearDistance(CURRENT_X, CURRENT_Y, NEIGHBOUR_X, NEIGHBOUR_Y);
-				AStarNode *node=nodePositions[neighbour];
-				if (node && neighbourSpentCost<node->getSpentCost()) {
+				uint32_t neighbourSpentCost = currentNode->getSpentCost()+AStarNode::nearDistance(CURRENT_X, CURRENT_Y, NEIGHBOUR_X, NEIGHBOUR_Y);
+				AStarNode *node = nodePositions[neighbour];
+				if (node && neighbourSpentCost < node->getSpentCost()) {
 					node->setOld(); //no delete, will be double on list but doesn't matter :)
-					node=0;
+					node = 0;
 				}
 				if (!node) {
-					AStarNode *newNode=new AStarNode(
+					AStarNode *newNode = new AStarNode(
 						currentNode, neighbourSpentCost,
 						AStarNode::farDistance(destinationX, destinationY, NEIGHBOUR_X, NEIGHBOUR_Y),
 						neighbour
 					);
 					openList.push(newNode);
-					nodePositions[neighbour]=newNode;
+					nodePositions[neighbour] = newNode;
 				}
 			}
 		}

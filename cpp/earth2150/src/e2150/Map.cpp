@@ -7,10 +7,9 @@
 #include "tf/time.h"
 #include "e2150/Utils.h"
 
+#include <cassert>
 #include <iostream>
 #include <fstream>
-
-#include <cassert>
 
 Map::Map(uint16_t width, uint16_t height) :
 		width(width),
@@ -19,8 +18,8 @@ Map::Map(uint16_t width, uint16_t height) :
 		heightMap(new uint16_t[width * height]),
 		movementMap(new uint8_t[width * height]),
 		statusMap(new uint8_t[width * height]),
-		navigator(new AStar(*this)),
-		//navigator(new JPSNavigator(*this)),
+		//navigator(new AStar(*this)),
+		navigator(new JPSNavigator(*this)),
 		units(),
 		movingUnits(),
 		spawnPositions(),
