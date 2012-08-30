@@ -29,8 +29,9 @@ class Utils {
 		}
 
 		/// Gibt den kleineren Winkel zwischen 2 Ausrichtungen zurück (Wertebereich 0 - 7)
-		static uint8_t getAngleDifference(int8_t a, int8_t b) {
-			return std::min(abs(a-b), abs(b-a));
+		static uint8_t getAngleDifference(uint8_t a, uint8_t b) {
+			uint8_t var = a < b ? b - a : a - b;
+			return (var & 4) ? (~var & 7) : var;
 		}
 
 		/// Gibt den Winkel zurück, in dem das 2te Feld in relation zum ersten steht
