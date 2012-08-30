@@ -36,7 +36,7 @@ bool AStar::getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_
 	const uint16_t MAP_WIDTH = map.getWidth();
 	const uint16_t MAP_HEIGHT = map.getHeight();
 
-	AStarNode **nodePositions = new AStarNode*[MAP_WIDTH*MAP_HEIGHT];
+	AStarNode **nodePositions = new AStarNode*[MAP_WIDTH * MAP_HEIGHT];
 	std::memset(nodePositions, 0, MAP_WIDTH * MAP_HEIGHT * 2);
 	MapBitLayer closedList(0, 0, MAP_WIDTH, MAP_HEIGHT); //map.getMinX(), map.getMinY()
 	std::deque<AStarNode*> gc; //garbage collector
@@ -64,7 +64,7 @@ bool AStar::getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_
 				const uint32_t neighbour = neighbours[i];
 				const uint16_t NEIGHBOUR_X = map.positionX(neighbour);
 				const uint16_t NEIGHBOUR_Y = map.positionY(neighbour);
-				if(closedList.isSet(NEIGHBOUR_X, NEIGHBOUR_Y)) {
+				if (closedList.isSet(NEIGHBOUR_X, NEIGHBOUR_Y)) {
 					continue;
 				}
 				uint32_t neighbourSpentCost = currentNode->getSpentCost()+AStarNode::nearDistance(CURRENT_X, CURRENT_Y, NEIGHBOUR_X, NEIGHBOUR_Y);

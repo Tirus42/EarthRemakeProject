@@ -19,9 +19,7 @@ Map::Map(uint16_t width, uint16_t height) :
 		movementMap(new uint8_t[width * height]),
 		statusMap(new uint8_t[width * height]),
 		//navigator(new AStar(*this)),
-		navigator(new JPSNavigator(*this)),
-		units(),
-		movingUnits(),
+		navigator(new JPSNavigator(*this)),		units(),		movingUnits(),
 		spawnPositions(),
 		viewerManager() {
 }
@@ -37,7 +35,7 @@ size_t Map::getNeighbours(uint32_t position, uint32_t *neighbours) const {
 	size_t numberOfNeighbours = 0;
 	uint8_t directions = getDirections(position);
 	if (directions & NORTH)      {neighbours[numberOfNeighbours++] = position - width;}
-	if (directions & NORTH_EAST) {neighbours[numberOfNeighbours++] = position + width + 1;}
+	if (directions & NORTH_EAST) {neighbours[numberOfNeighbours++] = position - width + 1;}
 	if (directions & EAST)       {neighbours[numberOfNeighbours++] = position + 1;}
 	if (directions & SOUTH_EAST) {neighbours[numberOfNeighbours++] = position + width + 1;}
 	if (directions & SOUTH)      {neighbours[numberOfNeighbours++] = position + width;}
