@@ -45,6 +45,43 @@ size_t Map::getNeighbours(uint32_t position, uint32_t *neighbours) const {
 	return numberOfNeighbours;
 }
 
+uint8_t Map::getDirection(uint32_t start_index, uint32_t goal_index) const {
+	int16_t x = positionX(goal_index) - positionX(start_index);
+	int16_t y = positionY(goal_index) - positionY(start_index);
+	bool x0 = x < 0;
+	bool y0 = y < 0;
+	int16_t x2 = 2 * x;
+	int16_t y2 = 2 * y;
+	if (x0) {
+		if (x <= y2 && y2 <= -x) {
+			return Map::DIRECTION_WEST;
+		}
+	} else {
+		if (-x <= y2 && y2 <= x) {
+			return Map::DIRECTION_EAST;
+		}
+	}
+	if (y0) {
+		if (y <= x2 && x2 <= -y) {
+			return Map::DIRECTION_NORTH;
+		}
+	} else {
+		if (-y <= x2 && x2 <= y) {
+			return Map::DIRECTION_SOUTH;
+		}
+	}
+	if (x0) {
+		if (y0) {
+			return Map::DIRECTION_NORTH_WEST;
+		}
+		return Map::DIRECTION_SOUTH_WEST;
+	}
+	if (y0) {
+		return Map::DIRECTION_NORTH_EAST;
+	}
+	return Map::DIRECTION_SOUTH_EAST;
+}
+
 bool Map::getWay(uint32_t start_index, uint32_t goal_index, std::list<uint32_t>& path_list) const {
 	assert(fieldOnMap(start_index));
 	assert(fieldOnMap(goal_index));

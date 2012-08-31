@@ -75,7 +75,7 @@ class Map {
 		static const uint8_t WEST		= (1 << 6);	 //0b01000000;
 		static const uint8_t NORTH_WEST	= (1 << 7);	 //0b10000000;
 
-		/// Richtungskonstanten um die Ausrichtung eines Objektes anzugeben (nur 4-Bit nötig)
+		/// Richtungskonstanten um die Ausrichtung eines Objektes anzugeben (nur 3-Bit nötig)
 		static const uint8_t DIRECTION_NORTH		= 0;
 		static const uint8_t DIRECTION_NORTH_EAST 	= 1;
 		static const uint8_t DIRECTION_EAST			= 2;
@@ -125,6 +125,9 @@ class Map {
 
 		/// Gibt die anzahl der begehbaren Nachbarn zurück und speichert diese in neighbours
 		size_t getNeighbours(uint32_t position, uint32_t *neighbours) const;
+
+		/// Richtung zum Ziel, dabei wird N/E/S/W eher genommen als NE/SE/SW/NW, falls es nicht eindeutig ist (NNE -> N)
+		uint8_t getDirection(uint32_t start_index, uint32_t goal_index) const;
 
 		/// Berechnet den Weg zwischen zwei Punkten und speichert den Weg
 		/// in die Liste. Gibt true zurück, wenn der Weg gefunden wurde.
