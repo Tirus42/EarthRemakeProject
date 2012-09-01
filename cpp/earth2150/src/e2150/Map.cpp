@@ -155,8 +155,7 @@ void Map::UnitDriveTo(Unit& unit, uint32_t target) {
 
 		MovingUnit* m = new MovingUnit(unit, Utils::getAngle(*this, startPos, position), MilliSecs(), *this);
 		movingUnits.push(m);
-
-		std::cout << "Einheit startet Bewegung!\n";
+		std::cout << "Einheit startet Bewegung!\n";
 	}
 }
 
@@ -172,32 +171,27 @@ void Map::updateMovementMap() {
 }
 
 void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
-	if (x1 > x2) {
-		std::swap(x1, x2);
-	}
-	if (y1 > y2) {
-		std::swap(y1, y2);
-	}
+	assert(x1 < x2);
+	assert(y1 < y2);
 
-	uint16_t width = x2 - x1 + 1;
-	uint16_t height = y2 - y1 + 1;
-	uint16_t width2 = width + 2;
-	uint16_t height2 = height + 2;
+	uint16_t width = x2 - x1;
+	uint16_t height = y2 - y1;
+	uint16_t width2 = width + 2;	uint16_t height2 = height + 2;
 	bool *passables = new bool[width2 * height2];
 	::memset(passables, true, width2 * height2 * sizeof(bool));
 
-	for (uint16_t x = 0; x != width2; x++) {
-		passables[x] = false;
-		passables[x + (height2 - 1) * width2] = false;
-	}
-	for (uint16_t y = 0; y != height2; y++) {
-		passables[y * width2] = false;
-		passables[y * width2 + width2 - 1] = false;
-	}
 	//Felder definieren, welche nicht "zu schief" sind
-	for (uint16_t y = 1; y <= height; y++) {
-		for (uint16_t x = 1; x <= width; x++) {
-			if (getHeightDiffOnField(position(x1 - 1 + x, y1 - 1 + y)) >= MAX_HEIGHTDIFF) {
+	for (uint16_t y = 0; y != height2; y++) {
+		for (uint16_t x = 0; x != width2; x++) {
+			uint16_t realX = x1 - 1 + x;
+			uint16_t realY = y1 - 1 + y;
+			if (
+				realX < borderWidth || realX >= this->width - borderWidth
+				||
+				realY < borderWidth || realY >= this->height - borderWidth
+				||
+				getHeightDiffOnField(position(realX, realY)) >= MAX_HEIGHTDIFF
+			) {
 				passables[y * width2 + x] = false;
 			}
 		}
@@ -296,37 +290,15 @@ bool Map::isFieldFree(uint32_t position) const {
 void Map::updateGameField(uint32_t currentTime) {
 	uint32_t currentEndTime;
 
-	while (movingUnits.size() > 0) {
-		MovingUnit* m = movingUnits.top();
-
-		currentEndTime = m->getFinishTime();
-
-		// Wenn Bewegung noch nicht fertig -> return
-		if (m->getFinishTime() > currentTime)
-			return;
-
-		// Bewegung ist abgeschlossen
-		m->finishMove(*this);
-		movingUnits.pop();
-
-		// Prüfen ob wir eine weitere Bewegung machen sollen
-		if (m->getUnit().countWaypoints() > 0) {
-			std::cout << "Starte weitere bewegung\n";
-			Unit& unit = m->getUnit();
-
-			uint32_t pos = unit.getNextWaypoint();
-			uint8_t direction = Utils::getAngle(*this, position(unit.getX(), unit.getY()), pos);
-			m->startMove(direction, currentEndTime, *this);
-
-			movingUnits.push(m);
-		}
-		else {
-			delete m;
-		}
+	while (movingUnits.size() > 0) {		MovingUnit* m = movingUnits.top();
+		currentEndTime = m->getFinishTime();
+		// Wenn Bewegung noch nicht fertig -> return		if (m->getFinishTime() > currentTime)			return;
+		// Bewegung ist abgeschlossen		m->finishMove(*this);		movingUnits.pop();
+		// Prüfen ob wir eine weitere Bewegung machen sollen		if (m->getUnit().countWaypoints() > 0) {			std::cout << "Starte weitere bewegung\n";			Unit& unit = m->getUnit();
+			uint32_t pos = unit.getNextWaypoint();			uint8_t direction = Utils::getAngle(*this, position(unit.getX(), unit.getY()), pos);			m->startMove(direction, currentEndTime, *this);
+			movingUnits.push(m);		}		else {			delete m;		}
 
 
 
-
-
-	}
-}
+	}
+}

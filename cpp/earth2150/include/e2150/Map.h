@@ -186,7 +186,7 @@ class Map {
 		void updateMovementMap();
 
 		/// Berechnet die Bewegungsmöglichkeiten innerhalb der angegebenen Felder (x, y) neu
-		/// x1 <= x <= x2, y1 <= y <= y2
+		/// (x1 <= x < x2, y1 <= y < y2)
 		void updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 
 		///Berechnet die Bewegungsmöglichkeiten innerhalb der angegebenen Felder auf der Map neu
