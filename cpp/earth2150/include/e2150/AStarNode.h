@@ -10,7 +10,6 @@ class AStarNode{
 		static const uint16_t SQRT_2;
 
 		AStarNode *previousNode;
-		uint32_t overallCost;
 		uint32_t spentCost;
 		uint32_t estimationCost;
 		uint32_t position;
@@ -28,7 +27,6 @@ class AStarNode{
 			return estimationCost;
 		}
 
-		uint32_t getOverallCost() const{return overallCost;}
 		AStarNode *getPreviousNode() const{return previousNode;}
 		uint32_t getSpentCost() const{return spentCost;}
 		uint32_t getPosition() const{return position;}

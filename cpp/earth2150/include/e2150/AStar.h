@@ -15,8 +15,8 @@ class AStar: public Navigator{
 		bool getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_t>& path_list) const;
 		bool buildPathAndEraseRAM(
 			AStarNode *currentNode,
-			std::priority_queue<AStarNode*, std::vector<AStarNode*>, AStarNodeComparator>& openList,
-			std::deque<AStarNode*>& gc,
+			const std::map<uint32_t, std::vector<AStarNode*> >& openList,
+			const std::deque<AStarNode*>& gc,
 			std::list<uint32_t>& path_list
 		) const;
 };

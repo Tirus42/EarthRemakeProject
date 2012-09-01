@@ -19,8 +19,8 @@ Map::Map(uint16_t width, uint16_t height) :
 		heightMap(new uint16_t[width * height]),
 		movementMap(new uint8_t[width * height]),
 		statusMap(new uint8_t[width * height]),
-		//navigator(new AStar(*this)),
-		navigator(new JPSNavigator(*this)),		units(),		movingUnits(),
+		navigator(new AStar(*this)),
+		//navigator(new JPSNavigator(*this)),		units(),		movingUnits(),
 		spawnPositions(),
 		viewerManager() {
 }

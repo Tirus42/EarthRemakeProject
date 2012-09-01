@@ -120,7 +120,6 @@
 		<Unit filename="..\tf\src\tf\time.cpp" />
 		<Unit filename="include\e2150\AStar.h" />
 		<Unit filename="include\e2150\AStarNode.h" />
-		<Unit filename="include\e2150\AStarNodeComparator.h" />
 		<Unit filename="include\e2150\Building.h" />
 		<Unit filename="include\e2150\Entity.h" />
 		<Unit filename="include\e2150\Faction.h" />

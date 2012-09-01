@@ -18,7 +18,6 @@ uint32_t AStarNode::farDistance(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t 
 
 AStarNode::AStarNode(AStarNode *previousNode, uint32_t spentCost, uint32_t estimationCost, uint32_t position):
 		previousNode(previousNode),
-		overallCost(spentCost+estimationCost),
 		spentCost(spentCost),
 		estimationCost(estimationCost),
 		position(position),

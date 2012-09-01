@@ -10,14 +10,15 @@
 #include <cstring>
 #include <queue>
 
-bool AStar::buildPathAndEraseRAM(AStarNode *currentNode, std::priority_queue<AStarNode*, std::vector<AStarNode*>, AStarNodeComparator>& openList, std::deque<AStarNode*>& gc, std::list<uint32_t>& path_list) const{
+bool AStar::buildPathAndEraseRAM(AStarNode *currentNode, const std::map<uint32_t, std::vector<AStarNode*> >& openList, const std::deque<AStarNode*>& gc, std::list<uint32_t>& path_list) const{
 	for (AStarNode *node=currentNode;node;node=node->getPreviousNode()){
 		assert(!currentNode->isOld());
 		path_list.push_front(node->getPosition());
 	}
-	while (!openList.empty()){
-		delete openList.top();
-		openList.pop();
+	for(std::map<uint32_t, std::vector<AStarNode*> >::const_iterator i=openList.begin();i!=openList.end();i++){
+		for(std::vector<AStarNode*>::const_iterator j=i->second.begin();j!=i->second.end();j++){
+			delete *j;
+		}
 	}
 	for (std::deque<AStarNode*>::const_iterator node=gc.begin();node!=gc.end();node++) {
 		delete *node;
@@ -32,7 +33,7 @@ bool AStar::buildPathAndEraseRAM(AStarNode *currentNode, std::priority_queue<ASt
 bool AStar::getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_t>& path_list) const {
 	uint16_t destinationX = map.positionX(goal_index);
 	uint16_t destinationY = map.positionY(goal_index);
-	std::priority_queue<AStarNode*, std::vector<AStarNode*>, AStarNodeComparator> openList;
+	std::map<uint32_t, std::vector<AStarNode*> > openList;
 	const uint16_t MAP_WIDTH = map.getWidth();
 	const uint16_t MAP_HEIGHT = map.getHeight();
 
@@ -42,12 +43,17 @@ bool AStar::getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_
 	std::deque<AStarNode*> gc; //garbage collector
 
 	AStarNode *firstNode = new AStarNode(0, 0, 0, start_index);
-	openList.push(firstNode);
+	openList[0].push_back(firstNode);
 	nodePositions[start_index] = firstNode;
 
 	do {
-		AStarNode *currentNode = openList.top();
-		openList.pop();
+		std::map<uint32_t, std::vector<AStarNode*> >::iterator openListBegin = openList.begin();
+		AStarNode *currentNode = *openListBegin->second.rbegin();
+		if (openListBegin->second.size() != 1) {
+			openListBegin->second.pop_back();
+		} else {
+			openList.erase(openListBegin);
+		}
 		if (!currentNode->isOld()){
 			const uint32_t CURRENT_POSITION = currentNode->getPosition();
 			if (CURRENT_POSITION == goal_index) {
@@ -74,18 +80,19 @@ bool AStar::getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_
 					node = 0;
 				}
 				if (!node) {
+					uint32_t neigbourEstimationCost = AStarNode::farDistance(destinationX, destinationY, NEIGHBOUR_X, NEIGHBOUR_Y);
 					AStarNode *newNode = new AStarNode(
 						currentNode, neighbourSpentCost,
-						AStarNode::farDistance(destinationX, destinationY, NEIGHBOUR_X, NEIGHBOUR_Y),
+						neigbourEstimationCost,
 						neighbour
 					);
-					openList.push(newNode);
+					openList[neighbourSpentCost + neigbourEstimationCost].push_back(newNode);
 					nodePositions[neighbour] = newNode;
 				}
 			}
 		}
 		gc.push_back(currentNode);
-	} while(!openList.empty());
+	} while (!openList.empty());
 	delete[] nodePositions;
 	return buildPathAndEraseRAM(0, openList, gc, path_list);
 }
