@@ -185,13 +185,12 @@ class Map {
 		/// Berechnet die Bewegungsmöglichkeiten von jedem Feld auf der Map neu
 		void updateMovementMap();
 
-		///Berechnet die Bewegungsmöglichkeiten innerhalb der angegebenen Felder auf der Map neu
+		/// Berechnet die Bewegungsmöglichkeiten innerhalb der angegebenen Felder (x, y) neu
+		/// x1 <= x <= x2, y1 <= y <= y2
 		void updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 
 		///Berechnet die Bewegungsmöglichkeiten innerhalb der angegebenen Felder auf der Map neu
 		void updateMovementMap(uint32_t position1, uint32_t position2);
-
-		void updateMovementMapWithBorder();
 
 		/// Läd eine Heightmap 1:1 aus einer Datei
 		bool loadHeightMapRAW(const std::string& filename);

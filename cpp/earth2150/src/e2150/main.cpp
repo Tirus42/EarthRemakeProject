@@ -15,7 +15,7 @@
 	if (!result)
 		return EXIT_FAILURE;
 	// Komplette Wegkarte berechnen
-	m.updateMovementMapWithBorder();
+	m.updateMovementMap();
 
 	m.addSpawnPoint(MapPosition(5, 5));
 	m.addSpawnPoint(MapPosition(20, 10));
