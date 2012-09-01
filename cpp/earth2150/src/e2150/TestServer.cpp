@@ -89,6 +89,8 @@ void TestServer::run() {
 		handleNewConnections();
 		checkIncommingData();
 
+		map.updateGameField(rTime);
+
 		if (MilliSecs() - rTime > frameTime) {
 			std::cout << "Warnung: Frame Time dauerte " << (MilliSecs() - rTime) << "ms\n";
 		}

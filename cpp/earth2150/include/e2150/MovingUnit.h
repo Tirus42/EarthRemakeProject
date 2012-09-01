@@ -32,13 +32,22 @@ class MovingUnit {
 		~MovingUnit();
 
 		/// Startet eine weitere Bewegung
-		inline void startMove(uint8_t direction, uint32_t currentTime, Map& map);
+		void startMove(uint8_t direction, uint32_t currentTime, Map& map);
 
 		/// Schlieﬂt eine Bewegung ab (sollte nur aufgerufen werden, wenn getFinishTime() <= currentTime)
-		inline void finishMove(uint32_t currentTime, Map& map);
+		void finishMove(Map& map);
 
 		/// Gibt den Zeitpunkt zur¸ck, wann die Bewegung (idr.) abgeschlossen ist
-		inline uint32_t getFinishTime() const;
+		uint32_t getFinishTime() const;
+
+		/// Gibt die Einheit zur¸ck
+		Unit& getUnit() const {return unit;}
+};
+
+struct MovingUnitComparator {
+	bool operator() (const MovingUnit* u1, const MovingUnit* u2) const {
+		return u1->getFinishTime() >= u2->getFinishTime();
+	};
 };
 
 #endif // MOVINGUNIT_H_INCLUDED

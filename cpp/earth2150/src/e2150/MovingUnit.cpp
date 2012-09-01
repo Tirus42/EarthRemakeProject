@@ -5,6 +5,8 @@
 #include "e2150/Map.h"
 #include "e2150/Utils.h"
 
+#include <iostream>
+
 MovingUnit::MovingUnit(Unit& unit, uint8_t direction, uint32_t currentTime, Map& map) :
 	 unit(unit),
 	 direction(direction),
@@ -29,7 +31,9 @@ void MovingUnit::startMove(uint8_t direction, uint32_t currentTime, Map& map) {
 	}
 }
 
-void MovingUnit::finishMove(uint32_t currentTime, Map& map) {
+void MovingUnit::finishMove(Map& map) {
+	std::cout << "Einheit hat eine bewegung abgeschlossen\n";
+
 	unit.setStatusFlag(Unit::FLAG_ONMOVE, false);
 
 	if (turn) {
@@ -39,6 +43,8 @@ void MovingUnit::finishMove(uint32_t currentTime, Map& map) {
 		map.setFieldStatusFlag(map.position(unit.getX(), unit.getY()), Map::STATUS_UNIT, false);
 		// Und Einheit bewegen
 		unit.move(direction);
+		// Wegpunkt entfernen
+		unit.removeCurrentWaypoint();
 	}
 }
 
@@ -55,5 +61,4 @@ uint32_t MovingUnit::getFinishTime() const {
 
 	//Also fahren wir gerade
 	return startTime + unit.getChassis().getMoveRate();
-
 }

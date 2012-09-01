@@ -3,9 +3,10 @@
 
 #include "e2150/MapPosition.h"
 #include "e2150/MapViewerManager.h"
+#include "e2150/MovingUnit.h"
 #include <stdint.h>
 #include <map>
-#include <set>
+#include <queue>
 #include <memory>
 #include <string>
 #include <vector>
@@ -46,7 +47,7 @@ class Map {
 
 		/// Speichert alle sich in Bewegung befindenden Einheiten in der Reihenfolge
 		/// ihrer Ankunft
-		std::multiset<MovingUnit*> movingUnits;
+		std::priority_queue<MovingUnit*, std::vector<MovingUnit*>, MovingUnitComparator> movingUnits;
 
 		std::vector<MapPosition> spawnPositions;
 

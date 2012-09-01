@@ -153,7 +153,7 @@ void Map::UnitDriveTo(Unit& unit, uint32_t target) {
 		uint32_t position = unit.getNextWaypoint();
 
 		MovingUnit* m = new MovingUnit(unit, Utils::getAngle(*this, startPos, position), MilliSecs(), *this);
-		movingUnits.insert(m);
+		movingUnits.push(m);
 
 		std::cout << "Einheit startet Bewegung!\n";
 	}
@@ -336,5 +336,39 @@ bool Map::isFieldFree(uint32_t position) const {
 }
 
 void Map::updateGameField(uint32_t currentTime) {
+	uint32_t currentEndTime;
 
+	while (movingUnits.size() > 0) {
+		MovingUnit* m = movingUnits.top();
+
+		currentEndTime = m->getFinishTime();
+
+		// Wenn Bewegung noch nicht fertig -> return
+		if (m->getFinishTime() > currentTime)
+			return;
+
+		// Bewegung ist abgeschlossen
+		m->finishMove(*this);
+		movingUnits.pop();
+
+		// Prüfen ob wir eine weitere Bewegung machen sollen
+		if (m->getUnit().countWaypoints() > 0) {
+			std::cout << "Starte weitere bewegung\n";
+			Unit& unit = m->getUnit();
+
+			uint32_t pos = unit.getNextWaypoint();
+			uint8_t direction = Utils::getAngle(*this, position(unit.getX(), unit.getY()), pos);
+			m->startMove(direction, currentEndTime, *this);
+
+			movingUnits.push(m);
+		}
+		else {
+			delete m;
+		}
+
+
+
+
+
+	}
 }
