@@ -154,6 +154,12 @@ void Map::UnitDriveTo(Unit& unit, uint32_t target) {
 
 		uint32_t position = unit.getNextWaypoint();
 
+		//Todo: Diese IF wieder entfernen wenn Surrim nicht mehr den Startpunkt mit einträgt
+		if (position == startPos) {
+			unit.removeCurrentWaypoint();
+			position = unit.getNextWaypoint();
+		}
+
 		MovingUnit* m = new MovingUnit(unit, Utils::getAngle(*this, startPos, position), MilliSecs(), *this);
 		movingUnits.push(m);
 		std::cout << "Einheit startet Bewegung!\n";
@@ -315,13 +321,13 @@ void Map::updateGameField(uint32_t currentTime) {
 
 	while (movingUnits.size() > 0) {		MovingUnit* m = movingUnits.top();
 		currentEndTime = m->getFinishTime();
-		// Wenn Bewegung noch nicht fertig -> return		if (m->getFinishTime() > currentTime)			return;
-		// Bewegung ist abgeschlossen		m->finishMove(*this);		movingUnits.pop();
+		// Wenn Bewegung noch nicht fertig -> return		if (currentEndTime > currentTime)			return;
+		// Bewegung ist abgeschlossen		m->finishMove(*this);		movingUnits.pop();
+
 		// Prüfen ob wir eine weitere Bewegung machen sollen		if (m->getUnit().countWaypoints() > 0) {			std::cout << "Starte weitere bewegung\n";			Unit& unit = m->getUnit();
+			viewerManager.debugPaintField(position(unit.getX(), unit.getY()), 0xFF50FF00);
+
 			uint32_t pos = unit.getNextWaypoint();			uint8_t direction = Utils::getAngle(*this, position(unit.getX(), unit.getY()), pos);			m->startMove(direction, currentEndTime, *this);
-			movingUnits.push(m);		}		else {			delete m;		}
-
-
-
-	}
+			movingUnits.push(m);		}		else {
+			viewerManager.debugPaintField(position(m->getUnit().getX(), m->getUnit().getY()), 0xFF289900);			delete m;		}	}
 }

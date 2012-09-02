@@ -22,6 +22,8 @@ MovingUnit::~MovingUnit() {
 
 void MovingUnit::startMove(uint8_t direction, uint32_t currentTime, Map& map) {
 	unit.setStatusFlag(Unit::FLAG_ONMOVE, true);
+	startTime = currentTime;
+	this->direction = direction;
 
 	if (unit.getDirection() != direction) {
 		turn = true;

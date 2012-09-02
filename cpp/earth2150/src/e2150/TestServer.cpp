@@ -46,10 +46,7 @@ bool TestServer::createUnit(const UnitChassis& chassis, uint16_t x, uint16_t y) 
 void TestServer::sendUnitToPosition(uint32_t unitID, uint32_t position) {
 	Unit* unit = map.getUnit(unitID);
 
-	std::cout << "Unit: " << unit << "\n";
-
-	if (unit == 0)
-		return;
+	assert(unit != 0);
 
 	map.UnitDriveTo(*unit, position);
 
