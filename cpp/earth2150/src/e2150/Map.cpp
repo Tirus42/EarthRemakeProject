@@ -6,6 +6,7 @@
 #include "tf/file.h"
 #include "tf/time.h"
 #include "e2150/Utils.h"
+#include "e2150/HumanPlayer.h"
 
 #include <cassert>
 #include <cstring>
@@ -22,7 +23,7 @@ Map::Map(uint16_t width, uint16_t height) :
 		navigator(new AStar(*this)),
 		//navigator(new JPSNavigator(*this)),		units(),		movingUnits(),
 		spawnPositions(),
-		viewerManager() {
+		viewerManager(*this) {
 }
 
 Map::~Map() {
@@ -268,6 +269,28 @@ bool Map::loadHeightMapRAW(const std::string& filename) {
 	file.close();
 
 	return true;
+}
+
+bool Map::addPlayer(Player& player, uint32_t slot) {
+	//Todo: Slot verwalten und prüfen ob schon belegt
+
+
+	HumanPlayer* hPlayer = dynamic_cast<HumanPlayer*>(&player);
+
+	if (hPlayer != 0)
+		viewerManager.addHumanPlayer(hPlayer);
+
+	return true;
+}
+
+void Map::removePlayer(Player& player, bool removeEntitys) {
+	//Todo: Entitys entfernen
+
+	HumanPlayer* hPlayer = dynamic_cast<HumanPlayer*>(&player);
+
+	if (hPlayer != 0)
+		viewerManager.removeHumanPlayer(hPlayer);
+
 }
 
 uint16_t Map::getHeightDiffOnField(uint32_t position) const {

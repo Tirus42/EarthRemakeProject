@@ -133,7 +133,6 @@
 		<Unit filename="include\e2150\Navigator.h" />
 		<Unit filename="include\e2150\Player.h" />
 		<Unit filename="include\e2150\PlayerNetworkConnection.h" />
-		<Unit filename="include\e2150\PlayerViewArea.h" />
 		<Unit filename="include\e2150\SendBuffer.h" />
 		<Unit filename="include\e2150\TestServer.h" />
 		<Unit filename="include\e2150\Unit.h" />
@@ -152,7 +151,6 @@
 		<Unit filename="src\e2150\MovingUnit.cpp" />
 		<Unit filename="src\e2150\Player.cpp" />
 		<Unit filename="src\e2150\PlayerNetworkConnection.cpp" />
-		<Unit filename="src\e2150\PlayerViewArea.cpp" />
 		<Unit filename="src\e2150\SendBuffer.cpp" />
 		<Unit filename="src\e2150\TestServer.cpp" />
 		<Unit filename="src\e2150\Unit.cpp" />

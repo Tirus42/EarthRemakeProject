@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 
+class Player;
 class Unit;
 class MovingUnit;
 class Faction;
@@ -194,6 +195,12 @@ class Map {
 
 		/// Läd eine Heightmap 1:1 aus einer Datei
 		bool loadHeightMapRAW(const std::string& filename);
+
+		/// Fügt einen weiteren Spieler in einen bestimmten Slot (Spawnpoint) hinzu
+		bool addPlayer(Player& player, uint32_t slot);
+
+		/// Entfernt einen Spieler und entfernt ggf. alle ihm gehörende Spielobjekte
+		void removePlayer(Player& player, bool removeEntitys = true);
 
 		const Navigator* getNavigator() { return navigator; }
 

@@ -44,7 +44,8 @@ class Entity {
 		int32_t getHitPointsMax() const {return hitPointsMax;}
 
 		/// Schreibt alle relevanten Informationen über das Objekt in den Buffer und gibt die größe zurück
-		int32_t dumpData(char* buffer) const;
+		virtual int32_t dumpData(char* buffer) const;
+		virtual uint32_t dumpDataSize() const;
 };
 
 #endif

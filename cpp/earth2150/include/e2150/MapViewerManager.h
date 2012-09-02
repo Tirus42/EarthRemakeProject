@@ -2,28 +2,32 @@
 #define MAPVIEWERMANAGER_H_INCLUDED
 
 #include <list>
+#include <vector>
 #include <stdint.h>
 
-class PlayerViewArea;
+class Map;
 class Entity;
+class HumanPlayer;
 
 /**
-* Diese Klasse Verwaltet die Spieler-Kamera Positionen und bestimmt daraus,
-* welche update-Informationen an den Spieler gesendet werden müssen.
-* Dies wird mit Hilfe von "Rastern" bestimmt.
-* Der Viewer bekommt eine Rastergröße, in welche die Gesammte Map aufgeteilt wird,
-* damit erhält der Spieler entweder den Inhalt des gesammten Rasters, oder nicht.
-* Anhand der Kamera Position kann bestimmt werden, in welche Raster der Spieler
-* z.Z. einsicht hat.
+* Verwaltet die (Menschlichen-) Spieler welche zugriff auf die Karte haben.
+* (ggf. auch nur Zuschauer)
 */
 class MapViewerManager {
 	private:
-		std::list<PlayerViewArea*> viewers;		//Spieler-Kameras (in diesem Bereich müssen die Spieler über Updates informiert werden)
+		Map& map;
 
-		uint16_t rasterSize;
+		std::vector<HumanPlayer*> viewers;		//Spieler-Kameras (in diesem Bereich müssen die Spieler über Updates informiert werden)
 
 	public:
-		MapViewerManager(uint16_t rasterSize = 32);
+		MapViewerManager(Map& map);
+		~MapViewerManager();
+
+		/// Fügt weiteren Spieler hinzu
+		void addHumanPlayer(HumanPlayer* player);
+
+		/// Entfernt einen Spieler
+		void removeHumanPlayer(HumanPlayer* player);
 
 		/// Sendet (falls erforderlich) ein spawn-Paket an den/die Spieler
 		void createEntity(const Entity& entity);
@@ -34,7 +38,7 @@ class MapViewerManager {
 		/// Sendet (falls erforderlich) ein positions-Paket an den/die Spieler
 		void updateEntityPosition(const Entity& entity);
 
-		/// "Malt" bei allen verbundenen Spielern ein Feld auf der an
+		/// "Malt" bei allen verbundenen Spielern ein Feld auf der Karte an
 		void debugPaintField(uint32_t position, uint32_t color);
 		void debugPaintFields(const std::list<uint32_t>& fields, uint32_t color);
 

@@ -54,6 +54,7 @@ class Unit : public Entity {
 		uint32_t countWaypoints() const {return wayPoints.size();}
 
 		int32_t dumpData(char* buffer) const;
+		uint32_t dumpDataSize() const;
 };
 
 #endif

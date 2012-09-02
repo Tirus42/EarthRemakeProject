@@ -6,16 +6,17 @@
 HumanPlayer::HumanPlayer(TestServer* server, int32_t socket, const std::string& name, const sockaddr_in& networkAddress) :
 		Player(name),
 		server(server),
-		connection(socket, networkAddress),
-		cameras(0) {
+		connection(socket, networkAddress) {
 }
 
 HumanPlayer::~HumanPlayer() {
 	//Todo: Alle Kameras entfernen
 	std::cout << "Human Player Destruktor aufgerufen\n";
+
+	if (countVisibleMaps() > 0) {
+		std::cout << "WARNUNG: Player ist noch in " << countVisibleMaps() << " Map(s) eingetragen!\n";
+	}
 }
-
-
 
 void HumanPlayer::debugPaintFields(const std::list<uint32_t>& fields, uint32_t color) {
 	char* buffer = new char[9 + fields.size()*4];

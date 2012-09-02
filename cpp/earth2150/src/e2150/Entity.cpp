@@ -29,3 +29,7 @@ int32_t Entity::dumpData(char* buffer) const {
 
 	return 16;
 }
+
+uint32_t Entity::dumpDataSize() const {
+	return 16;
+}

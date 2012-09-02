@@ -44,9 +44,6 @@ class TestServer {
 		/// Sendet die Liste aller Einheiten auf der Karte an den Spieler
 		void sendUnitList(HumanPlayer& player);
 
-		/// Sendet ein Spawn Paket an alle Spieler
-		void sendUnitSpawn(const Unit& unit);
-
 		uint32_t getFreeEntityID();
 
 		std::string peekString(uint32_t offset); //Liest aus dem netbuffer an angegebenen Offset einen String aus

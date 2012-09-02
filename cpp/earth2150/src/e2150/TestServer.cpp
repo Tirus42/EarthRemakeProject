@@ -40,8 +40,6 @@ bool TestServer::createUnit(const UnitChassis& chassis, uint16_t x, uint16_t y) 
 		return false;
 	}
 
-	sendUnitSpawn(*unit);
-
 	return true;
 }
 
@@ -55,15 +53,6 @@ void TestServer::sendUnitToPosition(uint32_t unitID, uint32_t position) {
 
 	map.UnitDriveTo(*unit, position);
 
-}
-
-void TestServer::sendUnitSpawn(const Unit& unit) {
-	netbuffer[0] = 200;
-	int32_t size = unit.dumpData(&netbuffer[1]);
-
-	for (std::list<HumanPlayer*>::iterator i = players.begin(); i != players.end(); ++i) {
-		(*i)->getConnection().sendPacket(netbuffer, size + 1);
-	}
 }
 
 void TestServer::run() {
@@ -114,6 +103,7 @@ void TestServer::checkIncommingData() {
 		if (size > 0) {
 			handleIncommingData(*(*i), size);
 		} else if (size == 0) {
+			map.removePlayer(*(*i));
 			removeHumanPlayer(*(*i));
 			return;
 		}
@@ -261,6 +251,8 @@ void TestServer::handleNewConnections() {
 				HumanPlayer* player = new HumanPlayer(this, socket, std::string("Player"), sockaddr_in());
 
 				players.push_back(player);
+
+				map.addPlayer(*player, 1);
 
 				//Sende ein Connection-ACK
 				netbuffer[0] = 1;

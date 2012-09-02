@@ -1,18 +1,49 @@
 #include "e2150/MapViewerManager.h"
 
-#include "e2150/PlayerViewArea.h"
 #include "e2150/HumanPlayer.h"
+#include "e2150/Entity.h"
+#include <iostream>
+#include <cassert>
 
-MapViewerManager::MapViewerManager(uint16_t rasterSize) :
-	viewers(),
-	rasterSize(rasterSize) {
+MapViewerManager::MapViewerManager(Map& map) :
+	map(map),
+	viewers() {
 
 }
 
-void MapViewerManager::createEntity(const Entity& entity) {
-	//Todo: prüfen ob senden wirklich erforderlich
+MapViewerManager::~MapViewerManager() {
+	if (viewers.size() != 0) {
+		std::cout << "WARNUNG! MapVierManager Destruktor aufgerufen, obwohl noch Spieler eingetragen!\n";
+	}
+}
 
-	//Todo: Paket an alle Spieler senden
+void MapViewerManager::addHumanPlayer(HumanPlayer* player) {
+	viewers.push_back(player);
+
+	player->addVisibleMap(map);
+}
+
+void MapViewerManager::removeHumanPlayer(HumanPlayer* player) {
+	for (std::vector<HumanPlayer*>::iterator i = viewers.begin(); i != viewers.end(); ++i) {
+		if ((*i) == player) {
+			viewers.erase(i);
+			player->removeVisibleMap(map);
+			return;
+		}
+	}
+
+	assert(false);
+}
+
+void MapViewerManager::createEntity(const Entity& entity) {
+	char* buffer = new char[entity.dumpDataSize() + 1];
+
+	buffer[0] = 200;
+	int32_t size = entity.dumpData(&buffer[1]);
+
+	for (std::vector<HumanPlayer*>::iterator i = viewers.begin(); i != viewers.end(); ++i) {
+		(*i)->getConnection().sendPacket(buffer, size + 1);
+	}
 }
 
 void MapViewerManager::removeEntity(const Entity& entity) {
@@ -27,7 +58,7 @@ void MapViewerManager::debugPaintField(uint32_t position, uint32_t color) {
 }
 
 void MapViewerManager::debugPaintFields(const std::list<uint32_t>& fields, uint32_t color) {
-	for (std::list<PlayerViewArea*>::iterator i = viewers.begin(); i != viewers.end(); ++i) {
-		(*i)->getPlayer().debugPaintFields(fields, color);
+	for (std::vector<HumanPlayer*>::iterator i = viewers.begin(); i != viewers.end(); ++i) {
+		(*i)->debugPaintFields(fields, color);
 	}
 }

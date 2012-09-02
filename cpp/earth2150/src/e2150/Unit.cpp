@@ -72,3 +72,7 @@ int32_t Unit::dumpData(char* buffer) const {
 
 	return offset + 5;
 }
+
+uint32_t Unit::dumpDataSize() const {
+	return Entity::dumpDataSize() + 5;
+}

@@ -20,8 +20,6 @@ class HumanPlayer : public Player {
 		TestServer* server;
 		PlayerNetworkConnection connection;		//Netzwerkverbindung des Spielers
 
-		std::vector<PlayerViewArea*> cameras;	//Kamera Position(en) des Spielers
-
 		HumanPlayer(const HumanPlayer&);
 		HumanPlayer operator=(const HumanPlayer&);
 
