@@ -34,6 +34,10 @@ class MapViewerManager {
 		/// Sendet (falls erforderlich) ein positions-Paket an den/die Spieler
 		void updateEntityPosition(const Entity& entity);
 
+		/// "Malt" bei allen verbundenen Spielern ein Feld auf der an
+		void debugPaintField(uint32_t position, uint32_t color);
+		void debugPaintFields(const std::list<uint32_t>& fields, uint32_t color);
+
 };
 
 #endif // MAPVIEWERMANAGER_H_INCLUDED

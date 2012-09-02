@@ -31,6 +31,8 @@ class PlayerViewArea {
 		uint32_t getRadius() const {return radius;}
 		uint16_t getX() const {return position.getX();}
 		uint16_t getY() const {return position.getY();}
+
+		HumanPlayer& getPlayer() const {return player;}
 };
 
 #endif // PLAYERVIEWAREA_H_INCLUDED
