@@ -15,6 +15,7 @@ bool AStar::buildPathAndEraseRAM(AStarNode *currentNode, const std::map<uint32_t
 		assert(!currentNode->isOld());
 		path_list.push_front(node->getPosition());
 	}
+	path_list.pop_front();
 	for(std::map<uint32_t, std::vector<AStarNode*> >::const_iterator i=openList.begin();i!=openList.end();i++){
 		for(std::vector<AStarNode*>::const_iterator j=i->second.begin();j!=i->second.end();j++){
 			delete *j;

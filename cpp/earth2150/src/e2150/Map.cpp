@@ -153,13 +153,6 @@ void Map::UnitDriveTo(Unit& unit, uint32_t target) {
 		unit.setWay(way);
 
 		uint32_t position = unit.getNextWaypoint();
-
-		//Todo: Diese IF wieder entfernen wenn Surrim nicht mehr den Startpunkt mit einträgt
-		if (position == startPos) {
-			unit.removeCurrentWaypoint();
-			position = unit.getNextWaypoint();
-		}
-
 		MovingUnit* m = new MovingUnit(unit, Utils::getAngle(*this, startPos, position), MilliSecs(), *this);
 		movingUnits.push(m);
 		std::cout << "Einheit startet Bewegung!\n";
