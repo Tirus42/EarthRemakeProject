@@ -1,7 +1,6 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
-#include "e2150/AStarNodeComparator.h"
 #include "e2150/Navigator.h"
 #include <deque>
 #include <queue>
