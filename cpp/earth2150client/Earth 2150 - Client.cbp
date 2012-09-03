@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Earth 2150 - Client" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\Earth 2150 - Client" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\earth2150" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\Earth 2150 - Client" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\earth2150" />
+				<Option object_output="obj\Release\" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="$(#irrlicht)\include" />
+			<Add directory="include" />
+			<Add directory="..\earth2150\include" />
+			<Add directory="..\tf\include" />
+			<Add directory="..\ff\include" />
+		</Compiler>
+		<Linker>
+			<Add library="Irrlicht" />
+			<Add library="opengl32" />
+			<Add library="glu32" />
+			<Add library="gdi32" />
+			<Add directory="$(#irrlicht)\lib\Win32-gcc" />
+		</Linker>
+		<Unit filename="include\client\VisualMap.h" />
+		<Unit filename="include\client\VisualMapPart.h" />
+		<Unit filename="src\client\VisualMap.cpp" />
+		<Unit filename="src\client\main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
