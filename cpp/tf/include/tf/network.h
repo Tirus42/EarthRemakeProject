@@ -6,7 +6,9 @@
 
 class sockaddr_in;
 
-#ifndef WIN32
+#ifdef WIN32
+	#include "winsock.h"
+#else
     #define NO_ERROR 0
 	#define SOCKET_ERROR -1
 	#define INVALID_SOCKET 0xFFFFFFFF

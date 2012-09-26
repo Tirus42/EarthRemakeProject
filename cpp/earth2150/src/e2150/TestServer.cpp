@@ -59,7 +59,7 @@ void TestServer::run() {
 	// Tirus: Da ich leider noch keine "Timer" Funktion unter Linux finden konnte
 	// hier diese Fallunterscheidung, unter Linux ist die FrameZeit daher z.Z. nicht garantiert
     #ifdef WIN32
-    int32_t timer = CreateTimer(frameTime);
+    HANDLE timer = CreateTimer(frameTime);
     #else
     timespec time;
     time.tv_sec = 0;

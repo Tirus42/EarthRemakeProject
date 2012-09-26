@@ -1,11 +1,5 @@
 #include "tf/time.h"
 
-#ifdef WIN32
-	#include <windows.h>
-#else
-	#include <sys/time.h>
-#endif
-
 unsigned int MilliSecs(){
 	#ifdef WIN32
         return timeGetTime();
@@ -16,31 +10,33 @@ unsigned int MilliSecs(){
 	#endif
 }
 
-int CreateTimer(int ms) {
+HANDLE CreateTimer(int ms) {
 	#ifdef WIN32
 	LARGE_INTEGER liDueTime;
     liDueTime.QuadPart = -10000L * ms;
 
     HANDLE hTimer = CreateWaitableTimer(NULL, false, NULL);  //Erstellt den Timer
     if (hTimer == NULL)
-		return -1;
+		return NULL;
 
-    if (!SetWaitableTimer(hTimer, &liDueTime, ms, NULL, NULL, 0))
-        return -1;
+    if (!SetWaitableTimer(hTimer, &liDueTime, ms, NULL, NULL, 0)) {
+		FreeTimer(hTimer);
+        return NULL;
+    }
 
-	return (int)hTimer;
+	return hTimer;
 	#else
 	return -1;	// Noch nicht implementiert
 	#endif
 }
 
-void WaitTimer(int hTimer) {
+void WaitTimer(HANDLE hTimer) {
 	#ifdef WIN32
-	WaitForSingleObject((void*)hTimer, INFINITE);
+	WaitForSingleObject(hTimer, INFINITE);
 	#endif
 }
 
-void FreeTimer(int hTimer) {
+void FreeTimer(HANDLE hTimer) {
 	#ifdef WIN32
 	CancelWaitableTimer((void*)hTimer);
 	#endif
