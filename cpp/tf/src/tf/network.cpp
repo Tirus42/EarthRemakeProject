@@ -18,7 +18,7 @@ bool InitNetwork() {
 	WORD wVersionRequested = MAKEWORD(2, 2);
 	WSADATA wsaData;
 
-	if(WSAStartup(wVersionRequested, &wsaData)){
+	if (WSAStartup(wVersionRequested, &wsaData)) {
 		std::cout << "WSA Startup fehlgeschlagen!\n";
 		return false;
 	}
@@ -29,8 +29,8 @@ bool InitNetwork() {
 }
 
 
-int CreateTCPServer(unsigned short port, bool nonblock) {
-	int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+SOCKET CreateTCPServer(unsigned short port, bool nonblock) {
+	SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	sockaddr_in service;
 
@@ -39,21 +39,21 @@ int CreateTCPServer(unsigned short port, bool nonblock) {
 	service.sin_port = htons(port);
 
 	int result = bind(sock, (sockaddr *) &service, sizeof(service));
-	if(result == SOCKET_ERROR) {
+	if (result == SOCKET_ERROR) {
 		closeSocket(sock);
 		return 0;
 	}
 
-	if(listen(sock, SOMAXCONN) == SOCKET_ERROR){
+	if (listen(sock, SOMAXCONN) == SOCKET_ERROR) {
 		std::cout << "Socket konnte nicht in listen mode gesetzt werden!";
 		closeSocket(sock);
 		return 0;
 	}
 
-	if(nonblock){
+	if (nonblock) {
 		//Socket in non-Block mode setzen
 		result = setSocketNonblock(sock);
-		if(result != NO_ERROR){
+		if (result != NO_ERROR) {
 			std::cout << "Konnte Socket nicht in nonBlock mode setzen!\n";
 		}
 	}
@@ -61,8 +61,8 @@ int CreateTCPServer(unsigned short port, bool nonblock) {
 	return sock;
 }
 
-int OpenTCPStream(const std::string& server, unsigned short port) {
-	int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+SOCKET OpenTCPStream(const std::string& server, unsigned short port) {
+	SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	sockaddr_in service;
 
@@ -70,7 +70,7 @@ int OpenTCPStream(const std::string& server, unsigned short port) {
 	service.sin_addr.s_addr = getHostIP(server);
 	service.sin_port = htons(port);
 
-	if(connect(sock, (sockaddr *) &service, sizeof(service)) != SOCKET_ERROR){
+	if (connect(sock, (sockaddr *) &service, sizeof(service)) != SOCKET_ERROR){
 		return sock;
 	}
 
@@ -82,13 +82,13 @@ int OpenTCPStream(const std::string& server, unsigned short port) {
 	return SOCKET_ERROR;
 }
 
-int CreateUDPStream(unsigned short port) {
-	int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+SOCKET CreateUDPStream(unsigned short port) {
+	SOCKET sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
 	return sock;
 }
 
-bool setSocketNonblock(int socket) {
+bool setSocketNonblock(SOCKET socket) {
     #ifdef WIN32
         u_long iMode = 1;
         return ioctlsocket(socket, FIONBIO, &iMode);
@@ -97,11 +97,11 @@ bool setSocketNonblock(int socket) {
     #endif
 }
 
-int socketSend(int socket, char* buffer, int size) {
+int socketSend(SOCKET socket, char* buffer, int size) {
 	return send(socket, buffer, size, 0);
 }
 
-int socketRecv(int socket, char* buffer, int size, bool peekOnly) {
+int socketRecv(SOCKET socket, char* buffer, int size, bool peekOnly) {
     #ifdef WIN32
         int result = recv(socket, buffer, size, (peekOnly ? MSG_PEEK : 0));
         if (result == SOCKET_ERROR) {
@@ -116,7 +116,11 @@ int socketRecv(int socket, char* buffer, int size, bool peekOnly) {
     #endif
 }
 
-void closeSocket(int socket) {
+SOCKET socketAccept(SOCKET socket) {
+    return accept(socket, NULL, NULL);
+}
+
+void closeSocket(SOCKET socket) {
 	#ifdef WIN32
 	closesocket(socket);
 	#else
@@ -124,7 +128,7 @@ void closeSocket(int socket) {
 	#endif
 }
 
-void SendUDPMSG(const int socket, const char* data, int dataSize, uint32_t targetIP, unsigned short targetPort) {
+void SendUDPMSG(SOCKET socket, const char* data, int dataSize, uint32_t targetIP, unsigned short targetPort) {
 	sockaddr_in service;
 
 	service.sin_family = AF_INET;
@@ -134,7 +138,7 @@ void SendUDPMSG(const int socket, const char* data, int dataSize, uint32_t targe
 	sendto(socket, data, dataSize, 0, (sockaddr*)&service, sizeof(service));
 }
 
-void SendUDPMSG(const int socket, const char* data, int dataSize, const sockaddr_in target) {
+void SendUDPMSG(SOCKET socket, const char* data, int dataSize, const sockaddr_in target) {
 	sendto(socket, data, dataSize, 0, (sockaddr*)&target, sizeof(target));
 }
 

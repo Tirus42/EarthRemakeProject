@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-PlayerNetworkConnection::PlayerNetworkConnection(int32_t socket, const sockaddr_in& networkAdress) :
+PlayerNetworkConnection::PlayerNetworkConnection(SOCKET socket, const sockaddr_in& networkAdress) :
 	socket(socket),
 	networkAdress(networkAdress),
 	sendBuffers() {
@@ -24,7 +24,7 @@ void PlayerNetworkConnection::sendPacket(char* pointer, int32_t length) {
 	}
 
 	//Wenn Buffer leer, dann versuche es direkt zu senden, wenn nicht erfolgreich, schreibe es in den Buffer
-	int32_t size = send(socket, pointer, length, 0);
+	int32_t size = socketSend(socket, pointer, length);
 
 	//Wenn der Inhalt garnicht gesendet werden konnte,
 	if (size == SOCKET_ERROR) {

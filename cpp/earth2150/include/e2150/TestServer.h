@@ -1,6 +1,8 @@
 #ifndef TESTSERVER_H
 #define TESTSERVER_H
 
+#include "tf/network.h"
+
 #include <stdint.h>
 #include <string>
 #include <map>
@@ -15,10 +17,10 @@ class TestServer {
 	private:
 		static const uint32_t BUFFERSIZE = 8192;
 
-		int32_t socket;	 	//TCP-Server socket, hört auf Eingehende Verbindungen
+		SOCKET socket;	 	//TCP-Server socket, hört auf Eingehende Verbindungen
 		char* netbuffer;	//Bufferspeicher für das lesen und schreiben von Netzwerknachrichten
 		Map& map;		//Jaja unschön, nur zum Test...
-		std::list<int32_t> waitingConnections;  //Speichert alle eingehende Verbindungen, bis eine Anfrage kommt
+		std::list<SOCKET> waitingConnections;  //Speichert alle eingehende Verbindungen, bis eine Anfrage kommt
 		std::list<HumanPlayer*> players;
 
 		std::map<uint32_t, const UnitChassis*> unitChassis;
@@ -49,7 +51,7 @@ class TestServer {
 		std::string peekString(uint32_t offset); //Liest aus dem netbuffer an angegebenen Offset einen String aus
 		uint32_t pokeString(const std::string& text, uint32_t offset);
 	public:
-		TestServer(int32_t socket, Map& map);
+		TestServer(SOCKET socket, Map& map);
 		virtual ~TestServer();
 
 		/// Fügt eine weitere UnitChassis zu den Spawnmöglichkeiten hinzu

@@ -12,7 +12,7 @@ SendBuffer::SendBuffer(char* pointer, int32_t length) :
 	memcpy(buffer, pointer, length);
 }
 
-bool SendBuffer::sendPacket(int32_t socket) {
+bool SendBuffer::sendPacket(SOCKET socket) {
 	int32_t sendSize = socketSend(socket, buffer + offset, length - offset);
 
 	if (sendSize == length - offset) {

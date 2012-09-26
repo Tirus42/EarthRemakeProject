@@ -17,7 +17,7 @@ class SendBuffer {
 		SendBuffer(char* pointer, int32_t length);
 		~SendBuffer();
 
-		bool sendPacket(int32_t socket);
+		bool sendPacket(SOCKET socket);
 
 
 };

@@ -3,7 +3,7 @@
 #include "e2150/Utils.h"
 #include <iostream>
 
-HumanPlayer::HumanPlayer(TestServer* server, int32_t socket, const std::string& name, const sockaddr_in& networkAddress) :
+HumanPlayer::HumanPlayer(TestServer* server, SOCKET socket, const std::string& name, const sockaddr_in& networkAddress) :
 		Player(name),
 		server(server),
 		connection(socket, networkAddress) {

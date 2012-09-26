@@ -17,16 +17,19 @@ class PlayerNetworkConnection {
 	friend class HumanPlayer;
 
 	private:
-		int32_t socket;
+        PlayerNetworkConnection(const PlayerNetworkConnection &pnc);
+		PlayerNetworkConnection& operator=(const PlayerNetworkConnection &pnc);
+
+		SOCKET socket;
 		sockaddr_in networkAdress;
 
 		std::list<SendBuffer*> sendBuffers;   //Netzwerkbuffer, welche noch an den Spieler gesendet werden müssen
 
 	public:
-		PlayerNetworkConnection(int32_t socket, const sockaddr_in& networkAdress);
+		PlayerNetworkConnection(SOCKET socket, const sockaddr_in& networkAdress);
 		virtual ~PlayerNetworkConnection();
 
-		int32_t getSocket() const {return socket;}
+		SOCKET getSocket() const {return socket;}
 
 		void sendPacket(char* pointer, int32_t length);	//Sendet angegebene Daten an den Client (behält Reihenfolge!)
 		void sendBufferContent();   //Sendet ggf. ausstehende Daten an den Client

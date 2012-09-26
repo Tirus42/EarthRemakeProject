@@ -13,7 +13,7 @@
 #include <iostream>
 #include <cstring>
 
-TestServer::TestServer(int32_t socket, Map& map):
+TestServer::TestServer(SOCKET socket, Map& map):
 		socket(socket),
 		netbuffer(new char[BUFFERSIZE]),
 		map(map),
@@ -92,7 +92,7 @@ void TestServer::run() {
 
 void TestServer::checkIncommingData() {
 	for (std::list<HumanPlayer*>::iterator i = players.begin(); i != players.end(); ++i) {
-		int32_t socket = (*i)->getConnection().getSocket();
+		SOCKET socket = (*i)->getConnection().getSocket();
 
 		int32_t size = socketRecv(socket, netbuffer, BUFFERSIZE, true);
 
@@ -111,7 +111,7 @@ void TestServer::checkIncommingData() {
 }
 
 void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
-	int32_t socket = player.getConnection().getSocket();
+	SOCKET socket = player.getConnection().getSocket();
 
 	switch (netbuffer[0]) {
 		case 0x01:	/// Anfrage des Clients der ganzen Map
@@ -210,11 +210,11 @@ void TestServer::removeHumanPlayer(HumanPlayer& player) {
 }
 
 void TestServer::acceptNewConnections() {
-	uint32_t accepted;
+	SOCKET accepted;
 	do {
-		accepted = accept(socket, NULL, NULL);
+		accepted = socketAccept(socket);
 
-		if (accepted != INVALID_SOCKET){
+		if (accepted != SOCKET_ERROR) {
 			std::cout << "Neue Verbindung!\n";
 
             //Setze Verbindung in NonBlock mode (in Windows wird das übernommen, in Linux nicht...)
@@ -227,8 +227,8 @@ void TestServer::acceptNewConnections() {
 }
 
 void TestServer::handleNewConnections() {
-	for (std::list<int32_t>::iterator i = waitingConnections.begin(); i != waitingConnections.end(); ++i) {
-		int32_t socket = (*i);
+	for (std::list<SOCKET>::iterator i = waitingConnections.begin(); i != waitingConnections.end(); ++i) {
+		SOCKET socket = (*i);
 
 		int32_t size = socketRecv(socket, netbuffer, BUFFERSIZE, true);
 
