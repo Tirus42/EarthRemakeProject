@@ -6,6 +6,7 @@
 #ifdef WIN32
 	#include <windows.h>
 #else
+	#define HANDLE int
 	#include <sys/time.h>
 #endif
 
