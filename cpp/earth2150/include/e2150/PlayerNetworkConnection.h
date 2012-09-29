@@ -1,12 +1,6 @@
 #ifndef PLAYERNETWORKCONNECTION_H_INCLUDED
 #define PLAYERNETWORKCONNECTION_H_INCLUDED
 
-#ifdef WIN32
-	#include <windows.h>
-#else
-	#include <netinet/in.h>
-#endif
-
 #include "tf/network.h"
 #include <stdint.h>
 #include <list>
