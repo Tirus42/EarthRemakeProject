@@ -1,5 +1,6 @@
 #include "tf/network.h"
 
+
 #include <iostream>
 #ifdef WIN32
 	#include <windows.h>
@@ -52,7 +53,7 @@ SOCKET CreateTCPServer(unsigned short port, bool nonblock) {
 
 	if (nonblock) {
 		//Socket in non-Block mode setzen
-		result = setSocketNonblock(sock);
+		result = setSocketBlockmode(sock, true);
 		if (result != NO_ERROR) {
 			std::cout << "Konnte Socket nicht in nonBlock mode setzen!\n";
 		}
@@ -88,13 +89,29 @@ SOCKET CreateUDPStream(unsigned short port) {
 	return sock;
 }
 
-bool setSocketNonblock(SOCKET socket) {
+bool setSocketBlockmode(SOCKET socket, bool nonblock) {
     #ifdef WIN32
-        u_long iMode = 1;
+        u_long iMode = nonblock;
         return ioctlsocket(socket, FIONBIO, &iMode);
     #else
-        return fcntl(socket, F_SETFL, fcntl(socket, F_GETFL, 0) | O_NONBLOCK);
+        if (nonblock) {
+			return fcntl(socket, F_SETFL, fcntl(socket, F_GETFL, 0) | O_NONBLOCK);
+        }
+
+        return fcntl(socket, F_SETFL, fcntl(socket, F_GETFL, 0) & (!O_NONBLOCK));
     #endif
+}
+
+unsigned int socketReadAvail(SOCKET socket) {
+	#ifdef WIN32
+		u_long result;
+		ioctlsocket(socket, FIONREAD, &result);
+		return result;
+	#else
+		int result;
+		ioctl(socket, FIONREAD, &result);
+		return result;
+	#endif
 }
 
 int socketSend(SOCKET socket, char* buffer, int size) {

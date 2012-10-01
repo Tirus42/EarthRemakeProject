@@ -31,7 +31,10 @@ SOCKET OpenTCPStream(const std::string& server, unsigned short port);
 SOCKET CreateUDPStream(unsigned short port);
 
 /// Setzt einen Socket in den NonBlock mode (recv return damit sofort und wartet nicht bis etwas eingeht)
-bool setSocketNonblock(SOCKET socket);
+bool setSocketBlockmode(SOCKET socket, bool block);
+
+/// Gibt die Anzahl an Bytes an, die zum Lesen bereit stehen
+unsigned int socketReadAvail(SOCKET socket);
 
 /**
 * Sendet Daten an einen (verbundenen) Socket

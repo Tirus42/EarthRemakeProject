@@ -218,7 +218,7 @@ void TestServer::acceptNewConnections() {
 			std::cout << "Neue Verbindung!\n";
 
             //Setze Verbindung in NonBlock mode (in Windows wird das übernommen, in Linux nicht...)
-            setSocketNonblock(accepted);
+            setSocketBlockmode(accepted, true);
 
 			//Füge neue Verbindung in Warteliste ein
 			waitingConnections.push_back(accepted);
