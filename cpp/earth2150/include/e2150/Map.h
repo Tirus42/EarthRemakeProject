@@ -107,19 +107,19 @@ class Map {
 		~Map();
 
 		/// Gibt die Breite der Karte zurück
-		uint16_t getWidth() const{return width;}
+		uint16_t getWidth() const {return width;}
 
 		/// Gibt die Höhe der Karte zurück
-		uint16_t getHeight() const{return height;}
+		uint16_t getHeight() const {return height;}
 
-		uint16_t getBorderWidth() const{return borderWidth;}
+		uint16_t getBorderWidth() const {return borderWidth;}
 
-		uint16_t getMinX() const{return borderWidth;}
-		uint16_t getMinY() const{return borderWidth;}
-		uint16_t getMaxX() const{return width-borderWidth;}
-		uint16_t getMaxY() const{return height-borderWidth;}
-		uint16_t getInnerWidth() const{return width-2*borderWidth;}
-		uint16_t getInnerHeight() const{return height-2*borderWidth;}
+		uint16_t getMinX() const {return borderWidth;}
+		uint16_t getMinY() const {return borderWidth;}
+		uint16_t getMaxX() const {return width-borderWidth;}
+		uint16_t getMaxY() const {return height-borderWidth;}
+		uint16_t getInnerWidth() const {return width-2*borderWidth;}
+		uint16_t getInnerHeight() const {return height-2*borderWidth;}
 
 		uint32_t position(uint16_t x, uint16_t y) const {return y * width + x;}
 		uint16_t positionX(uint32_t position) const {return position % width;}

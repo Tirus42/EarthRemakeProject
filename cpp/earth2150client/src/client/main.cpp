@@ -80,7 +80,20 @@ int main(int argc, char** argv) {
     To look at the mesh, we place a camera into 3d space at the position
     (0, 30, -40). The camera looks from there to (0,5,0).
     */
-    smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,5,0));
+    //smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,5,0));
+    scene::ICameraSceneNode* cam = smgr->addCameraSceneNodeFPS();
+	cam->setFarValue(100000.0f);
+
+	VisualMap map(driver, 1024, 1024);
+
+	if (!map.loadHeightMapRAW("map1024x1024.bin"))
+		return EXIT_FAILURE;
+
+	map.build(smgr);
+
+
+	/// Testweiße und zur Orientierung einen Cube hinzufügen
+	scene::ISceneNode* cube = smgr->addCubeSceneNode(10);
 
     /*
     Ok, now we have set up the scene, lets draw everything:

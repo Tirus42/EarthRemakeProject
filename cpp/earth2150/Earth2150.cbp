@@ -133,6 +133,9 @@
 		<Unit filename="..\earth2150client\include\client\VisualMap.h">
 			<Option target="Client - Debug" />
 		</Unit>
+		<Unit filename="..\earth2150client\include\client\VisualMapPart.cpp">
+			<Option target="Client - Debug" />
+		</Unit>
 		<Unit filename="..\earth2150client\include\client\VisualMapPart.h">
 			<Option target="Client - Debug" />
 		</Unit>
