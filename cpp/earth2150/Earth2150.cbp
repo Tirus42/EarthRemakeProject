@@ -100,6 +100,27 @@
 					<Add option="-g" />
 				</Compiler>
 			</Target>
+			<Target title="Client - Debug">
+				<Option output="..\earth2150client\bin\Debug\Earth2150-Client" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\earth2150" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="..\earth2150client\include" />
+					<Add directory="$(#irrlicht)\include" />
+				</Compiler>
+				<Linker>
+					<Add library="ws2_32" />
+					<Add library="winmm" />
+					<Add library="Irrlicht" />
+					<Add library="opengl32" />
+					<Add library="glu32" />
+					<Add library="gdi32" />
+					<Add directory="$(#irrlicht)\lib\Win32-gcc" />
+				</Linker>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Weffc++" />
@@ -109,6 +130,18 @@
 			<Add directory="..\tf\include" />
 			<Add directory="..\ff\include" />
 		</Compiler>
+		<Unit filename="..\earth2150client\include\client\VisualMap.h">
+			<Option target="Client - Debug" />
+		</Unit>
+		<Unit filename="..\earth2150client\include\client\VisualMapPart.h">
+			<Option target="Client - Debug" />
+		</Unit>
+		<Unit filename="..\earth2150client\src\client\VisualMap.cpp">
+			<Option target="Client - Debug" />
+		</Unit>
+		<Unit filename="..\earth2150client\src\client\main.cpp">
+			<Option target="Client - Debug" />
+		</Unit>
 		<Unit filename="..\ff\include\ff\JumpPointSearch.h" />
 		<Unit filename="..\ff\include\ff\MinHeap.h" />
 		<Unit filename="..\ff\src\ff\JumpPointSearch.cpp" />
@@ -138,7 +171,14 @@
 		<Unit filename="include\e2150\Unit.h" />
 		<Unit filename="include\e2150\UnitChassis.h" />
 		<Unit filename="include\e2150\Utils.h" />
-		<Unit filename="include\e2150\main.h" />
+		<Unit filename="include\e2150\main.h">
+			<Option target="Server - Debug" />
+			<Option target="Server - Release" />
+			<Option target="Server - VS - Debug" />
+			<Option target="Server - VS - Release" />
+			<Option target="VS - Debug" />
+			<Option target="Linux - Debug" />
+		</Unit>
 		<Unit filename="src\e2150\AStar.cpp" />
 		<Unit filename="src\e2150\AStarNode.cpp" />
 		<Unit filename="src\e2150\Entity.cpp" />
@@ -155,7 +195,14 @@
 		<Unit filename="src\e2150\TestServer.cpp" />
 		<Unit filename="src\e2150\Unit.cpp" />
 		<Unit filename="src\e2150\UnitChassis.cpp" />
-		<Unit filename="src\e2150\main.cpp" />
+		<Unit filename="src\e2150\main.cpp">
+			<Option target="Server - Debug" />
+			<Option target="Server - Release" />
+			<Option target="Server - VS - Debug" />
+			<Option target="Server - VS - Release" />
+			<Option target="VS - Debug" />
+			<Option target="Linux - Debug" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />
