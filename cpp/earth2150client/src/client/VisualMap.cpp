@@ -34,12 +34,20 @@ VisualMap::VisualMap(irr::video::IVideoDriver* driver, uint16_t width, uint16_t 
 }
 
 void VisualMap::build(irr::scene::ISceneManager* smgr) {
-	for (int32_t y = 0; y < 7; ++y) {
-		for (int32_t x = 0; x < 7; ++x) {
+	int32_t width = getWidth() / VISUAL_PART_SIZE;
+	int32_t height = getHeight() / VISUAL_PART_SIZE;
+
+	width = 7;
+	height = 7;
+
+	for (int32_t y = 0; y < height; ++y) {
+		for (int32_t x = 0; x < width; ++x) {
 			VisualMapPart* part = new VisualMapPart(*this, x, y);
 
 			/// Erstelle aus dem Mesh ein "AnimatedMesh" und füge es der Scene hinzu
 			scene::IMeshManipulator* manipulator = smgr->getMeshManipulator();
+			/// Vorerst Mesh-Normale automatisch berechnen lassen (Gibt unschöne Kanten)
+			manipulator->recalculateNormals(part->getMesh());
 			scene::ISceneNode* node = smgr->addAnimatedMeshSceneNode(manipulator->createAnimatedMesh(part->getMesh()));
 
 			node->setPosition(core::vector3df(x * VISUAL_PART_SIZE, 0, y * VISUAL_PART_SIZE));

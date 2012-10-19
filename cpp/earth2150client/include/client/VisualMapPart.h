@@ -14,9 +14,19 @@ class VisualMapPart {
 		uint16_t x;
 		uint16_t y;
 
+		/// Zeiger auf das Irrlicht-Mesh Objekt
 		irr::scene::SMesh* mesh;
+		/// Referenz auf das Vertex-Array
+		//irr::core::array<irr::video::S3DVertex> &vertices;
 
 		void buildMesh(const VisualMap& map);
+
+		/// Setzt alle Normalen neu
+		void updateNormals();
+		void updateNormalsBorderTop();
+		void updateNormalsBorderBottom();
+		void updateNormalsBorderLeft();
+		void updateNormalsBorderRight();
 
 	public:
 		VisualMapPart(const VisualMap& map, uint16_t x, uint16_t y);

@@ -95,6 +95,8 @@ int main(int argc, char** argv) {
 	/// Testweiße und zur Orientierung einen Cube hinzufügen
 	scene::ISceneNode* cube = smgr->addCubeSceneNode(10);
 
+	scene::ILightSceneNode* light = smgr->addLightSceneNode();
+
     /*
     Ok, now we have set up the scene, lets draw everything:
     We run the device in a while() loop, until the device does not
