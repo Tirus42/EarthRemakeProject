@@ -30,7 +30,7 @@ bool InitNetwork() {
 }
 
 
-SOCKET CreateTCPServer(unsigned short port, bool nonblock) {
+SOCKET CreateTCPServer(uint16_t port, bool nonblock) {
 	SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	sockaddr_in service;
@@ -62,7 +62,7 @@ SOCKET CreateTCPServer(unsigned short port, bool nonblock) {
 	return sock;
 }
 
-SOCKET OpenTCPStream(const std::string& server, unsigned short port) {
+SOCKET OpenTCPStream(const std::string& server, uint16_t port) {
 	SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	sockaddr_in service;
@@ -83,7 +83,7 @@ SOCKET OpenTCPStream(const std::string& server, unsigned short port) {
 	return SOCKET_ERROR;
 }
 
-SOCKET CreateUDPStream(unsigned short port) {
+SOCKET CreateUDPStream(uint16_t port) {
 	SOCKET sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
 	return sock;
@@ -114,7 +114,7 @@ unsigned int socketReadAvail(SOCKET socket) {
 	#endif
 }
 
-int socketSend(SOCKET socket, char* buffer, int size) {
+int socketSend(SOCKET socket, const char* buffer, int size) {
 	return send(socket, buffer, size, 0);
 }
 

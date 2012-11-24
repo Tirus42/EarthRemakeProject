@@ -2,7 +2,7 @@
 
 #include <sys/stat.h>
 
-unsigned char FileType(const std::string& filename){
+uint8_t FileType(const std::string& filename){
 	struct stat Status;
 	int Dateityp;
 	stat(filename.data(), &Status);
@@ -14,7 +14,7 @@ unsigned char FileType(const std::string& filename){
    }
 }
 
-long long FileSize(const std::string& filename){
+int64_t FileSize(const std::string& filename){
 	struct stat Status;
 	stat(filename.data(), &Status);
 	return Status.st_size;
