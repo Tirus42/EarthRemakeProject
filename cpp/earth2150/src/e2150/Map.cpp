@@ -2,6 +2,7 @@
 
 #include "e2150/AStar.h"
 #include "e2150/JPSNavigator.h"
+#include "PathFinder/TNavigator.h"
 #include "e2150/MovingUnit.h"
 #include "tf/file.h"
 #include "tf/time.h"
@@ -20,8 +21,9 @@ Map::Map(uint16_t width, uint16_t height) :
 		heightMap(new uint16_t[width * height]),
 		movementMap(new uint8_t[width * height]),
 		statusMap(new uint8_t[width * height]),
-		navigator(new AStar(*this)),
-		//navigator(new JPSNavigator(*this)),		units(),		movingUnits(),
+		//navigator(new AStar(*this)),
+		//navigator(new JPSNavigator(*this)),
+		navigator(new TNavigator(*this)),		units(),		movingUnits(),
 		spawnPositions(),
 		viewerManager(*this) {
 }
