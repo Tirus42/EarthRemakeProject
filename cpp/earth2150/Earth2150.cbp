@@ -7,8 +7,8 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Server - Debug">
-				<Option output="bin\Debug\Earth2150-Server" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Debug\" />
+				<Option output="bin/Debug/Earth2150-Server" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -20,8 +20,8 @@
 				</Linker>
 			</Target>
 			<Target title="Server - Release">
-				<Option output="bin\Release\Earth2150-Server" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Release\" />
+				<Option output="bin/Release/Earth2150-Server" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -35,8 +35,8 @@
 				</Linker>
 			</Target>
 			<Target title="Server - VS - Debug">
-				<Option output="bin\Debug\Earth 2150 VS" prefix_auto="1" extension_auto="1" />
-				<Option object_output="R:\comp\debug-objs" />
+				<Option output="bin/Debug/Earth 2150 VS" prefix_auto="1" extension_auto="1" />
+				<Option object_output="R:/comp/debug-objs" />
 				<Option type="1" />
 				<Option compiler="msvc10" />
 				<Compiler>
@@ -52,8 +52,8 @@
 				</Linker>
 			</Target>
 			<Target title="Server - VS - Release">
-				<Option output="bin\Release\Earth 2150 VS" prefix_auto="1" extension_auto="1" />
-				<Option object_output="R:\comp\release-objs" />
+				<Option output="bin/Release/Earth 2150 VS" prefix_auto="1" extension_auto="1" />
+				<Option object_output="R:/comp/release-objs" />
 				<Option type="1" />
 				<Option compiler="msvc10" />
 				<Compiler>
@@ -71,9 +71,9 @@
 				</Linker>
 			</Target>
 			<Target title="VS - Debug">
-				<Option output="bin\VS - Debug\Earth 2150" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="bin\VS - Debug\" />
-				<Option object_output="obj\VS - Debug\" />
+				<Option output="bin/VS - Debug/Earth 2150" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/VS - Debug/" />
+				<Option object_output="obj/VS - Debug/" />
 				<Option type="1" />
 				<Option compiler="msvc10" />
 				<Compiler>
@@ -92,8 +92,8 @@
 				</Linker>
 			</Target>
 			<Target title="Linux - Debug">
-				<Option output="bin\Debug\Earth2150-Server" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Debug\" />
+				<Option output="bin/Debug/Earth2150-Server" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -101,15 +101,15 @@
 				</Compiler>
 			</Target>
 			<Target title="Client - Debug">
-				<Option output="..\earth2150client\bin\Debug\Earth2150-Client" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="..\earth2150" />
-				<Option object_output="obj\Debug\" />
+				<Option output="../earth2150client/bin/Debug/Earth2150-Client" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../earth2150" />
+				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add directory="..\earth2150client\include" />
-					<Add directory="$(#irrlicht)\include" />
+					<Add directory="../earth2150client/include" />
+					<Add directory="$(#irrlicht)/include" />
 				</Compiler>
 				<Linker>
 					<Add library="ws2_32" />
@@ -118,7 +118,7 @@
 					<Add library="opengl32" />
 					<Add library="glu32" />
 					<Add library="gdi32" />
-					<Add directory="$(#irrlicht)\lib\Win32-gcc" />
+					<Add directory="$(#irrlicht)/lib/Win32-gcc" />
 				</Linker>
 			</Target>
 		</Build>
@@ -127,54 +127,56 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add directory="include" />
-			<Add directory="..\tf\include" />
-			<Add directory="..\ff\include" />
+			<Add directory="../tf/include" />
+			<Add directory="../ff/include" />
 		</Compiler>
-		<Unit filename="..\earth2150client\include\client\VisualMap.h">
+		<Unit filename="../earth2150client/include/client/VisualMap.h">
 			<Option target="Client - Debug" />
 		</Unit>
-		<Unit filename="..\earth2150client\include\client\VisualMapPart.cpp">
+		<Unit filename="../earth2150client/include/client/VisualMapPart.cpp">
 			<Option target="Client - Debug" />
 		</Unit>
-		<Unit filename="..\earth2150client\include\client\VisualMapPart.h">
+		<Unit filename="../earth2150client/include/client/VisualMapPart.h">
 			<Option target="Client - Debug" />
 		</Unit>
-		<Unit filename="..\earth2150client\src\client\VisualMap.cpp">
+		<Unit filename="../earth2150client/src/client/VisualMap.cpp">
 			<Option target="Client - Debug" />
 		</Unit>
-		<Unit filename="..\earth2150client\src\client\main.cpp">
+		<Unit filename="../earth2150client/src/client/main.cpp">
 			<Option target="Client - Debug" />
 		</Unit>
-		<Unit filename="..\ff\include\ff\JumpPointSearch.h" />
-		<Unit filename="..\ff\include\ff\MinHeap.h" />
-		<Unit filename="..\ff\src\ff\JumpPointSearch.cpp" />
-		<Unit filename="..\tf\include\tf\file.h" />
-		<Unit filename="..\tf\include\tf\network.h" />
-		<Unit filename="..\tf\include\tf\time.h" />
-		<Unit filename="..\tf\src\tf\file.cpp" />
-		<Unit filename="..\tf\src\tf\network.cpp" />
-		<Unit filename="..\tf\src\tf\time.cpp" />
-		<Unit filename="include\e2150\AStar.h" />
-		<Unit filename="include\e2150\AStarNode.h" />
-		<Unit filename="include\e2150\Building.h" />
-		<Unit filename="include\e2150\Entity.h" />
-		<Unit filename="include\e2150\Faction.h" />
-		<Unit filename="include\e2150\HumanPlayer.h" />
-		<Unit filename="include\e2150\JPSNavigator.h" />
-		<Unit filename="include\e2150\Map.h" />
-		<Unit filename="include\e2150\MapBitLayer.h" />
-		<Unit filename="include\e2150\MapPosition.h" />
-		<Unit filename="include\e2150\MapViewerManager.h" />
-		<Unit filename="include\e2150\MovingUnit.h" />
-		<Unit filename="include\e2150\Navigator.h" />
-		<Unit filename="include\e2150\Player.h" />
-		<Unit filename="include\e2150\PlayerNetworkConnection.h" />
-		<Unit filename="include\e2150\SendBuffer.h" />
-		<Unit filename="include\e2150\TestServer.h" />
-		<Unit filename="include\e2150\Unit.h" />
-		<Unit filename="include\e2150\UnitChassis.h" />
-		<Unit filename="include\e2150\Utils.h" />
-		<Unit filename="include\e2150\main.h">
+		<Unit filename="../ff/include/ff/JumpPointSearch.h" />
+		<Unit filename="../ff/include/ff/MinHeap.h" />
+		<Unit filename="../ff/src/ff/JumpPointSearch.cpp" />
+		<Unit filename="../tf/include/tf/file.h" />
+		<Unit filename="../tf/include/tf/network.h" />
+		<Unit filename="../tf/include/tf/time.h" />
+		<Unit filename="../tf/src/tf/file.cpp" />
+		<Unit filename="../tf/src/tf/network.cpp" />
+		<Unit filename="../tf/src/tf/time.cpp" />
+		<Unit filename="include/PathFinder/TNavigator.h" />
+		<Unit filename="include/PathFinder/TSearcher.h" />
+		<Unit filename="include/e2150/AStar.h" />
+		<Unit filename="include/e2150/AStarNode.h" />
+		<Unit filename="include/e2150/Building.h" />
+		<Unit filename="include/e2150/Entity.h" />
+		<Unit filename="include/e2150/Faction.h" />
+		<Unit filename="include/e2150/HumanPlayer.h" />
+		<Unit filename="include/e2150/JPSNavigator.h" />
+		<Unit filename="include/e2150/Map.h" />
+		<Unit filename="include/e2150/MapBitLayer.h" />
+		<Unit filename="include/e2150/MapPosition.h" />
+		<Unit filename="include/e2150/MapViewerManager.h" />
+		<Unit filename="include/e2150/MovingUnit.h" />
+		<Unit filename="include/e2150/Navigator.h" />
+		<Unit filename="include/e2150/Player.h" />
+		<Unit filename="include/e2150/PlayerNetworkConnection.h" />
+		<Unit filename="include/e2150/SendBuffer.h" />
+		<Unit filename="include/e2150/TestServer.h" />
+		<Unit filename="include/e2150/Unit.h" />
+		<Unit filename="include/e2150/UnitChassis.h" />
+		<Unit filename="include/e2150/Utils.h" />
+		<Unit filename="include/e2150/main.h">
 			<Option target="Server - Debug" />
 			<Option target="Server - Release" />
 			<Option target="Server - VS - Debug" />
@@ -182,23 +184,24 @@
 			<Option target="VS - Debug" />
 			<Option target="Linux - Debug" />
 		</Unit>
-		<Unit filename="src\e2150\AStar.cpp" />
-		<Unit filename="src\e2150\AStarNode.cpp" />
-		<Unit filename="src\e2150\Entity.cpp" />
-		<Unit filename="src\e2150\Faction.cpp" />
-		<Unit filename="src\e2150\HumanPlayer.cpp" />
-		<Unit filename="src\e2150\JPSNavigator.cpp" />
-		<Unit filename="src\e2150\Map.cpp" />
-		<Unit filename="src\e2150\MapBitLayer.cpp" />
-		<Unit filename="src\e2150\MapViewerManager.cpp" />
-		<Unit filename="src\e2150\MovingUnit.cpp" />
-		<Unit filename="src\e2150\Player.cpp" />
-		<Unit filename="src\e2150\PlayerNetworkConnection.cpp" />
-		<Unit filename="src\e2150\SendBuffer.cpp" />
-		<Unit filename="src\e2150\TestServer.cpp" />
-		<Unit filename="src\e2150\Unit.cpp" />
-		<Unit filename="src\e2150\UnitChassis.cpp" />
-		<Unit filename="src\e2150\main.cpp">
+		<Unit filename="src/PathFinder/TNavigator.cpp" />
+		<Unit filename="src/e2150/AStar.cpp" />
+		<Unit filename="src/e2150/AStarNode.cpp" />
+		<Unit filename="src/e2150/Entity.cpp" />
+		<Unit filename="src/e2150/Faction.cpp" />
+		<Unit filename="src/e2150/HumanPlayer.cpp" />
+		<Unit filename="src/e2150/JPSNavigator.cpp" />
+		<Unit filename="src/e2150/Map.cpp" />
+		<Unit filename="src/e2150/MapBitLayer.cpp" />
+		<Unit filename="src/e2150/MapViewerManager.cpp" />
+		<Unit filename="src/e2150/MovingUnit.cpp" />
+		<Unit filename="src/e2150/Player.cpp" />
+		<Unit filename="src/e2150/PlayerNetworkConnection.cpp" />
+		<Unit filename="src/e2150/SendBuffer.cpp" />
+		<Unit filename="src/e2150/TestServer.cpp" />
+		<Unit filename="src/e2150/Unit.cpp" />
+		<Unit filename="src/e2150/UnitChassis.cpp" />
+		<Unit filename="src/e2150/main.cpp">
 			<Option target="Server - Debug" />
 			<Option target="Server - Release" />
 			<Option target="Server - VS - Debug" />
