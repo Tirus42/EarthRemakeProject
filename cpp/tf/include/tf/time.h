@@ -1,28 +1,26 @@
 #ifndef TIME_H
 #define TIME_H
 
-// Benötigt "winmm.lib"
+// Benötigt unter Windows "winmm.lib"
 
-#ifdef WIN32
-	#include <windows.h>
-#else
-	#define HANDLE int
-	#include <sys/time.h>
-#endif
+#include <stdint.h>
 
 /// Gibt die Laufzeit des PCs in Millisekunden zurück
-unsigned int MilliSecs();
+uint32_t MilliSecs();
 
 /**
 * Erstellt einen Timer mit einer bestimmten Tickrate in Millisekunden
 * @return Den Timer oder -1, falls er nicht erstellt werden konnte
 */
-HANDLE CreateTimer(int ms);
+void* CreateTimer(int ms);
 
 /// Wartet so lange bis der Timer einen "Tick" auslöst
-void WaitTimer(HANDLE hTimer);
+void WaitTimer(void* hTimer);
 
 /// Gibt einen Timer wieder frei
-void FreeTimer(HANDLE hTimer);
+void FreeTimer(void* hTimer);
+
+/// Pausiert die Ausführung um die angegebene Anzahl an Millisekunden
+void Delay(uint32_t ms);
 
 #endif // TIME_H

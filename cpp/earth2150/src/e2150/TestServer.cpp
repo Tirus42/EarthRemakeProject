@@ -59,11 +59,7 @@ void TestServer::run() {
 	// Tirus: Da ich leider noch keine "Timer" Funktion unter Linux finden konnte
 	// hier diese Fallunterscheidung, unter Linux ist die FrameZeit daher z.Z. nicht garantiert
     #ifdef WIN32
-    HANDLE timer = CreateTimer(frameTime);
-    #else
-    timespec time;
-    time.tv_sec = 0;
-    time.tv_nsec = frameTime * 1000000L;
+    void* timer = CreateTimer(frameTime);
     #endif
 
 	uint32_t rTime;
@@ -84,7 +80,7 @@ void TestServer::run() {
         #ifdef WIN32
             WaitTimer(timer);
         #else
-            nanosleep(&time, 0);
+            Delay(frameTime);
         #endif
 	}
 
@@ -214,7 +210,7 @@ void TestServer::acceptNewConnections() {
 	do {
 		accepted = socketAccept(socket);
 
-		if (accepted != SOCKET_ERROR) {
+		if (accepted != INVALID_SOCKET) {
 			std::cout << "Neue Verbindung!\n";
 
             //Setze Verbindung in NonBlock mode (in Windows wird das übernommen, in Linux nicht...)

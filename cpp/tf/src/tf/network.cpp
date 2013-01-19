@@ -7,6 +7,7 @@
 #else
 	#include <sys/types.h>
 	#include <sys/socket.h>
+	#include <sys/ioctl.h>
 	#include <netinet/in.h>
 
 	#include <fcntl.h>
@@ -86,6 +87,16 @@ SOCKET OpenTCPStream(const std::string& server, uint16_t port) {
 SOCKET CreateUDPStream(uint16_t port) {
 	SOCKET sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
+	if (port != 0) {
+		sockaddr_in service;
+
+		service.sin_family = AF_INET;
+		service.sin_addr.s_addr = 0;
+		service.sin_port = htons(port);
+
+		bind(sock, (sockaddr*)&service, sizeof(service));
+	}
+
 	return sock;
 }
 
@@ -155,24 +166,22 @@ void SendUDPMSG(SOCKET socket, const char* data, int dataSize, uint32_t targetIP
 	sendto(socket, data, dataSize, 0, (sockaddr*)&service, sizeof(service));
 }
 
-void SendUDPMSG(SOCKET socket, const char* data, int dataSize, const sockaddr_in target) {
+void SendUDPMSG(SOCKET socket, const char* data, int dataSize, const sockaddr_in& target) {
 	sendto(socket, data, dataSize, 0, (sockaddr*)&target, sizeof(target));
 }
 
-int getHostIP(const std::string& hostname) {
-	#ifdef WIN32
-	return inet_addr(hostname.c_str());
-	#else
-	//Linux macht das etwas komplizierter...
-	struct hostent  *he;
+uint32_t getHostIP(const std::string& hostname) {
+	struct hostent *he;
 	if ((he = gethostbyname(hostname.c_str())) == NULL) {
 		return SOCKET_ERROR;
 	}
 
-	int addr;
+	if (he->h_length != 4)
+		return -1;
 
-	memcpy(&addr, he->h_addr_list[0], he->h_length);
+	uint32_t addr;
+
+	memcpy(&addr, he->h_addr_list[0], 4);
 
 	return addr;
-	#endif
 }

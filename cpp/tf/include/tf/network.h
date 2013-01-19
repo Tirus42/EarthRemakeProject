@@ -13,9 +13,9 @@ class sockaddr_in;
 
     #define NO_ERROR 0
 	#define SOCKET_ERROR -1
-	#define INVALID_SOCKET 0xFFFFFFFF
+	#define INVALID_SOCKET (SOCKET)(~0)
 
-	#define SOCKET int
+	#define SOCKET unsigned int
 #endif
 
 /// Initialisiert die Netzwerkumgebung (bei Anwendungsstart 1x Aufrufen)
@@ -59,6 +59,6 @@ void SendUDPMSG(SOCKET socket, const char* data, int dataSize, uint32_t targetIP
 void SendUDPMSG(SOCKET socket, const char* data, int dataSize, const sockaddr_in& target);
 
 /// Löst einen Hostnamen in eine IPv4-Adresse auf
-int getHostIP(const std::string& hostname);
+uint32_t getHostIP(const std::string& hostname);
 
 #endif
