@@ -154,6 +154,7 @@
 		<Unit filename="../tf/src/tf/file.cpp" />
 		<Unit filename="../tf/src/tf/network.cpp" />
 		<Unit filename="../tf/src/tf/time.cpp" />
+		<Unit filename="include/PathFinder/NavigatorFactory.h" />
 		<Unit filename="include/PathFinder/TNavigator.h" />
 		<Unit filename="include/PathFinder/TSearcher.h" />
 		<Unit filename="include/e2150/AStar.h" />
@@ -184,6 +185,7 @@
 			<Option target="VS - Debug" />
 			<Option target="Linux - Debug" />
 		</Unit>
+		<Unit filename="src/PathFinder/NavigatorFactory.cpp" />
 		<Unit filename="src/PathFinder/TNavigator.cpp" />
 		<Unit filename="src/e2150/AStar.cpp" />
 		<Unit filename="src/e2150/AStarNode.cpp" />
