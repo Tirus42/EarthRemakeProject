@@ -38,6 +38,8 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 	const uint16_t partX = this->x * map.VISUAL_PART_SIZE;
 	const uint16_t partY = this->y * map.VISUAL_PART_SIZE;
 
+	const uint16_t mapHeight = map.getHeight();
+
 	/// Mesh-Buffer erstellen
 	scene::CMeshBuffer<video::S3DVertex>* buffer = new scene::CMeshBuffer<video::S3DVertex>();
 
@@ -52,22 +54,22 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 			double dHeight = map.getField3DHeight(map.position(partX + x, partY + y));
 
 			/// Setze den Vertice an die 3D Position
-			vertices.push_back(video::S3DVertex(x, dHeight, y, 0,0,0, video::SColor(255,255,255,255), x, y));
+			vertices.push_back(video::S3DVertex(x, dHeight, mapHeight - y, 0,0,0, video::SColor(255,255,255,255), x, y));
 		}
 	}
 
 	/// Verbinde die Vertices zu Dreiecken (d.h. Baue eine Feld-Fläche auf)
 	for (uint16_t y = 0; y < size; ++y) {
 		for (uint16_t x = 0; x < size; ++x) {
-			int offset = y * (size + 1) + x;
+			int offset = y * (size + 1)  + x;
 
 			indices.push_back(offset);
 			indices.push_back(offset + 1);
-			indices.push_back((y + 1) * (size + 1) + x + 1);
+			indices.push_back(offset + 1 + (size + 1));
 
-			indices.push_back((y + 1) * (size + 1) + x + 1);
-			indices.push_back((y + 1) * (size + 1) + x);
 			indices.push_back(offset);
+			indices.push_back(offset + 1 + (size + 1));
+			indices.push_back(offset + (size + 1));
 		}
 	}
 
@@ -86,7 +88,7 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 
 	core::aabbox3d<f32> Box2 = mesh->getBoundingBox();
 
-	std::cout << "Mesh Bouncing Box\n";
-	std::cout << Box2.getCenter().X << " " << Box2.getCenter().Y << " " << Box2.getCenter().Z << "\n";
+	//std::cout << "Mesh Bouncing Box\n";
+	//std::cout << Box2.getCenter().X << " " << Box2.getCenter().Y << " " << Box2.getCenter().Z << "\n";
 
 }

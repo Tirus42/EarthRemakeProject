@@ -133,15 +133,13 @@
 		<Unit filename="../earth2150client/include/client/VisualMap.h">
 			<Option target="Client - Debug" />
 		</Unit>
-		<Unit filename="../earth2150client/include/client/VisualMapPart.cpp">
-			<Option target="Client - Debug" />
-		</Unit>
 		<Unit filename="../earth2150client/include/client/VisualMapPart.h">
 			<Option target="Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/client/VisualMap.cpp">
 			<Option target="Client - Debug" />
 		</Unit>
+		<Unit filename="../earth2150client/src/client/VisualMapPart.cpp" />
 		<Unit filename="../earth2150client/src/client/main.cpp">
 			<Option target="Client - Debug" />
 		</Unit>

@@ -95,7 +95,9 @@ int main(int argc, char** argv) {
 	/// Testweiße und zur Orientierung einen Cube hinzufügen
 	scene::ISceneNode* cube = smgr->addCubeSceneNode(10);
 
+
 	scene::ILightSceneNode* light = smgr->addLightSceneNode();
+	light->setRadius(1024);
 
     /*
     Ok, now we have set up the scene, lets draw everything:
@@ -110,6 +112,11 @@ int main(int argc, char** argv) {
         guienv->drawAll();
 
         driver->endScene();
+
+        while (!device->isWindowActive()) {
+			device->sleep(10);
+			device->run();
+        }
     }
 
     /*
