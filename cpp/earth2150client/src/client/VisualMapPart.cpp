@@ -76,7 +76,6 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 	/// Material zuweißen (temp) und Mesh-Buffer in Mesh setzen
 	buffer->Material = map.getMaterial(0);
 
-	buffer->setDirty(scene::EBT_VERTEX_AND_INDEX);
 	buffer->recalculateBoundingBox();
 
 	/// Eigendliches Mesh erstellen
@@ -84,11 +83,4 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 
 	mesh->addMeshBuffer(buffer);
 	mesh->recalculateBoundingBox();
-	mesh->setDirty(scene::EBT_VERTEX_AND_INDEX);
-
-	core::aabbox3d<f32> Box2 = mesh->getBoundingBox();
-
-	//std::cout << "Mesh Bouncing Box\n";
-	//std::cout << Box2.getCenter().X << " " << Box2.getCenter().Y << " " << Box2.getCenter().Z << "\n";
-
 }

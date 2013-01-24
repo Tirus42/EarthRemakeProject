@@ -20,7 +20,7 @@ VisualMap::VisualMap(irr::video::IVideoDriver* driver, uint16_t width, uint16_t 
 
 	video::SMaterial m;
 
-	m.BackfaceCulling = false;
+	//m.BackfaceCulling = false;
 	//m.Lighting = false;
 
 	m.setTexture(0, tex);
@@ -49,7 +49,9 @@ void VisualMap::build(irr::scene::ISceneManager* smgr) {
 
 			// Vorerst Mesh-Normale automatisch berechnen lassen (Gibt unschöne Kanten)
 			manipulator->recalculateNormals(part->getMesh());
-			scene::ISceneNode* node = smgr->addAnimatedMeshSceneNode(manipulator->createAnimatedMesh(part->getMesh()));
+			scene::IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(manipulator->createAnimatedMesh(part->getMesh()));
+
+			node->getMesh()->setHardwareMappingHint(scene::EHM_STATIC, scene::EBT_VERTEX_AND_INDEX);
 
 			node->setPosition(core::vector3df(x * VISUAL_PART_SIZE, 0, -y * VISUAL_PART_SIZE));
 

@@ -3,7 +3,7 @@
 
 #include "client/VisualMap.h"
 
-#include "Irrlicht.h"
+#include <Irrlicht.h>
 
 /**
 * Stellt einen Teil der Karte dar

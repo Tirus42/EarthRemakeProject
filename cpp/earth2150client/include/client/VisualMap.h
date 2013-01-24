@@ -3,7 +3,7 @@
 
 #include "e2150/Map.h"
 
-#include "Irrlicht.h"
+#include <Irrlicht.h>
 
 #include <vector>
 
@@ -18,7 +18,7 @@ class VisualMap : public Map {
 
 	public:
 		/// Definiert in was für Größen die Map eingeteilt wird (Grafisch)
-		static const uint8_t VISUAL_PART_SIZE = 16;
+		static const uint8_t VISUAL_PART_SIZE = 128;
 
 
 

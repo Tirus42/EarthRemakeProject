@@ -99,6 +99,11 @@ int main(int argc, char** argv) {
 	scene::ILightSceneNode* light = smgr->addLightSceneNode();
 	light->setRadius(1024);
 
+	light->setLightType(video::ELT_DIRECTIONAL);
+
+	scene::ISceneNodeAnimator * rotation = smgr->createRotationAnimator(vector3df(0, 0.2f, 0));
+	light->addAnimator(rotation);
+
     /*
     Ok, now we have set up the scene, lets draw everything:
     We run the device in a while() loop, until the device does not
