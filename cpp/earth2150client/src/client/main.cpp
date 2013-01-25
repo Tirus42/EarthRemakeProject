@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
     /*
     We add a hello world label to the window, using the GUI environment.
     */
-    guienv->addStaticText(L"Hello World!", rect<int>(10,10,200,22), true);
+    IGUIStaticText* fpsDisplay = guienv->addStaticText(L"FPS: -", rect<int>(10,10,100,22), true);
 
 
     //IAnimatedMesh* mesh = smgr->getMesh("../../media/sydney.md2");
@@ -117,6 +117,14 @@ int main(int argc, char** argv) {
         guienv->drawAll();
 
         driver->endScene();
+
+		{
+			core::stringw text("FPS: ");
+			text += driver->getFPS();
+
+			fpsDisplay->setText(text.c_str());
+		}
+
 
         while (!device->isWindowActive()) {
 			device->sleep(10);
