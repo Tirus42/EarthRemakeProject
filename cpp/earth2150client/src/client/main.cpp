@@ -29,6 +29,9 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
+// Temp, Todo: In eigene Klasse Packen
+static const irr::s32 ID_MAPPICK = 1 << 0;
+
 /*
 This is the main method. We can use void main() on every platform.
 On Windows platforms, we could also use the WinMain method
@@ -76,21 +79,21 @@ int main(int argc, char** argv) {
         node->setMaterialTexture( 0, driver->getTexture("../../media/sydney.bmp") );
     }
 
-    /*
-    To look at the mesh, we place a camera into 3d space at the position
-    (0, 30, -40). The camera looks from there to (0,5,0).
-    */
-    //smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,5,0));
-    scene::ICameraSceneNode* cam = smgr->addCameraSceneNodeFPS();
-	cam->setFarValue(100000.0f);
+    // FirstPerson Kamera erstellen (Steuerung mit Maus + Pfeiltasten)
+    scene::ICameraSceneNode* cam = smgr->addCameraSceneNodeFPS(0, 100.0f, 0.25f);
 
+	// Karte erstellen
 	VisualMap map(driver, 1024, 1024);
 
+	// Raw-Heightmap laden
 	if (!map.loadHeightMapRAW("map1024x1024.bin"))
 		return EXIT_FAILURE;
 
-	map.build(smgr);
+	// Selections-ID setzen
+	map.setMeshID(ID_MAPPICK);
 
+	// Komplette Map als Mesh aufbauen
+	map.build(smgr);
 
 	/// Testweiße und zur Orientierung einen Cube hinzufügen
 	scene::ISceneNode* cube = smgr->addCubeSceneNode(10);
@@ -104,6 +107,18 @@ int main(int argc, char** argv) {
 	scene::ISceneNodeAnimator * rotation = smgr->createRotationAnimator(vector3df(0, 0.2f, 0));
 	light->addAnimator(rotation);
 
+
+	scene::ISceneCollisionManager* collMan = smgr->getSceneCollisionManager();
+	// Tracks the current intersection point with the level or a mesh
+	core::vector3df intersection;
+	// Used to show with triangle has been hit
+	core::triangle3df hitTriangle;
+
+	video::SMaterial matWireframe;
+	matWireframe.Lighting = false;
+	matWireframe.setTexture(0, 0);
+	matWireframe.Wireframe = true;
+
     /*
     Ok, now we have set up the scene, lets draw everything:
     We run the device in a while() loop, until the device does not
@@ -115,6 +130,29 @@ int main(int argc, char** argv) {
 
         smgr->drawAll();
         guienv->drawAll();
+
+		// Mesh Seletor Test
+
+		core::line3d<f32> ray;
+		ray.start = cam->getPosition();
+		ray.end = ray.start + (cam->getTarget() - ray.start).normalize() * 1000.0f;
+
+		scene::ISceneNode * selectedSceneNode =
+			collMan->getSceneNodeAndCollisionPointFromRay(
+					ray,
+					intersection, // This will be the position of the collision
+					hitTriangle, // This will be the triangle hit in the collision
+					ID_MAPPICK, // This ensures that only nodes that we have
+							// set up to be pickable are considered
+					0); // Check the entire scene (this is actually the implicit default)
+
+		if (selectedSceneNode) {
+			driver->setTransform(video::ETS_WORLD, core::matrix4());
+			driver->setMaterial(matWireframe);
+			driver->draw3DTriangle(hitTriangle, video::SColor(0, 255, 0, 0));
+		}
+
+		//
 
         driver->endScene();
 

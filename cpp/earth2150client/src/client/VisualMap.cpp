@@ -2,12 +2,14 @@
 
 #include "client/VisualMapPart.h"
 
+#include <cassert>
 #include <iostream>
 
 using namespace irr;
 
 VisualMap::VisualMap(irr::video::IVideoDriver* driver, uint16_t width, uint16_t height) :
 	driver(driver),
+	meshID(-1),
 	Map(width, height) {
 
 	// Testweiﬂe eine Textur laden
@@ -33,6 +35,13 @@ VisualMap::VisualMap(irr::video::IVideoDriver* driver, uint16_t width, uint16_t 
 	materials.push_back(m);
 }
 
+VisualMap::~VisualMap() {
+	// Alle Map Parts entfernen
+	for (std::vector<VisualMapPart*>::const_iterator i = mapParts.begin(); i != mapParts.end(); ++i) {
+		delete *i;
+	}
+}
+
 void VisualMap::build(irr::scene::ISceneManager* smgr) {
 	int32_t width = getWidth() / VISUAL_PART_SIZE;
 	int32_t height = getHeight() / VISUAL_PART_SIZE;
@@ -47,13 +56,21 @@ void VisualMap::build(irr::scene::ISceneManager* smgr) {
 		for (int32_t x = 0; x < width; ++x) {
 			VisualMapPart* part = new VisualMapPart(*this, x, y);
 
+			scene::IMesh* mesh = part->getMesh();
+
 			// Vorerst Mesh-Normale automatisch berechnen lassen (Gibt unschˆne Kanten)
-			manipulator->recalculateNormals(part->getMesh());
-			scene::IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(manipulator->createAnimatedMesh(part->getMesh()));
+			manipulator->recalculateNormals(mesh);
 
-			node->getMesh()->setHardwareMappingHint(scene::EHM_STATIC, scene::EBT_VERTEX_AND_INDEX);
+			scene::IMeshSceneNode* node = smgr->addMeshSceneNode(mesh, 0, meshID,
+							core::vector3df(x * VISUAL_PART_SIZE, 0, -y * VISUAL_PART_SIZE));
 
-			node->setPosition(core::vector3df(x * VISUAL_PART_SIZE, 0, -y * VISUAL_PART_SIZE));
+			// Flag setzen das das Mesh im VRAM gehalten wird
+			mesh->setHardwareMappingHint(scene::EHM_STATIC, scene::EBT_VERTEX_AND_INDEX);
+
+			// Triangle Selector f¸r jeden Part setzen
+			scene::ITriangleSelector* selector = smgr->createTriangleSelector(mesh, node);
+			node->setTriangleSelector(selector);
+			selector->drop();
 
 			mapParts.push_back(part);
 		}

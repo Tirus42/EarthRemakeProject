@@ -1,5 +1,6 @@
 #include "client/VisualMapPart.h"
 
+#include <cassert>
 #include <iostream>
 
 using namespace irr;
@@ -9,6 +10,11 @@ VisualMapPart::VisualMapPart(const VisualMap& map, uint16_t x, uint16_t y) :
 	y(y) {
 
 	buildMesh(map);
+}
+
+VisualMapPart::~VisualMapPart() {
+	// Zusichern, dass das Mesh gelöscht wurde (geschieht nur wenn Referenz Count == 0)
+	assert(mesh->drop());
 }
 
 void VisualMapPart::updateNormals() {
@@ -83,4 +89,7 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 
 	mesh->addMeshBuffer(buffer);
 	mesh->recalculateBoundingBox();
+
+	// Wir brauchen den Buffer nicht mehr, also Referenz abziehen
+	buffer->drop();
 }

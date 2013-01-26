@@ -30,6 +30,7 @@ class VisualMapPart {
 
 	public:
 		VisualMapPart(const VisualMap& map, uint16_t x, uint16_t y);
+		~VisualMapPart();
 
 		irr::scene::SMesh* getMesh() const {return mesh;}
 

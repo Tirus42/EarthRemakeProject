@@ -16,6 +16,8 @@ class VisualMap : public Map {
 		std::vector<VisualMapPart*> mapParts;
 		std::vector<irr::video::SMaterial> materials;
 
+		irr::s32 meshID;	// Diese MeshID wird jeweils im Mesh gesetzt
+
 	public:
 		/// Definiert in was für Größen die Map eingeteilt wird (Grafisch)
 		static const uint8_t VISUAL_PART_SIZE = 128;
@@ -23,6 +25,7 @@ class VisualMap : public Map {
 
 
 		VisualMap(irr::video::IVideoDriver* driver, uint16_t width, uint16_t height);
+		~VisualMap();
 
 		/// Gibt die 3D Höhe des Feldes auf der Karte zurück (Formel wird ggf. noch angepasst!)
 		double getField3DHeight(uint32_t position) const {return getRawHeight(position) / 2560.0;}
@@ -32,6 +35,8 @@ class VisualMap : public Map {
 		/// Test Methode zum erstellen aller Map Parts
 		void build(irr::scene::ISceneManager* smgr);
 
+		/// Setzt die Mesh ID, welche bei allen MapParts gesetzt wird
+		void setMeshID(irr::s32 id) {meshID = id;}
 };
 
 #endif // VISUALMAP_H_INCLUDED

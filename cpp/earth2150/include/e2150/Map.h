@@ -104,7 +104,7 @@ class Map {
 		/// Erstellt eine neue map und allokiert den für die
 		/// angegebene Größe notwendigen Speicher.
 		Map(uint16_t width, uint16_t height);
-		~Map();
+		virtual ~Map();
 
 		/// Gibt die Breite der Karte zurück
 		uint16_t getWidth() const {return width;}
