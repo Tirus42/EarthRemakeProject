@@ -2,6 +2,7 @@
 #include "driverChoice.h"
 
 #include "client/VisualMap.h"
+#include "GUI/IngameGUI.h"
 
 /*
 In the Irrlicht Engine, everything can be found in the namespace
@@ -31,6 +32,26 @@ using namespace gui;
 
 // Temp, Todo: In eigene Klasse Packen
 static const irr::s32 ID_MAPPICK = 1 << 0;
+
+scene::ICameraSceneNode* cam;
+
+// Kleine Eventhandler Klasse, um das Fangen der Maus Umschalten zu können
+class CamMouseDisabler : public IEventReceiver {
+	private:
+		IEventReceiver* recv;
+
+	public:
+		bool OnEvent(const SEvent& event) {
+			if (event.EventType == irr::EET_MOUSE_INPUT_EVENT &&
+				event.MouseInput.isRightPressed()) {
+				cam->setInputReceiverEnabled(!cam->isInputReceiverEnabled());
+
+				return true;
+			}
+
+			return false;
+		}
+};
 
 /*
 This is the main method. We can use void main() on every platform.
@@ -80,7 +101,7 @@ int main(int argc, char** argv) {
     }
 
     // FirstPerson Kamera erstellen (Steuerung mit Maus + Pfeiltasten)
-    scene::ICameraSceneNode* cam = smgr->addCameraSceneNodeFPS(0, 100.0f, 0.25f);
+    cam = smgr->addCameraSceneNodeFPS(0, 100.0f, 0.25f);
 
 	// Karte erstellen
 	VisualMap map(driver, 1024, 1024);
@@ -118,6 +139,12 @@ int main(int argc, char** argv) {
 	matWireframe.Lighting = false;
 	matWireframe.setTexture(0, 0);
 	matWireframe.Wireframe = true;
+
+	// Erstelle Ingame GUI
+	IngameGUI gui(device->getGUIEnvironment());
+
+	// Setze eigenen EventReceiver, um die Kamera-Steuerung unterbinden zu können.
+	device->setEventReceiver(new CamMouseDisabler());
 
     /*
     Ok, now we have set up the scene, lets draw everything:
