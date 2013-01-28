@@ -41,12 +41,21 @@ class CamMouseDisabler : public IEventReceiver {
 		IEventReceiver* recv;
 
 	public:
+		core::position2d<s32> mousePosition;
+
 		bool OnEvent(const SEvent& event) {
 			if (event.EventType == irr::EET_MOUSE_INPUT_EVENT &&
 				event.MouseInput.isRightPressed()) {
 				cam->setInputReceiverEnabled(!cam->isInputReceiverEnabled());
 
 				return true;
+			}
+			// Bei Mausbewegung aktuelle Position speichern
+			else if (event.EventType == irr::EET_MOUSE_INPUT_EVENT &&
+				event.MouseInput.Event == irr::EMIE_MOUSE_MOVED) {
+
+				mousePosition.X = event.MouseInput.X;
+				mousePosition.Y = event.MouseInput.Y;
 			}
 
 			return false;
@@ -144,7 +153,8 @@ int main(int argc, char** argv) {
 	IngameGUI gui(device->getGUIEnvironment());
 
 	// Setze eigenen EventReceiver, um die Kamera-Steuerung unterbinden zu können.
-	device->setEventReceiver(new CamMouseDisabler());
+	CamMouseDisabler* mouseHandler = new CamMouseDisabler();
+	device->setEventReceiver(mouseHandler);
 
     /*
     Ok, now we have set up the scene, lets draw everything:
@@ -159,10 +169,7 @@ int main(int argc, char** argv) {
         guienv->drawAll();
 
 		// Mesh Seletor Test
-
-		core::line3d<f32> ray;
-		ray.start = cam->getPosition();
-		ray.end = ray.start + (cam->getTarget() - ray.start).normalize() * 1000.0f;
+		core::line3d<f32> ray = smgr->getSceneCollisionManager()->getRayFromScreenCoordinates(mouseHandler->mousePosition, cam);
 
 		scene::ISceneNode * selectedSceneNode =
 			collMan->getSceneNodeAndCollisionPointFromRay(
