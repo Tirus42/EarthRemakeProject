@@ -7,6 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Server - Debug">
+				<Option platforms="Windows;" />
 				<Option output="bin/Debug/Earth2150-Server" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
@@ -20,6 +21,7 @@
 				</Linker>
 			</Target>
 			<Target title="Server - Release">
+				<Option platforms="Windows;" />
 				<Option output="bin/Release/Earth2150-Server" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
@@ -70,37 +72,8 @@
 					<Add library="winmm" />
 				</Linker>
 			</Target>
-			<Target title="VS - Debug">
-				<Option output="bin/VS - Debug/Earth 2150" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="bin/VS - Debug/" />
-				<Option object_output="obj/VS - Debug/" />
-				<Option type="1" />
-				<Option compiler="msvc10" />
-				<Compiler>
-					<Add option="/MDd" />
-					<Add option="/Zi" />
-					<Add option="/D_DEBUG" />
-					<Add option="/DWIN32" />
-					<Add option="/DNOMINMAX" />
-				</Compiler>
-				<Linker>
-					<Add option="/DEBUG" />
-					<Add library="msvcrtd.lib" />
-					<Add library="msvcprtd.lib" />
-					<Add library="ws2_32" />
-					<Add library="winmm" />
-				</Linker>
-			</Target>
-			<Target title="Linux - Debug">
-				<Option output="bin/Debug/Earth2150-Server" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Debug/" />
-				<Option type="1" />
-				<Option compiler="gcc" />
-				<Compiler>
-					<Add option="-g" />
-				</Compiler>
-			</Target>
 			<Target title="Client - Debug">
+				<Option platforms="Windows;" />
 				<Option output="../earth2150client/bin/Debug/Earth2150-Client" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="../earth2150" />
 				<Option object_output="obj/Debug/" />
@@ -121,6 +94,33 @@
 					<Add directory="$(#irrlicht)/lib/Win32-gcc" />
 				</Linker>
 			</Target>
+			<Target title="Linux - Server - Debug">
+				<Option platforms="Unix;" />
+				<Option output="bin/Debug/Earth2150-Server" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Linux - Client - Debug">
+				<Option platforms="Unix;" />
+				<Option output="../earth2150client/bin/Debug/Earth2150-Client" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../earth2150" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="../earth2150client/include" />
+					<Add directory="$(#irrlicht)/include" />
+				</Compiler>
+				<Linker>
+					<Add library="Irrlicht" />
+					<Add directory="$(#irrlicht)/lib/Linux" />
+				</Linker>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Weffc++" />
@@ -132,33 +132,43 @@
 		</Compiler>
 		<Unit filename="../earth2150client/include/GUI/IGUI.h">
 			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/include/GUI/IngameGUI.h">
 			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/include/GUI/IngameGUIEventReceiver.h">
 			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/include/client/VisualMap.h">
 			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/include/client/VisualMapPart.h">
 			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/GUI/IngameGUI.cpp">
 			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/GUI/IngameGUIEventReceiver.cpp">
 			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/client/VisualMap.cpp">
 			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/client/VisualMapPart.cpp">
 			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/client/main.cpp">
 			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../ff/include/ff/JumpPointSearch.h" />
 		<Unit filename="../ff/include/ff/MinHeap.h" />
@@ -197,8 +207,7 @@
 			<Option target="Server - Release" />
 			<Option target="Server - VS - Debug" />
 			<Option target="Server - VS - Release" />
-			<Option target="VS - Debug" />
-			<Option target="Linux - Debug" />
+			<Option target="Linux - Server - Debug" />
 		</Unit>
 		<Unit filename="src/PathFinder/NavigatorFactory.cpp" />
 		<Unit filename="src/PathFinder/TNavigator.cpp" />
@@ -223,8 +232,7 @@
 			<Option target="Server - Release" />
 			<Option target="Server - VS - Debug" />
 			<Option target="Server - VS - Release" />
-			<Option target="VS - Debug" />
-			<Option target="Linux - Debug" />
+			<Option target="Linux - Server - Debug" />
 		</Unit>
 		<Extensions>
 			<code_completion />

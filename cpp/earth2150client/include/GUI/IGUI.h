@@ -1,7 +1,7 @@
 #ifndef GUI_H_INCLUDED
 #define GUI_H_INCLUDED
 
-#include <Irrlicht.h>
+#include <irrlicht.h>
 
 /**
 * Oberklasse für alle Unterschiedlichen Ingame-GUIs

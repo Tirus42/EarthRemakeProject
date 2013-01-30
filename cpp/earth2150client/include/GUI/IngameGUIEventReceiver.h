@@ -1,7 +1,7 @@
 #ifndef INGAMEGUIEVENTRECEIVER_H_INCLUDED
 #define INGAMEGUIEVENTRECEIVER_H_INCLUDED
 
-#include <Irrlicht.h>
+#include <irrlicht.h>
 
 class IngameGUI;
 

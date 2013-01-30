@@ -3,7 +3,7 @@
 
 #include "e2150/Map.h"
 
-#include <Irrlicht.h>
+#include <irrlicht.h>
 
 #include <vector>
 

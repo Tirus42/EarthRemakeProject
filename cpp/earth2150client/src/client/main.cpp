@@ -71,7 +71,7 @@ we use main().
 */
 int main(int argc, char** argv) {
 
-	video::E_DRIVER_TYPE driverType = driverChoiceConsole(false);
+	video::E_DRIVER_TYPE driverType = driverChoiceConsole();
 
 	if (driverType == video::EDT_COUNT)
 		return -1;

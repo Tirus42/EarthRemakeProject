@@ -3,7 +3,7 @@
 
 #include "IGUI.h"
 
-#include <Irrlicht.h>
+#include <irrlicht.h>
 
 /**
 * Ingame GUI
