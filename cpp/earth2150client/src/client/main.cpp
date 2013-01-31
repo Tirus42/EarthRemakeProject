@@ -3,6 +3,7 @@
 
 #include "client/VisualMap.h"
 #include "GUI/IngameGUI.h"
+#include "GUI/IngameGUIEventReceiver.h"
 
 /*
 In the Irrlicht Engine, everything can be found in the namespace
@@ -43,6 +44,12 @@ class CamMouseDisabler : public IEventReceiver {
 	public:
 		core::position2d<s32> mousePosition;
 
+		CamMouseDisabler() : recv(0) {}
+
+		void setSubEventReceiver(IEventReceiver* receiver) {
+			recv = receiver;
+		}
+
 		bool OnEvent(const SEvent& event) {
 			if (event.EventType == irr::EET_MOUSE_INPUT_EVENT &&
 				event.MouseInput.isRightPressed()) {
@@ -58,8 +65,13 @@ class CamMouseDisabler : public IEventReceiver {
 				mousePosition.Y = event.MouseInput.Y;
 			}
 
+			if (recv != 0)
+				return recv->OnEvent(event);
+
 			return false;
 		}
+
+
 };
 
 /*
@@ -88,6 +100,9 @@ int main(int argc, char** argv) {
     IVideoDriver* driver = device->getVideoDriver();
     ISceneManager* smgr = device->getSceneManager();
     IGUIEnvironment* guienv = device->getGUIEnvironment();
+
+	// Mache Fenster frei Skalierbar
+	device->setResizable(true);
 
 	core::stringw caption("Earth 2150 Remake Projekt - ");
 	caption += driver->getName();
@@ -150,11 +165,14 @@ int main(int argc, char** argv) {
 	matWireframe.Wireframe = true;
 
 	// Erstelle Ingame GUI
-	IngameGUI gui(device->getGUIEnvironment());
+	IngameGUI gui(guienv);
 
 	// Setze eigenen EventReceiver, um die Kamera-Steuerung unterbinden zu können.
 	CamMouseDisabler* mouseHandler = new CamMouseDisabler();
 	device->setEventReceiver(mouseHandler);
+
+	// Füge in diesen EventReceiver den GUI-EventReceiver ein (Themoräre Lösung...)
+	mouseHandler->setSubEventReceiver(new IngameGUIEventReceiver(&gui));
 
     /*
     Ok, now we have set up the scene, lets draw everything:

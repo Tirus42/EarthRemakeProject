@@ -20,7 +20,8 @@ class IngameGUI : public IGUI {
 	public:
 		enum {
 			GUI_PANEL,
-			GUI_CLOSE
+			GUI_TEST_BTN1,
+			GUI_TEST_BTN2
 		};
 
 		IngameGUI(irr::gui::IGUIEnvironment* guiEnv);

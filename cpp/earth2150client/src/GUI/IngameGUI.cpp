@@ -24,12 +24,10 @@ void IngameGUI::buildGUI() {
 	panel->setDraggable(false);
 
 	// Einige Test Elemente eingfügen
-	env->addButton(core::rect<s32>(200, 20, 300, 40), panel, -1, L"Test Button 1");
-	env->addButton(core::rect<s32>(200, 50, 300, 70), panel, -1, L"Test Button 2");
+	env->addButton(core::rect<s32>(200, 20, 300, 40), panel, GUI_TEST_BTN1, L"Test Button 1");
+	env->addButton(core::rect<s32>(200, 50, 300, 70), panel, GUI_TEST_BTN2, L"Test Button 2");
 
 	env->addStaticText(L"Mit der Rechten Maustaste kann die Kamera von der Maus geloest werden, und damit diese GUI bedient werden",
 						 core::rect<s32>(320, 20, 500, 70), true, true, panel, -1, true);
-
-
 
 }

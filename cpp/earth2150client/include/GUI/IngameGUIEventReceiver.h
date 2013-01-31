@@ -10,6 +10,9 @@ class IngameGUI;
 * Reagiert auf alle GUI Events und führt entsprechende Funktionen aus.
 */
 class IngameGUIEventReceiver : public irr::IEventReceiver {
+	private:
+		IngameGUI* gui;
+
 	public:
 		IngameGUIEventReceiver(IngameGUI* gui);
 		virtual ~IngameGUIEventReceiver();
