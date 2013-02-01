@@ -91,6 +91,10 @@ int main(int argc, char** argv) {
     IrrlichtDevice *device =
         createDevice(driverType, dimension2d<u32>(1024, 768));
 
+	// Wenn Device nicht gestartet werden konnte, dann abbrechen
+	if (!device)
+		return EXIT_FAILURE;
+
     /*
     Get a pointer to the video driver, the SceneManager and the
     graphical user interface environment, so that

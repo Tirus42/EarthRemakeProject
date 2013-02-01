@@ -27,6 +27,9 @@ class IngameGUI : public IGUI {
 		IngameGUI(irr::gui::IGUIEnvironment* guiEnv);
 		virtual ~IngameGUI();
 
+		// Skaliert die GUI auf eine neue Größe (Fenstergröße)
+		void resize(irr::s32 newWidth, irr::s32 newHeight);
+
 };
 
 

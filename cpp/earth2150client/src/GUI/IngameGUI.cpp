@@ -31,3 +31,7 @@ void IngameGUI::buildGUI() {
 						 core::rect<s32>(320, 20, 500, 70), true, true, panel, -1, true);
 
 }
+
+void IngameGUI::resize(s32 newWidth, s32 newHeight) {
+	panel->setRelativePosition(core::rect<s32>(0, newHeight - 200, newWidth, newHeight));
+}

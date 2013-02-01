@@ -35,5 +35,25 @@ bool IngameGUIEventReceiver::OnEvent(const irr::SEvent& event) {
 
 	}
 
+	// Fange Log-Eintrag Event beim Ändern der Auflösung ab
+	if (event.EventType == EET_LOG_TEXT_EVENT) {
+		// we check for log message like "Resizing window (640 480)"
+		const char* b = "Resizing window (";
+		const u32 strLength = 17;
+
+		core::string<c8> s = event.LogEvent.Text;
+
+		if (s.equalsn(b, strLength)) {
+			s = s.subString(strLength, s.size() - strLength);
+
+			u32 width = 0;
+			u32 height = 0;
+
+			sscanf(s.c_str(), "%u %u)", &width, &height);
+			gui->resize(width, height);
+		}
+	 }
+
+
 	return false;
 }
