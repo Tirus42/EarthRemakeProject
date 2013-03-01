@@ -1,19 +1,20 @@
 #ifndef TSEARCHER_H_INCLUDED
 #define TSEARCHER_H_INCLUDED
 
+#include "e2150/Map.h"
 
 #include <stdint.h>
 #include <memory.h>
 
-#define container std::list
+#define container std::vector
 
 /// Hilfsstruktur für abgesuche Wegpunkte
 struct Waypoint {
-	Waypoint(Waypoint* previus, uint32_t position) :
+	Waypoint(uint32_t previus, uint32_t position) :
 		searched(false), previus(previus), position(position) {}
 
 	bool searched;
-	Waypoint* previus;
+	uint32_t previus;
 	uint32_t position;
 };
 
@@ -25,6 +26,8 @@ class TSearcher {
 	private:
 		TSearcher(const TSearcher&);
 		TSearcher& operator=(const TSearcher&);
+
+		static const uint32_t START_WAYPOINT = 0xFFFFFFFF;
 
 		size_t mapSize;	// Rohdatengröße
 		uint8_t* searchMap;	// Such-Bitmap
@@ -54,18 +57,23 @@ class TSearcher {
 			// Punktliste
 			container<Waypoint> waypoints;
 
+			// Genügend Speicher Reservieren, damit es nicht zu unnötigen reallocs kommt
+			waypoints.reserve(map.getWidth() * map.getHeight());
+
 			// Startpunkt in Suchliste eintragen
-			waypoints.push_back(Waypoint(NULL, position1));
+			waypoints.push_back(Waypoint(START_WAYPOINT, position1));
 
 			uint32_t position = 0;
 
 			const uint16_t mapWidth = map.getWidth();
 
 			while (true) {
-				for (container<Waypoint>::iterator i = waypoints.begin(); i != waypoints.end(); ++i) {
-					Waypoint& way = (*i);
+				for (int32_t i = waypoints.size() - 1; i >= 0; --i) {
+					int32_t currentEnd = waypoints.size() - 1;
 
-					if (i == waypoints.begin() && way.searched == true) {
+					Waypoint& way = waypoints[i];
+
+					if (i == currentEnd && way.searched == true) {
 						// Abbrechen, da es keinen Weg gibt
 						return false;
 					}
@@ -85,7 +93,7 @@ class TSearcher {
 						position = position1 - mapWidth + 1;
 
 						if (!searchMap[position]) {
-							waypoints.push_front(Waypoint(&way, position));
+							waypoints.push_back(Waypoint(i, position));
 
 							searchMap[position] = 1;
 						}
@@ -98,7 +106,7 @@ class TSearcher {
 						position = position1 + mapWidth + 1;
 
 						if (!searchMap[position]) {
-							waypoints.push_front(Waypoint(&way, position));
+							waypoints.push_back(Waypoint(i, position));
 
 							searchMap[position] = 1;
 						}
@@ -111,7 +119,7 @@ class TSearcher {
 						position = position1 + mapWidth - 1;
 
 						if (!searchMap[position]) {
-							waypoints.push_front(Waypoint(&way, position));
+							waypoints.push_back(Waypoint(i, position));
 
 							searchMap[position] = 1;
 						}
@@ -124,7 +132,7 @@ class TSearcher {
 						position = position1 - mapWidth - 1;
 
 						if (!searchMap[position]) {
-							waypoints.push_front(Waypoint(&way, position));
+							waypoints.push_back(Waypoint(i, position));
 
 							searchMap[position] = 1;
 						}
@@ -137,7 +145,7 @@ class TSearcher {
 						position = position1 - mapWidth;
 
 						if (!searchMap[position]) {
-							waypoints.push_front(Waypoint(&way, position));
+							waypoints.push_back(Waypoint(i, position));
 
 							searchMap[position] = 1;
 						}
@@ -150,7 +158,7 @@ class TSearcher {
 						position = position1 + 1;
 
 						if (!searchMap[position]) {
-							waypoints.push_front(Waypoint(&way, position));
+							waypoints.push_back(Waypoint(i, position));
 
 							searchMap[position] = 1;
 						}
@@ -163,7 +171,7 @@ class TSearcher {
 						position = position1 + mapWidth;
 
 						if (!searchMap[position]) {
-							waypoints.push_front(Waypoint(&way, position));
+							waypoints.push_back(Waypoint(i, position));
 
 							searchMap[position] = 1;
 						}
@@ -176,7 +184,7 @@ class TSearcher {
 						position = position1 - 1;
 
 						if (!searchMap[position]) {
-							waypoints.push_front(Waypoint(&way, position));
+							waypoints.push_back(Waypoint(i, position));
 
 							searchMap[position] = 1;
 						}
@@ -192,12 +200,12 @@ class TSearcher {
 			way_found:;
 
 			// Letze eingetragene Position holen
-			Waypoint& w = waypoints.front();
+			Waypoint& w = waypoints.back();
 			Waypoint* way = &w;
 
-			while (way->previus != NULL) {
+			while (way->previus != START_WAYPOINT) {
 				path_list.push_back(way->position);
-				way = way->previus;
+				way = &waypoints[way->previus];
 			}
 
 			return true;
