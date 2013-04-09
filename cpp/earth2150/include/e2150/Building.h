@@ -4,20 +4,24 @@
 #include "e2150/Entity.h"
 
 /**
-* Diese Klasse stellt jedliches Spieler-Gebäude dar, welches in der Spielwelt gebaut wurde
+* Diese Klasse stellt eine Oberklasse für jedliches Gebäude dar, welches in der Spielwelt erstellt wurde.
 */
 class Building : public Entity {
-	private:
-		static const uint8_t TYP_POWERSTATION;	//Kraftwerk
-		static const uint8_t TYP_HOMEBASE;		//Hauptbasis / Hauptgebäude
-		static const uint8_t TYP_FACTORY;		//Fabrik
-
-
-		uint8_t typ;
+	protected:
+		Building();
 
 	public:
-		Building();
+		/// Auflistung aller möglichen Gebäudearten
+		enum BuildingTyp {
+			POWERSTATION,		// Kraftwerk
+			HOMEBASE,			// Haputbasis / Hauptgebäude
+			FACTORY				// Fabrik
+		};
+
 		virtual ~Building();
+
+		/// Gibt den Typ des Gebäudes zurück
+		virtual BuildingTyp getTyp() const = 0;
 
 };
 

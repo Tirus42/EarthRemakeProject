@@ -5,7 +5,7 @@
 #include <string>
 
 /**
-* Jedes Objekt stellt eine Fraktion da (also Global wie USC, ED, LC ect)
+* Jedes Objekt gehört einer Fraktion an (also Global wie USC, ED, LC ect)
 */
 class Faction {
 	private:
@@ -13,6 +13,7 @@ class Faction {
 
 		uint32_t uID;
 		std::string name;
+
 	public:
 		Faction(const std::string& name);
 		Faction(const std::string& name, uint32_t uID);
