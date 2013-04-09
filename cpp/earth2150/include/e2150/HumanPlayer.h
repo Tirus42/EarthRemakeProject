@@ -2,8 +2,8 @@
 #define HUMANPLAYER_H
 
 #include "e2150/Player.h"
-#include "e2150/TestServer.h"
-#include "e2150/PlayerNetworkConnection.h"
+#include "Network/TestServer.h"
+#include "Network/PlayerNetworkConnection.h"
 #include <vector>
 
 

@@ -1,6 +1,6 @@
 #include "e2150/Unit.h"
 #include "e2150/UnitChassis.h"
-#include "e2150/Map.h"
+#include "Map/Map.h"
 
 Unit::Unit(uint32_t id, const UnitChassis& chassis) :
 	Entity(id, chassis.getHitPoints()),

@@ -1,5 +1,5 @@
-#include "e2150/PlayerNetworkConnection.h"
-#include "e2150/SendBuffer.h"
+#include "Network/PlayerNetworkConnection.h"
+#include "Network/SendBuffer.h"
 
 #include <iostream>
 

@@ -1,8 +1,8 @@
 #include "e2150/AStar.h"
 
 #include "e2150/AStarNode.h"
-#include "e2150/Map.h"
-#include "e2150/MapBitLayer.h"
+#include "Map/Map.h"
+#include "Map/MapBitLayer.h"
 #include "e2150/Unit.h"
 #include <algorithm>
 #include <cassert>

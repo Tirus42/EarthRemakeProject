@@ -1,7 +1,7 @@
 #ifndef TSEARCHER_H_INCLUDED
 #define TSEARCHER_H_INCLUDED
 
-#include "e2150/Map.h"
+#include "Map/Map.h"
 
 #include <stdint.h>
 #include <memory.h>

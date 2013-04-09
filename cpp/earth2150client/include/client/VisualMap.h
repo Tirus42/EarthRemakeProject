@@ -1,7 +1,7 @@
 #ifndef VISUALMAP_H_INCLUDED
 #define VISUALMAP_H_INCLUDED
 
-#include "e2150/Map.h"
+#include "Map/Map.h"
 
 #include <irrlicht.h>
 

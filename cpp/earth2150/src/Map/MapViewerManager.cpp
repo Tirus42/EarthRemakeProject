@@ -1,4 +1,4 @@
-#include "e2150/MapViewerManager.h"
+#include "Map/MapViewerManager.h"
 
 #include "e2150/HumanPlayer.h"
 #include "e2150/Entity.h"

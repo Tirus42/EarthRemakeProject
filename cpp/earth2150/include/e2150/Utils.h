@@ -7,8 +7,8 @@
 #include <stdint.h>
 #include <vector>
 
-#include "e2150/Map.h"
-#include "e2150/MapPosition.h"
+#include "Map/Map.h"
+#include "Map/MapPosition.h"
 
 class Utils {
 	public:

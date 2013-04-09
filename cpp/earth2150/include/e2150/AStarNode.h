@@ -1,7 +1,7 @@
 #ifndef ASTARNODE_H
 #define ASTARNODE_H
 
-#include "e2150/MapPosition.h"
+#include "Map/MapPosition.h"
 
 class AStarNode{
 	private:
