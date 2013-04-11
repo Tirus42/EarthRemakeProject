@@ -1,7 +1,7 @@
 #include "e2150/main.h"
 
-#include "e2150/Map.h"
-#include "e2150/TestServer.h"
+#include "Map/Map.h"
+#include "Network/TestServer.h"
 #include "e2150/UnitChassis.h"
 #include "tf/network.h"
 #include <iostream>
