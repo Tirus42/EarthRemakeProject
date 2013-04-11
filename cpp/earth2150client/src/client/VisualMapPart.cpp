@@ -13,8 +13,8 @@ VisualMapPart::VisualMapPart(const VisualMap& map, uint16_t x, uint16_t y) :
 }
 
 VisualMapPart::~VisualMapPart() {
-	// Zusichern, dass das Mesh gelöscht wurde (geschieht nur wenn Referenz Count == 0)
-	assert(mesh->drop());
+	// Wir geben unsere Referenz auf das Mesh ab
+	mesh->drop();
 }
 
 void VisualMapPart::updateNormals() {

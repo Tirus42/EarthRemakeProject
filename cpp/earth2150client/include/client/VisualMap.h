@@ -2,6 +2,7 @@
 #define VISUALMAP_H_INCLUDED
 
 #include "Map/Map.h"
+#include "client/MapMarkerManager.h"
 
 #include <irrlicht.h>
 
@@ -12,11 +13,14 @@ class VisualMapPart;
 class VisualMap : public Map {
 	private:
 		irr::video::IVideoDriver* driver;
+		irr::scene::ISceneManager* smgr;
 
 		std::vector<VisualMapPart*> mapParts;
 		std::vector<irr::video::SMaterial> materials;
 
 		irr::s32 meshID;	// Diese MeshID wird jeweils im Mesh gesetzt
+
+		MapMarkerManager MarkerManager;
 
 	public:
 		/// Definiert in was für Größen die Map eingeteilt wird (Grafisch)
@@ -24,7 +28,7 @@ class VisualMap : public Map {
 
 
 
-		VisualMap(irr::video::IVideoDriver* driver, uint16_t width, uint16_t height);
+		VisualMap(irr::video::IVideoDriver* driver, irr::scene::ISceneManager* smgr, uint16_t width, uint16_t height);
 		~VisualMap();
 
 		/// Gibt die 3D Höhe des Feldes auf der Karte zurück (Formel wird ggf. noch angepasst!)
@@ -33,10 +37,12 @@ class VisualMap : public Map {
 		const irr::video::SMaterial& getMaterial(int32_t index) const {return materials[index];}
 
 		/// Test Methode zum erstellen aller Map Parts
-		void build(irr::scene::ISceneManager* smgr);
+		void build();
 
 		/// Setzt die Mesh ID, welche bei allen MapParts gesetzt wird
 		void setMeshID(irr::s32 id) {meshID = id;}
+
+		MapMarkerManager& getMapMarkerManager() {return MarkerManager;}
 };
 
 #endif // VISUALMAP_H_INCLUDED

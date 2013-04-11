@@ -2,6 +2,7 @@
 #include "driverChoice.h"
 
 #include "client/VisualMap.h"
+#include "client/MapMarker.h"
 #include "GUI/IngameGUI.h"
 #include "GUI/IngameGUIEventReceiver.h"
 
@@ -132,7 +133,7 @@ int main(int argc, char** argv) {
     cam = smgr->addCameraSceneNodeFPS(0, 100.0f, 0.25f);
 
 	// Karte erstellen
-	VisualMap map(driver, 1024, 1024);
+	VisualMap map(driver, smgr, 1024, 1024);
 
 	// Raw-Heightmap laden
 	if (!map.loadHeightMapRAW("map1024x1024.bin"))
@@ -142,7 +143,7 @@ int main(int argc, char** argv) {
 	map.setMeshID(ID_MAPPICK);
 
 	// Komplette Map als Mesh aufbauen
-	map.build(smgr);
+	map.build();
 
 	/// Testweiße und zur Orientierung einen Cube hinzufügen
 	scene::ISceneNode* cube = smgr->addCubeSceneNode(10);
@@ -177,6 +178,27 @@ int main(int argc, char** argv) {
 
 	// Füge in diesen EventReceiver den GUI-EventReceiver ein (Themoräre Lösung...)
 	mouseHandler->setSubEventReceiver(new IngameGUIEventReceiver(&gui));
+
+
+	// Testweiße eine Markierung auf der Karte plazieren
+	{
+		video::ITexture* tex = driver->getTexture("position.png");
+
+		video::SMaterial m;
+		m.setTexture(0, tex);
+
+		m.AmbientColor.set(255,255,255,255);
+		m.Lighting = false;
+		m.ZWriteEnable = false;
+		m.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL;
+
+		MapMarker* marker = map.getMapMarkerManager().getMarkerForMaterial(m);
+		marker->addField(MapPosition(5, 5));
+		marker->addField(MapPosition(7, 5));
+		marker->addField(MapPosition(5, 1020));
+		marker->addField(MapPosition(7, 1020));
+	}
+
 
     /*
     Ok, now we have set up the scene, lets draw everything:

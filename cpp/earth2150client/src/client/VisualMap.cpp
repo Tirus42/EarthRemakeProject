@@ -7,10 +7,15 @@
 
 using namespace irr;
 
-VisualMap::VisualMap(irr::video::IVideoDriver* driver, uint16_t width, uint16_t height) :
+VisualMap::VisualMap(irr::video::IVideoDriver* driver, scene::ISceneManager* smgr,  uint16_t width, uint16_t height) :
 	driver(driver),
+	smgr(smgr),
 	meshID(-1),
-	Map(width, height) {
+	Map(width, height),
+	MarkerManager(*this, smgr) {
+
+	driver->grab();
+	smgr->grab();
 
 	// Testweiße eine Textur laden
 	video::IImage* img = driver->createImageFromFile("sand1.jpg");
@@ -40,9 +45,12 @@ VisualMap::~VisualMap() {
 	for (std::vector<VisualMapPart*>::const_iterator i = mapParts.begin(); i != mapParts.end(); ++i) {
 		delete *i;
 	}
+
+	smgr->drop();
+	driver->drop();
 }
 
-void VisualMap::build(irr::scene::ISceneManager* smgr) {
+void VisualMap::build() {
 	int32_t width = getWidth() / VISUAL_PART_SIZE;
 	int32_t height = getHeight() / VISUAL_PART_SIZE;
 
