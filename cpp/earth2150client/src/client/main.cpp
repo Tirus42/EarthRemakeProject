@@ -6,15 +6,7 @@
 #include "GUI/IngameGUI.h"
 #include "GUI/IngameGUIEventReceiver.h"
 
-/*
-In the Irrlicht Engine, everything can be found in the namespace
-'irr'. So if you want to use a class of the engine, you have to
-write an irr:: before the name of the class. For example to use
-the IrrlichtDevice write: irr::IrrlichtDevice. To get rid of the
-irr:: in front of the name of every class, we tell the compiler
-that we use that namespace from now on, and we will not have to
-write that 'irr::'.
-*/
+
 using namespace irr;
 
 /*
@@ -75,13 +67,6 @@ class CamMouseDisabler : public IEventReceiver {
 
 };
 
-/*
-This is the main method. We can use void main() on every platform.
-On Windows platforms, we could also use the WinMain method
-if we would want to get rid of the console window, which pops up when
-starting a program with main(), but to keep this example simple,
-we use main().
-*/
 int main(int argc, char** argv) {
 
 	video::E_DRIVER_TYPE driverType = driverChoiceConsole();
@@ -114,20 +99,9 @@ int main(int argc, char** argv) {
 
 	device->setWindowCaption(caption.c_str());
 
-    /*
-    We add a hello world label to the window, using the GUI environment.
-    */
+    // Kleines Text Feld zur FPS Anzeige erstellen
     IGUIStaticText* fpsDisplay = guienv->addStaticText(L"FPS: -", rect<int>(10,10,100,22), true);
 
-
-    //IAnimatedMesh* mesh = smgr->getMesh("../../media/sydney.md2");
-    IAnimatedMeshSceneNode* node = 0; //smgr->addAnimatedMeshSceneNode( mesh );
-
-    if (node) {
-        node->setMaterialFlag(EMF_LIGHTING, false);
-        node->setFrameLoop(0, 310);
-        node->setMaterialTexture( 0, driver->getTexture("../../media/sydney.bmp") );
-    }
 
     // FirstPerson Kamera erstellen (Steuerung mit Maus + Pfeiltasten)
     cam = smgr->addCameraSceneNodeFPS(0, 100.0f, 0.25f);
@@ -148,22 +122,27 @@ int main(int argc, char** argv) {
 	/// Testweiße und zur Orientierung einen Cube hinzufügen
 	scene::ISceneNode* cube = smgr->addCubeSceneNode(10);
 
-
+	// Lichtquelle erstellen, Radius und Typ festlegen
 	scene::ILightSceneNode* light = smgr->addLightSceneNode();
 	light->setRadius(1024);
-
 	light->setLightType(video::ELT_DIRECTIONAL);
 
+	// Dieses Licht automatisch Rotieren lassen (Ausrichtung ändern, da Direktionales Licht)
 	scene::ISceneNodeAnimator * rotation = smgr->createRotationAnimator(vector3df(0, 0.2f, 0));
 	light->addAnimator(rotation);
 
-
+	/*
+	* Objekte erstellen die nötig sind, um den Kollisionspunkt von der
+	* Maus Position auf dem Bildschirm die darunter liegende Karte zu finden
+	* Das getroffene Dreieck wird (Testweiße) Rot eingezeichnet).
+	*/
 	scene::ISceneCollisionManager* collMan = smgr->getSceneCollisionManager();
 	// Tracks the current intersection point with the level or a mesh
 	core::vector3df intersection;
 	// Used to show with triangle has been hit
 	core::triangle3df hitTriangle;
 
+	// Material mit dem gezeichnet werden soll (Nur Drahtgitter und ohne Beleuchtung)
 	video::SMaterial matWireframe;
 	matWireframe.Lighting = false;
 	matWireframe.setTexture(0, 0);
@@ -200,12 +179,7 @@ int main(int argc, char** argv) {
 	}
 
 
-    /*
-    Ok, now we have set up the scene, lets draw everything:
-    We run the device in a while() loop, until the device does not
-    want to run any more. This would be when the user closed the window
-    or pressed ALT+F4 in windows.
-    */
+    // Hauptschleife
     while (device->run()) {
         driver->beginScene(true, true, SColor(0,200,200,200));
 
@@ -224,6 +198,8 @@ int main(int argc, char** argv) {
 							// set up to be pickable are considered
 					0); // Check the entire scene (this is actually the implicit default)
 
+		// Wenn durch das Tracing eine Stelle auf der Map gefunden wurde, Zeichne das
+		// getroffene Dreieck rot ein.
 		if (selectedSceneNode) {
 			driver->setTransform(video::ETS_WORLD, core::matrix4());
 			driver->setMaterial(matWireframe);
@@ -234,14 +210,14 @@ int main(int argc, char** argv) {
 
         driver->endScene();
 
-		{
+		{	// Schreibe die aktuellen FPS Werte neu in das GUI Element (Textfeld)
 			core::stringw text("FPS: ");
 			text += driver->getFPS();
 
 			fpsDisplay->setText(text.c_str());
 		}
 
-
+		// Wenn das Fenster den Fokus verliert, dann nicht weiter rendern
         while (!device->isWindowActive()) {
 			device->sleep(10);
 			device->run();
