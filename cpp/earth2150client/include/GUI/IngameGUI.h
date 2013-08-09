@@ -13,6 +13,7 @@
 class IngameGUI : public IGUI {
 	private:
 		irr::gui::IGUIWindow* panel;
+		irr::scene::ICameraSceneNode* mainCamera;
 
 		void buildGUI();
 
@@ -24,11 +25,13 @@ class IngameGUI : public IGUI {
 			GUI_TEST_BTN2
 		};
 
-		IngameGUI(irr::gui::IGUIEnvironment* guiEnv);
+		IngameGUI(irr::gui::IGUIEnvironment* guiEnv, irr::scene::ICameraSceneNode* mainCam);
 		virtual ~IngameGUI();
 
 		// Skaliert die GUI auf eine neue Größe (Fenstergröße)
 		void resize(irr::s32 newWidth, irr::s32 newHeight);
+
+		irr::scene::ICameraSceneNode* getMainCamera() const {return mainCamera;}
 
 };
 

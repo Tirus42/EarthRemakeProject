@@ -2,14 +2,17 @@
 
 using namespace irr;
 
-IngameGUI::IngameGUI(gui::IGUIEnvironment* guiEnv) :
-	IGUI(guiEnv) {
+IngameGUI::IngameGUI(gui::IGUIEnvironment* guiEnv, scene::ICameraSceneNode* mainCam) :
+	IGUI(guiEnv),
+	mainCamera(mainCam) {
+
+	mainCamera->grab();
 
 	buildGUI();
 }
 
 IngameGUI::~IngameGUI() {
-
+	mainCamera->drop();
 }
 
 void IngameGUI::buildGUI() {

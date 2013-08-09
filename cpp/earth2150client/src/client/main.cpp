@@ -149,7 +149,7 @@ int main(int argc, char** argv) {
 	matWireframe.Wireframe = true;
 
 	// Erstelle Ingame GUI
-	IngameGUI gui(guienv);
+	IngameGUI gui(guienv, cam);
 
 	// Setze eigenen EventReceiver, um die Kamera-Steuerung unterbinden zu können.
 	CamMouseDisabler* mouseHandler = new CamMouseDisabler();
@@ -164,12 +164,22 @@ int main(int argc, char** argv) {
 		video::ITexture* tex = driver->getTexture("position.png");
 
 		video::SMaterial m;
-		m.setTexture(0, tex);
+
 
 		m.AmbientColor.set(255,255,255,255);
 		m.Lighting = false;
 		m.ZWriteEnable = false;
 		m.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL;
+		//m.PolygonOffsetDirection = EPO_FRONT;
+		m.PolygonOffsetFactor = 1;
+
+		m.MaterialTypeParam = video::pack_textureBlendFunc(video::EBF_SRC_ALPHA, video::EBF_ONE_MINUS_SRC_ALPHA, video::EMFN_MODULATE_1X, video::EAS_TEXTURE | video::EAS_VERTEX_COLOR);
+		m.TextureLayer[0].TextureWrapU = video::ETC_CLAMP_TO_BORDER;
+		m.TextureLayer[0].TextureWrapV = video::ETC_CLAMP_TO_BORDER;
+
+		m.setTexture(0, tex);
+
+		//video::pack_textureBlendFunc()
 
 		MapMarker* marker = map.getMapMarkerManager().getMarkerForMaterial(m);
 		marker->addField(MapPosition(5, 5));
