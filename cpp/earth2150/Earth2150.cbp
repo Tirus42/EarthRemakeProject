@@ -195,6 +195,7 @@
 		<Unit filename="../tf/src/tf/file.cpp" />
 		<Unit filename="../tf/src/tf/network.cpp" />
 		<Unit filename="../tf/src/tf/time.cpp" />
+		<Unit filename="include/Event/IEntityEventReceiver.h" />
 		<Unit filename="include/Map/Map.h" />
 		<Unit filename="include/Map/MapBitLayer.h" />
 		<Unit filename="include/Map/MapPosition.h" />
@@ -205,6 +206,7 @@
 		<Unit filename="include/PathFinder/NavigatorFactory.h" />
 		<Unit filename="include/PathFinder/TNavigator.h" />
 		<Unit filename="include/PathFinder/TSearcher.h" />
+		<Unit filename="include/Util/ReferenceCounter.h" />
 		<Unit filename="include/e2150/AStar.h" />
 		<Unit filename="include/e2150/AStarNode.h" />
 		<Unit filename="include/e2150/Building.h" />
