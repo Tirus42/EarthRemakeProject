@@ -158,6 +158,10 @@
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>
+		<Unit filename="../earth2150client/include/config/ClientConfig.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
 		<Unit filename="../earth2150client/src/GUI/IngameGUI.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
@@ -183,6 +187,10 @@
 			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/client/main.cpp">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/src/config/ClientConfig.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>

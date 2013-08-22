@@ -1,11 +1,11 @@
 #include <irrlicht.h>
-#include "driverChoice.h"
 
 #include "client/VisualMap.h"
 #include "client/MapMarker.h"
 #include "GUI/IngameGUI.h"
 #include "GUI/IngameGUIEventReceiver.h"
 
+#include "config/ClientConfig.h"
 
 using namespace irr;
 
@@ -69,13 +69,33 @@ class CamMouseDisabler : public IEventReceiver {
 
 int main(int argc, char** argv) {
 
-	video::E_DRIVER_TYPE driverType = driverChoiceConsole();
+	ClientConfig config;
 
-	if (driverType == video::EDT_COUNT)
-		return -1;
+	{	// Config Datei Laden wenn vorhanden, andernfalls mit Standardwerten erstellen.
+		IrrlichtDevice *device = createDevice(EDT_NULL);
 
-    IrrlichtDevice *device =
-        createDevice(driverType, dimension2d<u32>(1024, 768));
+		IXMLReader *configReader = device->getFileSystem()->createXMLReader("clientconfig.xml");
+
+		if (configReader) {
+			config.loadXMLFile(configReader);
+
+			configReader->drop();
+		} else {
+			config.setDefaultValues();
+
+			IXMLWriter *configWriter = device->getFileSystem()->createXMLWriter("clientconfig.xml");
+
+			if (configWriter) {
+				config.saveXMLFile(configWriter);
+
+				configWriter->drop();
+			}
+		}
+
+		device->drop();
+	}
+
+    IrrlichtDevice *device = createDeviceEx(config.Parameter());
 
 	// Wenn Device nicht gestartet werden konnte, dann abbrechen
 	if (!device)
