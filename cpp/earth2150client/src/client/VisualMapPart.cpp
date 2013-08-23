@@ -7,14 +7,15 @@ using namespace irr;
 
 VisualMapPart::VisualMapPart(const VisualMap& map, uint16_t x, uint16_t y) :
 	x(x),
-	y(y) {
+	y(y),
+	meshBuffer(0) {
 
 	buildMesh(map);
 }
 
 VisualMapPart::~VisualMapPart() {
 	// Wir geben unsere Referenz auf das Mesh ab
-	mesh->drop();
+	meshBuffer->drop();
 }
 
 void VisualMapPart::updateNormals() {
@@ -34,8 +35,6 @@ void VisualMapPart::updateNormals() {
 void VisualMapPart::updateNormalsBorderTop() {
 
 	core::vector3df left(-1, 0, 0);
-
-
 }
 
 void VisualMapPart::buildMesh(const VisualMap& map) {
@@ -46,25 +45,28 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 
 	const uint16_t mapHeight = map.getHeight();
 
-	/// Mesh-Buffer erstellen
-	scene::CMeshBuffer<video::S3DVertex>* buffer = new scene::CMeshBuffer<video::S3DVertex>();
+	// Mesh-Buffer erstellen
+	if (meshBuffer)
+		meshBuffer->drop();
 
-	/// Vertex und Zuweisungsarray holen und vorskalieren
-	core::array<video::S3DVertex> &vertices = buffer->Vertices;
-	core::array<u16> &indices = buffer->Indices;
+	meshBuffer = new scene::CMeshBuffer<video::S3DVertex>();
 
-	/// Setze alle Vertices
+	// Vertex und Zuweisungsarray holen und vorskalieren
+	core::array<video::S3DVertex> &vertices = meshBuffer->Vertices;
+	core::array<u16> &indices = meshBuffer->Indices;
+
+	// Setze alle Vertices
 	for (uint16_t y = 0; y <= size; ++y) {
 		for (uint16_t x = 0; x <= size; ++x) {
-			/// Hole 3D-Höhe der Map
+			// Hole 3D-Höhe der Map
 			double dHeight = map.getField3DHeight(map.position(partX + x, partY + y));
 
-			/// Setze den Vertice an die 3D Position
-			vertices.push_back(video::S3DVertex(x, dHeight, mapHeight - y, 0,0,0, video::SColor(255,255,255,255), x, y));
+			// Setze den Vertice an die 3D Position
+			vertices.push_back(video::S3DVertex(partX + x, dHeight, mapHeight - (partY + y), 0,0,0, video::SColor(255,255,255,255), x, y));
 		}
 	}
 
-	/// Verbinde die Vertices zu Dreiecken (d.h. Baue eine Feld-Fläche auf)
+	// Verbinde die Vertices zu Dreiecken (d.h. Baue eine Feld-Fläche auf)
 	for (uint16_t y = 0; y < size; ++y) {
 		for (uint16_t x = 0; x < size; ++x) {
 			int offset = y * (size + 1)  + x;
@@ -79,17 +81,8 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 		}
 	}
 
-	/// Material zuweißen (temp) und Mesh-Buffer in Mesh setzen
-	buffer->Material = map.getMaterial(0);
+	// Material zuweißen (temp) und Mesh-Buffer in Mesh setzen
+	meshBuffer->Material = map.getMaterial(0);
 
-	buffer->recalculateBoundingBox();
-
-	/// Eigendliches Mesh erstellen
-	mesh = new scene::SMesh();
-
-	mesh->addMeshBuffer(buffer);
-	mesh->recalculateBoundingBox();
-
-	// Wir brauchen den Buffer nicht mehr, also Referenz abziehen
-	buffer->drop();
+	meshBuffer->recalculateBoundingBox();
 }

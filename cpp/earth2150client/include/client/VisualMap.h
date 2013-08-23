@@ -18,7 +18,10 @@ class VisualMap : public Map {
 		std::vector<VisualMapPart*> mapParts;
 		std::vector<irr::video::SMaterial> materials;
 
-		irr::s32 meshID;	// Diese MeshID wird jeweils im Mesh gesetzt
+		irr::s32 meshID;
+
+		/// Das Mesh welchem die Map besteht.
+		irr::scene::SMesh* mesh;
 
 		MapMarkerManager MarkerManager;
 

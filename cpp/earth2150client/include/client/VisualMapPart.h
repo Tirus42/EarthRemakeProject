@@ -14,10 +14,8 @@ class VisualMapPart {
 		uint16_t x;
 		uint16_t y;
 
-		/// Zeiger auf das Irrlicht-Mesh Objekt
-		irr::scene::SMesh* mesh;
-		/// Referenz auf das Vertex-Array
-		//irr::core::array<irr::video::S3DVertex> &vertices;
+		/// Zeiger auf den Meshbuffer
+		irr::scene::CMeshBuffer<irr::video::S3DVertex>* meshBuffer;
 
 		void buildMesh(const VisualMap& map);
 
@@ -32,7 +30,7 @@ class VisualMapPart {
 		VisualMapPart(const VisualMap& map, uint16_t x, uint16_t y);
 		~VisualMapPart();
 
-		irr::scene::SMesh* getMesh() const {return mesh;}
+		irr::scene::CMeshBuffer<irr::video::S3DVertex>* getMeshBuffer() const {return meshBuffer;}
 
 
 };

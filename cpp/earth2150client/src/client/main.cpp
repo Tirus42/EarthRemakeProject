@@ -182,16 +182,11 @@ int main(int argc, char** argv) {
 	// Testweiße eine Markierung auf der Karte plazieren
 	{
 		video::ITexture* tex = driver->getTexture("position.png");
-
 		video::SMaterial m;
-
 
 		m.AmbientColor.set(255,255,255,255);
 		m.Lighting = false;
-		m.ZWriteEnable = false;
 		m.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL;
-		//m.PolygonOffsetDirection = EPO_FRONT;
-		m.PolygonOffsetFactor = 1;
 
 		m.MaterialTypeParam = video::pack_textureBlendFunc(video::EBF_SRC_ALPHA, video::EBF_ONE_MINUS_SRC_ALPHA, video::EMFN_MODULATE_1X, video::EAS_TEXTURE | video::EAS_VERTEX_COLOR);
 		m.TextureLayer[0].TextureWrapU = video::ETC_CLAMP_TO_BORDER;
@@ -219,14 +214,15 @@ int main(int argc, char** argv) {
 		// Mesh Seletor Test
 		core::line3d<f32> ray = smgr->getSceneCollisionManager()->getRayFromScreenCoordinates(mouseHandler->mousePosition, cam);
 
-		scene::ISceneNode * selectedSceneNode =
-			collMan->getSceneNodeAndCollisionPointFromRay(
+		scene::ISceneNode * selectedSceneNode = 0;
+			/*collMan->getSceneNodeAndCollisionPointFromRay(
 					ray,
 					intersection, // This will be the position of the collision
 					hitTriangle, // This will be the triangle hit in the collision
 					ID_MAPPICK, // This ensures that only nodes that we have
 							// set up to be pickable are considered
 					0); // Check the entire scene (this is actually the implicit default)
+		*/
 
 		// Wenn durch das Tracing eine Stelle auf der Map gefunden wurde, Zeichne das
 		// getroffene Dreieck rot ein.
