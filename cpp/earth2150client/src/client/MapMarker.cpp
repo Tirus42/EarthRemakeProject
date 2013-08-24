@@ -64,6 +64,16 @@ void MapMarker::addField(const MapPosition& position) {
 	manager.setDirty();
 }
 
+void MapMarker::clear() {
+    meshBuffer->Vertices.clear();
+    meshBuffer->Indices.clear();
+
+    meshBuffer->setDirty();
+    meshBuffer->recalculateBoundingBox();
+
+    manager.setDirty();
+}
+
 video::SMaterial& MapMarker::getMaterial() {
 	return meshBuffer->getMaterial();
 }
