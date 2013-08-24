@@ -21,8 +21,14 @@ class IngameGUI : public IGUI {
 	public:
 		enum {
 			GUI_PANEL,
+			GUI_TABBER,
 			GUI_TEST_BTN1,
-			GUI_TEST_BTN2
+			GUI_TEST_BTN2,
+			GUI_TEST_CAMPOS_1,
+			GUI_TEST_CAMPOS_2,
+			GUI_TEST_CAMPOS_3,
+			GUI_TEST_CAMPOS_4,
+			GUI_TEST_CAMPOS_PERFORMANCETEST
 		};
 
 		IngameGUI(irr::gui::IGUIEnvironment* guiEnv, irr::scene::ICameraSceneNode* mainCam);
