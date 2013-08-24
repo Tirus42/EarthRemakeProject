@@ -112,13 +112,25 @@ class Map {
 		/// Gibt die Höhe der Karte zurück
 		uint16_t getHeight() const {return height;}
 
+		/// Gibt die breite des Spielfeldrandes zurück
 		uint16_t getBorderWidth() const {return borderWidth;}
 
+		/// Gibt die kleinste X Position zurück, worauf Spielobjekte plaziert sein können
 		uint16_t getMinX() const {return borderWidth;}
+
+		/// Gibt die kleinste Y Position zurück, worauf Spielibjekte plaziert sein können
 		uint16_t getMinY() const {return borderWidth;}
+
+		/// Gibt die größte X Position zurück, worauf Spielobjekte plaziert sein können
 		uint16_t getMaxX() const {return width-borderWidth;}
+
+		/// Gibt die größe Y Position zurück, worauf Spielobjekte plaziert sein können
 		uint16_t getMaxY() const {return height-borderWidth;}
+
+		/// Gibt die nutzbare Breite der Spielfläche zurück
 		uint16_t getInnerWidth() const {return width-2*borderWidth;}
+
+		/// Gibt die nutzbare Höhe der Spielfläche zurück
 		uint16_t getInnerHeight() const {return height-2*borderWidth;}
 
 		uint32_t position(uint16_t x, uint16_t y) const {return y * width + x;}
