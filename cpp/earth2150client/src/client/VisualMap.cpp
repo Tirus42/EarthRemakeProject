@@ -12,6 +12,7 @@ VisualMap::VisualMap(irr::video::IVideoDriver* driver, scene::ISceneManager* smg
 	smgr(smgr),
 	meshID(-1),
 	mesh(0),
+	node(0),
 	Map(width, height),
 	MarkerManager(*this, smgr) {
 
@@ -47,7 +48,12 @@ VisualMap::~VisualMap() {
 		delete *i;
 	}
 
-	mesh->drop();
+	if (node)
+		node->remove();
+
+	if (mesh)
+		mesh->drop();
+
 	smgr->drop();
 	driver->drop();
 }
@@ -86,10 +92,83 @@ void VisualMap::build() {
 
 	mesh->recalculateBoundingBox();
 
-	scene::IMeshSceneNode* node = smgr->addMeshSceneNode(mesh, 0, meshID);
+	this->node = smgr->addMeshSceneNode(mesh, 0, meshID);
 
 	// Triangle Selector für das Mesh Setzen
 	scene::ITriangleSelector* selector = smgr->createTriangleSelector(mesh, node);
 	node->setTriangleSelector(selector);
 	selector->drop();
+}
+
+
+MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core::vector3df& direction) {
+	// Hole Bounding Box der Map
+	const core::aabbox3df boundingBox = mesh->BoundingBox;
+
+	core::vector3df myDirection(0);
+
+	// Prüfen ob Richtungsvektor gleich dem Nullvektor ist
+	if (direction == myDirection)
+		return MapPosition::InvalidPosition();
+
+	// Vektor Normalisieren
+	myDirection = direction;
+	myDirection.normalize();
+
+	core::vector3df position = source + this->node->getPosition();
+
+	// Zielposition, falls die Oberfläche geschnitten wird
+	core::vector3df target;
+
+	// Vektor ablaufen und prüfen, ob wir auf ein Feld der Map treffen
+	while (true) {
+		// Prüfen ob wir irgendwo aus der Karte raus sind
+		if (myDirection.X > 0 && position.X > boundingBox.MaxEdge.X)
+			break;
+		if (myDirection.X < 0 && position.X < boundingBox.MinEdge.X)
+			break;
+		if (myDirection.Y > 0 && position.Y > boundingBox.MaxEdge.Y)
+			break;
+		if (myDirection.Y < 0 && position.Y < boundingBox.MinEdge.Y)
+			break;
+		if (myDirection.Z > 0 && position.Z > boundingBox.MaxEdge.Z)
+			break;
+		if (myDirection.Z < 0 && position.Z < boundingBox.MinEdge.Z)
+			break;
+
+		// Prüfen ob wir auf der Karte sind
+		if (boundingBox.isPointInside(position)) {
+
+			// Höhe des Feldes an dieser Position holen
+			double f0 = getField3DHeight(this->position((int)position.X, getHeight() - (int)position.Z));
+			double f1 = getField3DHeight(this->position((int)position.X + 1, getHeight() - (int)position.Z));
+			double f2 = getField3DHeight(this->position((int)position.X, getHeight() - ((int)position.Z + 1)));
+			double f3 = getField3DHeight(this->position((int)position.X + 1, getHeight() - ((int)position.Z + 1)));
+
+			// Eckpunkte als Vektoren anlegen
+			core::vector3df v0((int)position.X, 	f0, (int)position.Z);
+			core::vector3df v1((int)position.X + 1, f1, (int)position.Z);
+			core::vector3df v2((int)position.X, 	f2, (int)position.Z + 1);
+			core::vector3df v3((int)position.X + 1, f3, (int)position.Z + 1);
+
+			// Zu Dreieck verbinden
+            core::triangle3df t1(v0, v1, v2);
+
+			// Gegen erstes Dreieck prüfen
+            if (t1.getIntersectionWithLine(position, myDirection, target))
+				return MapPosition(target.X, getHeight() - target.Z);
+
+			core::triangle3df t2(v1, v3, v2);
+
+			// Gegen zweites Dreieck prüfen
+			if (t2.getIntersectionWithLine(position, myDirection, target))
+				return MapPosition(target.X, getHeight() - target.Z);
+		}
+
+		// Richtungsvektor weiter ablaufen
+		position += myDirection;
+	}
+
+	// Nichts gefunden
+	return MapPosition::InvalidPosition();
 }

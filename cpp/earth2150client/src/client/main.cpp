@@ -180,7 +180,7 @@ int main(int argc, char** argv) {
 
 
 	// Testweiße eine Markierung auf der Karte plazieren
-	{
+	//{
 		video::ITexture* tex = driver->getTexture("position.png");
 		video::SMaterial m;
 
@@ -201,7 +201,7 @@ int main(int argc, char** argv) {
 		marker->addField(MapPosition(7, 5));
 		marker->addField(MapPosition(5, 1020));
 		marker->addField(MapPosition(7, 1020));
-	}
+	//}
 
 
     // Hauptschleife
@@ -213,6 +213,13 @@ int main(int argc, char** argv) {
 
 		// Mesh Seletor Test
 		core::line3d<f32> ray = smgr->getSceneCollisionManager()->getRayFromScreenCoordinates(mouseHandler->mousePosition, cam);
+
+		MapPosition pos = map.pickMapPosition(ray.start, ray.getVector());
+
+		if (pos.isValid()) {
+			marker->clear();
+			marker->addField(pos);
+		}
 
 		scene::ISceneNode * selectedSceneNode = 0;
 			/*collMan->getSceneNodeAndCollisionPointFromRay(

@@ -23,6 +23,10 @@ class VisualMap : public Map {
 		/// Das Mesh welchem die Map besteht.
 		irr::scene::SMesh* mesh;
 
+		/// Irrlicht Scene Node der Map
+		irr::scene::IMeshSceneNode* node;
+
+		/// Manager für Markierungen auf der Map
 		MapMarkerManager MarkerManager;
 
 	public:
@@ -45,7 +49,12 @@ class VisualMap : public Map {
 		/// Setzt die Mesh ID, welche bei allen MapParts gesetzt wird
 		void setMeshID(irr::s32 id) {meshID = id;}
 
+		/// Gibt die Referenz auf den MapMarkerManager zurück
 		MapMarkerManager& getMapMarkerManager() {return MarkerManager;}
+
+		/// Prüft auf welches Feld auf der Map der Richtungsvektor trifft
+		/// \return Die MapPosition mit dem Feld, invalides Feld, falls kein Feld getroffen wird
+		MapPosition pickMapPosition(const irr::core::vector3df& source, const irr::core::vector3df& direction);
 };
 
 #endif // VISUALMAP_H_INCLUDED
