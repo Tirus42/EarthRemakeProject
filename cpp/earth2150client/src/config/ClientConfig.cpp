@@ -29,6 +29,8 @@ void ClientConfig::saveXMLFile(io::IXMLWriter* writer) const {
 	writer->writeElement(L"config");
 	writer->writeLineBreak();
 
+	writer->writeComment(L"type = {null, opengl, dx8, dx9, software}");
+	writer->writeLineBreak();
 	writer->writeElement(L"driver", true,
 						L"type", DriverName(param.DriverType),
 						L"antialias", core::stringw(param.AntiAlias).c_str(),
@@ -42,7 +44,8 @@ void ClientConfig::saveXMLFile(io::IXMLWriter* writer) const {
 						L"width", core::stringw(param.WindowSize.Width).c_str(),
 						L"height", core::stringw(param.WindowSize.Height).c_str(),
 						L"bit", core::stringw(param.Bits).c_str(),
-						L"fullscreen", core::stringw(param.Fullscreen).c_str()
+						L"fullscreen", core::stringw(param.Fullscreen).c_str(),
+						L"vsync", core::stringw(param.Vsync).c_str()
 						);
 	writer->writeLineBreak();
 
@@ -85,6 +88,9 @@ void ClientConfig::loadXMLFile(io::IXMLReader* reader) {
 
 			if (reader->getAttributeValue(L"fullscreen"))
 				param.Fullscreen = reader->getAttributeValueAsInt(L"fullscreen");
+
+			if (reader->getAttributeValue(L"vsync"))
+				param.Vsync = reader->getAttributeValueAsInt(L"vsync");
 		}
 	}
 }
