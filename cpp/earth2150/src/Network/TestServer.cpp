@@ -3,10 +3,10 @@
 #include "e2150/Utils.h"
 
 #include "e2150/HumanPlayer.h"
-#include "e2150/UnitChassis.h"
+#include "Unit/UnitChassis.h"
 #include "Map/Map.h"
 #include "e2150/AStar.h"
-#include "e2150/Unit.h"
+#include "Unit/Unit.h"
 #include "e2150/Navigator.h"
 #include "tf/time.h"
 

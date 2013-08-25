@@ -2,7 +2,7 @@
 #define NAVIGATOR_H
 
 #include "Map/Map.h"
-#include "e2150/Unit.h"
+#include "Unit/Unit.h"
 
 #include <list>
 
