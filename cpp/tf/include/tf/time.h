@@ -23,4 +23,23 @@ void FreeTimer(void* hTimer);
 /// Pausiert die Ausführung um die angegebene Anzahl an Millisekunden
 void Delay(uint32_t ms);
 
+
+/**
+* Funktionen für sehr genaue Zeitmessungen (Nanosekunden Bereich)
+*/
+
+/// Bereitet System auf Messungen vor / Prüft ob Messungen möglich sind
+/// Systemspezifisch (erzeugt keine Laufzeitkosten)
+bool InitHighResolutionTimer();
+
+/// Gibt den aktuellen Timer Wert zurück
+void HighResolutionTime(uint64_t* target);
+
+/// Berechnet den Unterschied zwischen 2 Zeitangaben, Rückgabe in Sekunden (Flieskomma)
+double HighResolutionDiffSec(uint64_t first, uint64_t second);
+
+/// Berechnet den Unterschied zwischen 2 Zeitangaben, Rückgabe in Nanosekunden
+uint64_t HighResolutionDiffNanoSec(uint64_t first, uint64_t second);
+
+
 #endif // TIME_H

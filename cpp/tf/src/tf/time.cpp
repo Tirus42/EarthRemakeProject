@@ -2,8 +2,12 @@
 
 #ifdef WIN32
 	#include <windows.h>
+
+	// Frequenz Wert von QueryPerformanceFrequency()
+	uint64_t COUNTER_FREQ = 0;
 #else
 	#include <sys/time.h>
+	#include <time.h>
 	#include <unistd.h>
 #endif
 
@@ -54,5 +58,56 @@ void Delay(uint32_t ms) {
 		Sleep(ms);
 	#else
 		usleep(ms * 1000);
+	#endif // WIN32
+}
+
+
+bool InitHighResolutionTimer() {
+	#ifdef WIN32
+	return QueryPerformanceFrequency((LARGE_INTEGER*)&COUNTER_FREQ);
+	#else
+	return true;
+	#endif // WIN32
+}
+
+void HighResolutionTime(uint64_t* target) {
+	#ifdef WIN32
+	QueryPerformanceCounter((LARGE_INTEGER*)target);
+	#else
+	clock_gettime(CLOCK_MONOTONIC, (struct timespec*)target);
+	#endif // WIN32
+}
+
+double HighResolutionDiffSec(uint64_t first, uint64_t second) {
+	#ifdef WIN32
+	uint64_t diff = second - first;
+
+	return ((double)diff) / (double)COUNTER_FREQ;
+	#else
+	struct timespec& tFirst = (struct timespec&)first;
+	struct timespec& tSecond = (struct timespec&)second;
+
+	uint32_t sec = tSecond.tv_sec - tFirst.tv_sec;
+	int32_t ns = tSecond.tv_nsec - tFirst.tv_nsec;
+
+	return sec + ns * 0.000000001d;
+	#endif // WIN32
+}
+
+uint64_t HighResolutionDiffNanoSec(uint64_t first, uint64_t second) {
+	#ifdef WIN32
+	uint64_t diff = (second - first);
+
+	double ns = ((double)diff / (double)COUNTER_FREQ) * 1000000000;
+
+	return ns;
+	#else
+	struct timespec& tFirst = (struct timespec&)first;
+	struct timespec& tSecond = (struct timespec&)second;
+
+	uint64_t sec = tSecond.tv_sec - tFirst.tv_sec;
+	int64_t ns = tSecond.tv_nsec - tFirst.tv_nsec;
+
+	return sec * 1000000000 + ns;
 	#endif // WIN32
 }

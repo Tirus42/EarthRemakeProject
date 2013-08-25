@@ -7,6 +7,8 @@
 
 #include "config/ClientConfig.h"
 
+#include "tf/time.h"
+
 using namespace irr;
 
 /*
@@ -29,7 +31,7 @@ static const irr::s32 ID_MAPPICK = 1 << 0;
 
 scene::ICameraSceneNode* cam;
 
-// Kleine Eventhandler Klasse, um das Fangen der Maus Umschalten zu können
+// Kleine Eventhandler Klasse, um das Fangen der Maus Umschalten zu kÃ¶nnen
 class CamMouseDisabler : public IEventReceiver {
 	private:
 		IEventReceiver* recv;
@@ -70,6 +72,9 @@ class CamMouseDisabler : public IEventReceiver {
 int main(int argc, char** argv) {
 
 	ClientConfig config;
+
+	// HochauflÃ¶senden Timer initiieren (fÃ¼r exakte Zeitmessungen)
+	InitHighResolutionTimer();
 
 	{	// Config Datei Laden wenn vorhanden, andernfalls mit Standardwerten erstellen.
 		IrrlichtDevice *device = createDevice(EDT_NULL);
@@ -121,6 +126,8 @@ int main(int argc, char** argv) {
 
     // Kleines Text Feld zur FPS Anzeige erstellen
     IGUIStaticText* fpsDisplay = guienv->addStaticText(L"FPS: -", rect<int>(10,10,100,22), true);
+    IGUIStaticText* frameTimeDisplay = guienv->addStaticText(L"", rect<s32>(10, 25, 100, 37), true);
+    IGUIStaticText* renderTimeDisplay = guienv->addStaticText(L"", rect<s32>(10, 40, 100, 52), true);
 
 
     // FirstPerson Kamera erstellen (Steuerung mit Maus + Pfeiltasten)
@@ -139,7 +146,7 @@ int main(int argc, char** argv) {
 	// Komplette Map als Mesh aufbauen
 	map.build();
 
-	/// Testweiße und zur Orientierung einen Cube hinzufügen
+	/// TestweiÃŸe und zur Orientierung einen Cube hinzufÃ¼gen
 	scene::ISceneNode* cube = smgr->addCubeSceneNode(10);
 
 	// Lichtquelle erstellen, Radius und Typ festlegen
@@ -147,14 +154,14 @@ int main(int argc, char** argv) {
 	light->setRadius(1024);
 	light->setLightType(video::ELT_DIRECTIONAL);
 
-	// Dieses Licht automatisch Rotieren lassen (Ausrichtung ändern, da Direktionales Licht)
+	// Dieses Licht automatisch Rotieren lassen (Ausrichtung Ã¤ndern, da Direktionales Licht)
 	scene::ISceneNodeAnimator * rotation = smgr->createRotationAnimator(vector3df(0, 0.2f, 0));
 	light->addAnimator(rotation);
 
 	/*
-	* Objekte erstellen die nötig sind, um den Kollisionspunkt von der
+	* Objekte erstellen die nÃ¶tig sind, um den Kollisionspunkt von der
 	* Maus Position auf dem Bildschirm die darunter liegende Karte zu finden
-	* Das getroffene Dreieck wird (Testweiße) Rot eingezeichnet).
+	* Das getroffene Dreieck wird (TestweiÃŸe) Rot eingezeichnet).
 	*/
 	scene::ISceneCollisionManager* collMan = smgr->getSceneCollisionManager();
 	// Tracks the current intersection point with the level or a mesh
@@ -171,15 +178,15 @@ int main(int argc, char** argv) {
 	// Erstelle Ingame GUI
 	IngameGUI gui(guienv, cam);
 
-	// Setze eigenen EventReceiver, um die Kamera-Steuerung unterbinden zu können.
+	// Setze eigenen EventReceiver, um die Kamera-Steuerung unterbinden zu kÃ¶nnen.
 	CamMouseDisabler* mouseHandler = new CamMouseDisabler();
 	device->setEventReceiver(mouseHandler);
 
-	// Füge in diesen EventReceiver den GUI-EventReceiver ein (Themoräre Lösung...)
+	// FÃ¼ge in diesen EventReceiver den GUI-EventReceiver ein (ThemorÃ¤re LÃ¶sung...)
 	mouseHandler->setSubEventReceiver(new IngameGUIEventReceiver(&gui));
 
 
-	// Testweiße eine Markierung auf der Karte plazieren
+	// TestweiÃŸe eine Markierung auf der Karte plazieren
 	//{
 		video::ITexture* tex = driver->getTexture("position.png");
 		video::SMaterial m;
@@ -203,13 +210,26 @@ int main(int argc, char** argv) {
 		marker->addField(MapPosition(7, 1020));
 	//}
 
+	// Ausgabevariablen von der Zeitmessung
+	uint64_t lastRenderTime = 0;
+	uint64_t lastFrameTime = 0;
+
+	uint64_t startTime;
+	uint64_t endTimeRender;
+	uint64_t endTimeFrame;
 
     // Hauptschleife
     while (device->run()) {
+		HighResolutionTime(&startTime);
+
         driver->beginScene(true, true, SColor(0,200,200,200));
 
         smgr->drawAll();
         guienv->drawAll();
+
+        driver->endScene();
+
+        HighResolutionTime(&endTimeRender);
 
 		// Mesh Seletor Test
 		core::line3d<f32> ray = smgr->getSceneCollisionManager()->getRayFromScreenCoordinates(mouseHandler->mousePosition, cam);
@@ -233,22 +253,39 @@ int main(int argc, char** argv) {
 
 		// Wenn durch das Tracing eine Stelle auf der Map gefunden wurde, Zeichne das
 		// getroffene Dreieck rot ein.
-		if (selectedSceneNode) {
+		/*if (selectedSceneNode) {
 			driver->setTransform(video::ETS_WORLD, core::matrix4());
 			driver->setMaterial(matWireframe);
 			driver->draw3DTriangle(hitTriangle, video::SColor(0, 255, 0, 0));
-		}
+		}*/
 
 		//
 
-        driver->endScene();
+
 
 		{	// Schreibe die aktuellen FPS Werte neu in das GUI Element (Textfeld)
 			core::stringw text("FPS: ");
 			text += driver->getFPS();
 
 			fpsDisplay->setText(text.c_str());
+		}{
+			core::stringw text("FrameTime:  ");
+			text += (u32)(lastFrameTime / 1000);
+			text += L"Âµs";
+
+			frameTimeDisplay->setText(text.c_str());
+		}{
+			core::stringw text("RenderTime: ");
+			text += (u32)(lastRenderTime / 1000);
+			text += L"Âµs";
+
+			renderTimeDisplay->setText(text.c_str());
 		}
+
+		HighResolutionTime(&endTimeFrame);
+
+		lastRenderTime = HighResolutionDiffNanoSec(startTime, endTimeRender);
+		lastFrameTime = HighResolutionDiffNanoSec(startTime, endTimeFrame);
 
 		// Wenn das Fenster den Fokus verliert, dann nicht weiter rendern
         while (!device->isWindowActive()) {
