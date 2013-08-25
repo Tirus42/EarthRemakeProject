@@ -203,6 +203,8 @@
 		<Unit filename="../tf/src/tf/file.cpp" />
 		<Unit filename="../tf/src/tf/network.cpp" />
 		<Unit filename="../tf/src/tf/time.cpp" />
+		<Unit filename="include/Building/BuildingChassis.h" />
+		<Unit filename="include/Building/BuildingGround.h" />
 		<Unit filename="include/Event/IEntityEventReceiver.h" />
 		<Unit filename="include/Map/Map.h" />
 		<Unit filename="include/Map/MapBitLayer.h" />
@@ -236,6 +238,8 @@
 			<Option target="Server - VS - Release" />
 			<Option target="Linux - Server - Debug" />
 		</Unit>
+		<Unit filename="src/Building/BuildingChassis.cpp" />
+		<Unit filename="src/Building/BuildingGround.cpp" />
 		<Unit filename="src/Map/Map.cpp" />
 		<Unit filename="src/Map/MapBitLayer.cpp" />
 		<Unit filename="src/Map/MapViewerManager.cpp" />
