@@ -2,12 +2,12 @@
 
 #include <cassert>
 
-BuildingGround::BuildingGround(uint8_t width, uint8_t height) :
+BuildingGround::BuildingGround(uint8_t width, uint8_t height, GroundType startType) :
 	width(width),
 	height(height),
 	field(new uint8_t[width * height]) {
 
-		memset(field, FIELD_SOLID, width * height);
+		memset(field, startType, width * height);
 }
 
 BuildingGround::~BuildingGround() {

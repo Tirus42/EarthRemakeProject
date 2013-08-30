@@ -22,15 +22,20 @@ class BuildingGround {
 		BuildingGround& operator=(const BuildingGround& cc);
 
 	public:
-		BuildingGround(uint8_t width, uint8_t height);
-		~BuildingGround();
-
 		/// Definition der Bodenflächenarten
 		enum GroundType {
 			FIELD_FREE,	// Gebäude blockiert/nutzt dieses Feld nicht
 			FIELD_SOLID,	// Gebäude steht auf diesem Feld
 			FIELD_ENTRY	// Von/auf dieses Feld fahren Einheiten, welche mit dem Gebäude interagieren
 		};
+
+		/// Konstruktor
+		/// Erstellt die Untergrundfläche für Gebäude.
+		/// Die Fläche wird mit dem Wert startType initiiert.
+		BuildingGround(uint8_t width, uint8_t height, GroundType startType = FIELD_SOLID);
+
+		/// Destruktor
+		~BuildingGround();
 
 		/// Gibt die Breite der Bodenfläche zurück
 		uint8_t getWidth() const {
