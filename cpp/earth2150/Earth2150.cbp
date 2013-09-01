@@ -81,6 +81,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option='-isystem &quot;$(#irrlicht)\include&quot;' />
 					<Add directory="../earth2150client/include" />
 					<Add directory="$(#irrlicht)/include" />
 				</Compiler>
