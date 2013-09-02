@@ -26,6 +26,8 @@ class VisualMapPart {
 		void updateNormalsBorderLeft();
 		void updateNormalsBorderRight();
 
+		VisualMapPart(const VisualMapPart&);
+		VisualMapPart operator=(const VisualMapPart&);
 	public:
 		VisualMapPart(const VisualMap& map, uint16_t x, uint16_t y);
 		~VisualMapPart();

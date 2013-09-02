@@ -8,12 +8,14 @@
 using namespace irr;
 
 VisualMap::VisualMap(irr::video::IVideoDriver* driver, scene::ISceneManager* smgr,  uint16_t width, uint16_t height) :
+	Map(width, height),
 	driver(driver),
 	smgr(smgr),
+	mapParts(),
+	materials(),
 	meshID(-1),
 	mesh(0),
 	node(0),
-	Map(width, height),
 	MarkerManager(*this, smgr) {
 
 	driver->grab();

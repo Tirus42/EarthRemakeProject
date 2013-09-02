@@ -36,10 +36,12 @@ class CamMouseDisabler : public IEventReceiver {
 	private:
 		IEventReceiver* recv;
 
+		CamMouseDisabler(const CamMouseDisabler&);
+		CamMouseDisabler operator=(const CamMouseDisabler&);
 	public:
 		core::position2d<s32> mousePosition;
 
-		CamMouseDisabler() : recv(0) {}
+		CamMouseDisabler() : recv(0), mousePosition() {}
 
 		void setSubEventReceiver(IEventReceiver* receiver) {
 			recv = receiver;

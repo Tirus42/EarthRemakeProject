@@ -17,7 +17,8 @@ class IngameGUI : public IGUI {
 
 		void buildGUI();
 
-
+		IngameGUI(const IngameGUI&);
+		IngameGUI operator=(const IngameGUI&);
 	public:
 		enum {
 			GUI_PANEL,

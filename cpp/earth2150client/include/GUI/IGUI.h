@@ -9,7 +9,8 @@
 */
 class IGUI {
 	private:
-
+		IGUI(const IGUI&);
+		IGUI operator=(const IGUI&);
 	protected:
 		irr::gui::IGUIEnvironment* env;
 

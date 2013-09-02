@@ -29,6 +29,8 @@ class VisualMap : public Map {
 		/// Manager für Markierungen auf der Map
 		MapMarkerManager MarkerManager;
 
+		VisualMap(const VisualMap&);
+		VisualMap operator=(const VisualMap&);
 	public:
 		/// Definiert in was für Größen die Map eingeteilt wird (Grafisch)
 		static const uint8_t VISUAL_PART_SIZE = 128;

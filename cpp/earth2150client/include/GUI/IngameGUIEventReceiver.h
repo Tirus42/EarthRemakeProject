@@ -13,6 +13,8 @@ class IngameGUIEventReceiver : public irr::IEventReceiver {
 	private:
 		IngameGUI* gui;
 
+		IngameGUIEventReceiver(const IngameGUIEventReceiver&);
+		IngameGUIEventReceiver operator=(const IngameGUIEventReceiver&);
 	public:
 		IngameGUIEventReceiver(IngameGUI* gui);
 		virtual ~IngameGUIEventReceiver();
