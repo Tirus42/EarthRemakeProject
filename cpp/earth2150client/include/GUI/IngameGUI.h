@@ -5,15 +5,20 @@
 
 #include <irrlicht.h>
 
+class ResearchWindow;
+
 /**
 * Ingame GUI
 * Hält alle Zeiger auf die einzelnen GUI Elemente,
 * die Ingame verfügbar sind.
 */
 class IngameGUI : public IGUI {
+	friend class IngameGUIEventReceiver;
 	private:
 		irr::gui::IGUIWindow* panel;
 		irr::scene::ICameraSceneNode* mainCamera;
+
+		ResearchWindow* researchWindow;
 
 		void buildGUI();
 
@@ -25,6 +30,7 @@ class IngameGUI : public IGUI {
 			GUI_TABBER,
 			GUI_TEST_BTN1,
 			GUI_TEST_BTN2,
+			GUI_TEST_RESEARCH_WINDOW,
 			GUI_TEST_CAMPOS_1,
 			GUI_TEST_CAMPOS_2,
 			GUI_TEST_CAMPOS_3,
@@ -35,8 +41,14 @@ class IngameGUI : public IGUI {
 		IngameGUI(irr::gui::IGUIEnvironment* guiEnv, irr::scene::ICameraSceneNode* mainCam);
 		virtual ~IngameGUI();
 
-		// Skaliert die GUI auf eine neue Größe (Fenstergröße)
+		/// Skaliert die GUI auf eine neue Größe (Fenstergröße)
 		void resize(irr::s32 newWidth, irr::s32 newHeight);
+
+		/// Öffnet bzw. Erstellt das Forschungsfenster
+		void openResearchWindow();
+
+		/// Schließt das Forschungsfenster
+		void closeResearchWindow();
 
 		irr::scene::ICameraSceneNode* getMainCamera() const {return mainCamera;}
 

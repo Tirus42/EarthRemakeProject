@@ -1,6 +1,7 @@
 #include "GUI/IngameGUIEventReceiver.h"
 
 #include "GUI/IngameGUI.h"
+#include "GUI/ResearchWindow.h"
 
 #include <stdio.h>
 
@@ -26,6 +27,10 @@ bool IngameGUIEventReceiver::OnEvent(const irr::SEvent& event) {
 
 				case IngameGUI::GUI_TEST_BTN2:
 					printf("Button 2 gedrueckt!\n");
+					return true;
+
+				case IngameGUI::GUI_TEST_RESEARCH_WINDOW:
+					gui->openResearchWindow();
 					return true;
 
 				case IngameGUI::GUI_TEST_CAMPOS_1:
@@ -57,6 +62,8 @@ bool IngameGUIEventReceiver::OnEvent(const irr::SEvent& event) {
 
 		}
 
+		if (gui->researchWindow)
+			gui->researchWindow->OnEvent(event);
 
 	}
 

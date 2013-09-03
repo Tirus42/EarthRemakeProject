@@ -1,10 +1,14 @@
 #include "GUI/IngameGUI.h"
 
+#include "GUI/ResearchWindow.h"
+
 using namespace irr;
 
 IngameGUI::IngameGUI(gui::IGUIEnvironment* guiEnv, scene::ICameraSceneNode* mainCam) :
 	IGUI(guiEnv),
-	mainCamera(mainCam) {
+	panel(0),
+	mainCamera(mainCam),
+	researchWindow(0) {
 
 	mainCamera->grab();
 
@@ -26,12 +30,12 @@ void IngameGUI::buildGUI() {
 	// Fenster nicht verschiebbar machen
 	panel->setDraggable(false);
 
-	// Einige Test Elemente eingfügen
+	// Einige Test Elemente eingfÃ¼gen
 
 	// Tab Control mit 3 Tabs
 	gui::IGUITabControl* tab = env->addTabControl(core::rect<s32>(200, 10, 700, 190), panel, true, true, GUI_TABBER);
 
-	// Tab Leisten Breite und Höhe festlegen
+	// Tab Leisten Breite und HÃ¶he festlegen
 	tab->setTabExtraWidth(60);
 	tab->setTabHeight(20);
 
@@ -50,14 +54,16 @@ void IngameGUI::buildGUI() {
 	t3->setBackgroundColor(color);
 	t3->setDrawBackground(true);
 
-	// Test Button in Tab 1 und 2 einfügen
+	// Test Button in Tab 1 und 2 einfÃ¼gen
 	env->addButton(core::rect<s32>(10, 10, 110, 30), t1, GUI_TEST_BTN1, L"Test Button 1");
 	env->addButton(core::rect<s32>(10, 10, 110, 30), t2, GUI_TEST_BTN2, L"Test Button 2");
+
+	env->addButton(core::rect<s32>(10, 10, 110, 30), t3, GUI_TEST_RESEARCH_WINDOW, L"Ã–ffne Forschungsfenster");
 
 	env->addStaticText(L"Mit der Rechten Maustaste kann die Kamera von der Maus geloest werden, und damit diese GUI bedient werden",
 						 core::rect<s32>(10, 10, 190, 190), true, true, panel, -1, true);
 
-	// Weiteren Tab für Kamera-Positionierung einfügen
+	// Weiteren Tab fÃ¼r Kamera-Positionierung einfÃ¼gen
 	gui::IGUITab* camTab = tab->insertTab(3, L"Kamera Position");
 	color.set(63, 0, 255, 0);
 	camTab->setBackgroundColor(color);
@@ -68,11 +74,24 @@ void IngameGUI::buildGUI() {
 	env->addButton(core::rect<s32>(10, 70, 110, 90), camTab, GUI_TEST_CAMPOS_3, L"@50:950", L"Setzt die Kamera an die Spielfeldposition 50:950");
 	env->addButton(core::rect<s32>(10, 100, 110, 120), camTab, GUI_TEST_CAMPOS_4, L"@950:950", L"Setzt die Kamera an die Spielfeldposition 950:950");
 
-	// Einen Position, welche die gesammte Karte überblickt
+	// Einen Position, welche die gesammte Karte Ã¼berblickt
 	env->addButton(core::rect<s32>(10, 130, 110, 150), camTab, GUI_TEST_CAMPOS_PERFORMANCETEST, L"Performance Test Position", L"Position von wo aus die ganze Karte sichtbar ist");
 
 }
 
 void IngameGUI::resize(s32 newWidth, s32 newHeight) {
 	panel->setRelativePosition(core::rect<s32>(0, newHeight - 200, newWidth, newHeight));
+}
+
+void IngameGUI::openResearchWindow() {
+	if (!researchWindow)
+		researchWindow = new ResearchWindow(env, this);
+}
+
+void IngameGUI::closeResearchWindow() {
+	if (!researchWindow)
+		return;
+
+	delete researchWindow;
+	researchWindow = 0;
 }
