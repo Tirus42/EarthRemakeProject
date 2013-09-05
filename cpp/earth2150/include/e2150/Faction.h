@@ -5,18 +5,31 @@
 #include <string>
 
 /**
-* Jedes Objekt gehört einer Fraktion an (also Global wie USC, ED, LC ect)
+* Speicherstruktur für Fraktionen.
+* Speichert ID und Name der Fraktion.
 */
 class Faction {
 	private:
-		static uint32_t lastUID;
-
 		uint32_t uID;
-		std::string name;
+		std::wstring name;
 
 	public:
-		Faction(const std::string& name);
-		Faction(const std::string& name, uint32_t uID);
+		Faction(uint32_t uID, const std::wstring& name);
+
+		/// Gibt die ID der Fraktion zurück
+		uint32_t getID() const {
+			return uID;
+		}
+
+		/// Gibt den Namen der Fraktion zurück
+		const std::wstring& getName() const {
+			return name;
+		}
+
+		/// Setzt einen neuen Namen für die Fraktion
+		void setName(const std::wstring& name) {
+			this->name = name;
+		}
 };
 
 #endif

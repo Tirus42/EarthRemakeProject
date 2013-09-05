@@ -1,14 +1,6 @@
 #include "e2150/Faction.h"
 
-uint32_t Faction::lastUID = 0;
-
-Faction::Faction(const std::string& name) :
-		uID(lastUID),
-		name(name) {
-	lastUID++;
-}
-
-Faction::Faction(const std::string& name, uint32_t uID) :
+Faction::Faction(uint32_t uID, const std::wstring& name) :
 		uID(uID),
 		name(name) {
 }
