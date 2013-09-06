@@ -148,9 +148,6 @@ int main(int argc, char** argv) {
 	// Komplette Map als Mesh aufbauen
 	map.build();
 
-	/// Testweiße und zur Orientierung einen Cube hinzufügen
-	scene::ISceneNode* cube = smgr->addCubeSceneNode(10);
-
 	// Lichtquelle erstellen, Radius und Typ festlegen
 	scene::ILightSceneNode* light = smgr->addLightSceneNode();
 	light->setRadius(1024);
@@ -159,23 +156,7 @@ int main(int argc, char** argv) {
 	// Dieses Licht automatisch Rotieren lassen (Ausrichtung ändern, da Direktionales Licht)
 	scene::ISceneNodeAnimator * rotation = smgr->createRotationAnimator(vector3df(0, 0.2f, 0));
 	light->addAnimator(rotation);
-
-	/*
-	* Objekte erstellen die nötig sind, um den Kollisionspunkt von der
-	* Maus Position auf dem Bildschirm die darunter liegende Karte zu finden
-	* Das getroffene Dreieck wird (Testweiße) Rot eingezeichnet).
-	*/
-	scene::ISceneCollisionManager* collMan = smgr->getSceneCollisionManager();
-	// Tracks the current intersection point with the level or a mesh
-	core::vector3df intersection;
-	// Used to show with triangle has been hit
-	core::triangle3df hitTriangle;
-
-	// Material mit dem gezeichnet werden soll (Nur Drahtgitter und ohne Beleuchtung)
-	video::SMaterial matWireframe;
-	matWireframe.Lighting = false;
-	matWireframe.setTexture(0, 0);
-	matWireframe.Wireframe = true;
+	rotation->drop();	// Wir brauchen das Handle nicht mehr, das Objekt (light) hat nun selbst eine referenz darauf
 
 	// Erstelle Ingame GUI
 	IngameGUI gui(guienv, cam);
@@ -188,29 +169,20 @@ int main(int argc, char** argv) {
 	mouseHandler->setSubEventReceiver(new IngameGUIEventReceiver(&gui));
 
 
-	// Testweiße eine Markierung auf der Karte plazieren
-	//{
-		video::ITexture* tex = driver->getTexture("position.png");
-		video::SMaterial m;
+	// Testweiße Marker für die Maus Position erstellen (siehe Hauptschleife)
+	video::ITexture* tex = driver->getTexture("position.png");	// Textur Laden
 
-		m.AmbientColor.set(255,255,255,255);
-		m.Lighting = false;
-		m.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL;
+	// Material für das Rendern bestimmen
+	video::SMaterial m;
 
-		m.MaterialTypeParam = video::pack_textureBlendFunc(video::EBF_SRC_ALPHA, video::EBF_ONE_MINUS_SRC_ALPHA, video::EMFN_MODULATE_1X, video::EAS_TEXTURE | video::EAS_VERTEX_COLOR);
-		m.TextureLayer[0].TextureWrapU = video::ETC_CLAMP_TO_BORDER;
-		m.TextureLayer[0].TextureWrapV = video::ETC_CLAMP_TO_BORDER;
+	m.AmbientColor.set(255,255,255,255);
+	m.Lighting = false;
+	m.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL;
 
-		m.setTexture(0, tex);
+	m.setTexture(0, tex);
 
-		//video::pack_textureBlendFunc()
-
-		MapMarker* marker = map.getMapMarkerManager().getMarkerForMaterial(m);
-		marker->addField(MapPosition(5, 5));
-		marker->addField(MapPosition(7, 5));
-		marker->addField(MapPosition(5, 1020));
-		marker->addField(MapPosition(7, 1020));
-	//}
+	// Den Marker mit dem Material erstellen/holen
+	MapMarker* marker = map.getMapMarkerManager().getMarkerForMaterial(m);
 
 	// Ausgabevariablen von der Zeitmessung
 	uint64_t lastRenderTime = 0;
@@ -242,28 +214,6 @@ int main(int argc, char** argv) {
 			marker->clear();
 			marker->addField(pos);
 		}
-
-		scene::ISceneNode * selectedSceneNode = 0;
-			/*collMan->getSceneNodeAndCollisionPointFromRay(
-					ray,
-					intersection, // This will be the position of the collision
-					hitTriangle, // This will be the triangle hit in the collision
-					ID_MAPPICK, // This ensures that only nodes that we have
-							// set up to be pickable are considered
-					0); // Check the entire scene (this is actually the implicit default)
-		*/
-
-		// Wenn durch das Tracing eine Stelle auf der Map gefunden wurde, Zeichne das
-		// getroffene Dreieck rot ein.
-		/*if (selectedSceneNode) {
-			driver->setTransform(video::ETS_WORLD, core::matrix4());
-			driver->setMaterial(matWireframe);
-			driver->draw3DTriangle(hitTriangle, video::SColor(0, 255, 0, 0));
-		}*/
-
-		//
-
-
 
 		{	// Schreibe die aktuellen FPS Werte neu in das GUI Element (Textfeld)
 			core::stringw text("FPS: ");
