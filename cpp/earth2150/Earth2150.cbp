@@ -234,6 +234,7 @@
 		<Unit filename="include/Unit/MovingUnit.h" />
 		<Unit filename="include/Unit/Unit.h" />
 		<Unit filename="include/Unit/UnitChassis.h" />
+		<Unit filename="include/Util/MemoryBlock.h" />
 		<Unit filename="include/Util/ReferenceCounter.h" />
 		<Unit filename="include/e2150/AStar.h" />
 		<Unit filename="include/e2150/AStarNode.h" />
