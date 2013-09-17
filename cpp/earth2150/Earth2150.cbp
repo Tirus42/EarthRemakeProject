@@ -104,6 +104,9 @@
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
+				<Linker>
+					<Add library="rt" />
+				</Linker>
 			</Target>
 			<Target title="Linux - Client - Debug">
 				<Option platforms="Unix;" />
