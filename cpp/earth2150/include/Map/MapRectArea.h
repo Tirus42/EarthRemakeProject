@@ -10,14 +10,26 @@
 */
 class MapRectArea {
 	private:
+		/// Erste Ecke, die kleinere im Wertebereich
 		MapPosition minEdge;
+
+		/// Zweite Position, ist >= der ersten Ecke
 		MapPosition maxEdge;
 
 		/// Stellt sicher, dass minEdge < maxEdge ist (X und Y)
 		void repair();
 
 	public:
+		/// Standardkonstruktur, erzeugt eine ungültige Fläche!
+		MapRectArea();
+
+		/// Definiert die Fläche durch zwei Eckpunkte (Reihenfolge ist beliebig)
 		MapRectArea(const MapPosition& pos1, const MapPosition& pos2);
+
+		/// Definiert die Fläche durch eine MinEcke sowie die Breite und Länge
+		MapRectArea(const MapPosition& pos, uint16_t width, uint16_t height);
+
+		/// Destruktor
 		~MapRectArea();
 
 		/// Gibt die Ecke der kleineren Koorinaten zurück

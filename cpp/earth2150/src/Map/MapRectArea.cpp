@@ -2,6 +2,11 @@
 
 #include <cassert>
 
+MapRectArea::MapRectArea() :
+	minEdge(MapPosition::InvalidPosition()),
+	maxEdge(MapPosition::InvalidPosition()) {
+}
+
 MapRectArea::MapRectArea(const MapPosition& pos1, const MapPosition& pos2) :
 	minEdge(pos1),
 	maxEdge(pos2) {
@@ -12,6 +17,18 @@ MapRectArea::MapRectArea(const MapPosition& pos1, const MapPosition& pos2) :
 
 	// minEdge und maxEdge richtig setzen, falls nicht schon richtig
 	repair();
+}
+
+MapRectArea::MapRectArea(const MapPosition& pos, uint16_t width, uint16_t height) :
+	minEdge(pos),
+	maxEdge(MapPosition(pos.getX() + width, pos.getY() + height)) {
+
+	// Sichergehen das die Position gültig ist
+	assert(pos.isValid());
+
+	// Sichergehen das die Fläche nicht über den Wertebereich hinaus ging
+	assert((uint32_t)pos.getX() + (uint32_t)width < 0xFFFF);
+	assert((uint32_t)pos.getY() + (uint32_t)height < 0xFFFF);
 }
 
 MapRectArea::~MapRectArea() {
