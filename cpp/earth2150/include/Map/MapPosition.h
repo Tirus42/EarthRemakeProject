@@ -29,7 +29,7 @@ class MapPosition {
 		void setXY(uint16_t x, uint16_t y) {this->x = x; this->y = y;}
 
 		/// Prüft ob eine Position gesetzt wurde
-		bool isValid() {
+		bool isValid() const {
 			return (x != (uint16_t)(~0) && y != (uint16_t)(~0));
 		}
 
