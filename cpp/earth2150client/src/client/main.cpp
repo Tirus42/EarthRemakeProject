@@ -4,8 +4,10 @@
 #include "client/MapMarker.h"
 #include "GUI/IngameGUI.h"
 #include "GUI/IngameGUIEventReceiver.h"
+#include "renderer/NormalScreenRenderer.h"
 
 #include "config/ClientConfig.h"
+
 
 #include "tf/time.h"
 
@@ -188,22 +190,15 @@ int main(int argc, char** argv) {
 	uint64_t lastRenderTime = 0;
 	uint64_t lastFrameTime = 0;
 
-	uint64_t startTime;
-	uint64_t endTimeRender;
+	uint64_t startTimeFrame;
 	uint64_t endTimeFrame;
+
+	NormalScreenRenderer renderer(device, SColor(0, 200, 200, 200));
 
     // Hauptschleife
     while (device->run()) {
-		HighResolutionTime(&startTime);
-
-        driver->beginScene(true, true, SColor(0,200,200,200));
-
-        smgr->drawAll();
-        guienv->drawAll();
-
-        driver->endScene();
-
-        HighResolutionTime(&endTimeRender);
+		HighResolutionTime(&startTimeFrame);
+		renderer.render();
 
 		// Mesh Seletor Test
 		core::line3d<f32> ray = smgr->getSceneCollisionManager()->getRayFromScreenCoordinates(mouseHandler->mousePosition, cam);
@@ -236,8 +231,8 @@ int main(int argc, char** argv) {
 
 		HighResolutionTime(&endTimeFrame);
 
-		lastRenderTime = HighResolutionDiffNanoSec(startTime, endTimeRender);
-		lastFrameTime = HighResolutionDiffNanoSec(startTime, endTimeFrame);
+		lastRenderTime = renderer.getLastRenderTime();
+		lastFrameTime = HighResolutionDiffNanoSec(startTimeFrame, endTimeFrame);
 
 		// Wenn das Fenster den Fokus verliert, dann nicht weiter rendern
         while (!device->isWindowActive()) {
