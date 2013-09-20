@@ -222,9 +222,12 @@
 		<Unit filename="include/Building/Building.h" />
 		<Unit filename="include/Building/BuildingChassis.h" />
 		<Unit filename="include/Building/BuildingGround.h" />
+		<Unit filename="include/Building/BuildingReference.h" />
 		<Unit filename="include/Event/IEntityEventReceiver.h" />
+		<Unit filename="include/Map/IMapBuildingsObserver.h" />
 		<Unit filename="include/Map/Map.h" />
 		<Unit filename="include/Map/MapBitLayer.h" />
+		<Unit filename="include/Map/MapBuildings.h" />
 		<Unit filename="include/Map/MapPosition.h" />
 		<Unit filename="include/Map/MapPositionIterator.h" />
 		<Unit filename="include/Map/MapRectArea.h" />
@@ -260,8 +263,10 @@
 		</Unit>
 		<Unit filename="src/Building/BuildingChassis.cpp" />
 		<Unit filename="src/Building/BuildingGround.cpp" />
+		<Unit filename="src/Building/BuildingReference.cpp" />
 		<Unit filename="src/Map/Map.cpp" />
 		<Unit filename="src/Map/MapBitLayer.cpp" />
+		<Unit filename="src/Map/MapBuildings.cpp" />
 		<Unit filename="src/Map/MapRectArea.cpp" />
 		<Unit filename="src/Map/MapViewerManager.cpp" />
 		<Unit filename="src/Network/PlayerNetworkConnection.cpp" />
