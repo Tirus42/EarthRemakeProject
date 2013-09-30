@@ -44,12 +44,12 @@ class MapRectArea {
 
 		/// Gibt die Breite zurück (X-Achse)
 		uint16_t getWidth() const {
-			return maxEdge.getX() - minEdge.getX();
+			return (maxEdge.getX() - minEdge.getX()) + 1;
 		}
 
 		/// Gibt die Höhe zurück (Y-Achse)
 		uint16_t getHeight() const {
-			return maxEdge.getY() - minEdge.getY();
+			return (maxEdge.getY() - minEdge.getY()) + 1;
 		}
 
 		/// Gibt die Anzahl an Feldern zurück (Die Fläche)
