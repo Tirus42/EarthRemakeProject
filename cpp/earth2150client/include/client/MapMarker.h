@@ -15,6 +15,8 @@ namespace irr {
 
 class MapMarkerManager;
 class MapPosition;
+class MapRectArea;
+class VisualMap;
 
 /**
 * Bietet die Schnittstelle, um einzelne Felder auf der Karte zu Markieren.
@@ -34,12 +36,17 @@ class MapMarker {
 		/// MeshBuffer welcher auf die Map gezeichnet wird
 		irr::scene::CMeshBuffer<irr::video::S3DVertex>* meshBuffer;
 
+		void addFieldToMesh(const VisualMap& map, uint16_t x, uint16_t y);
+
 	public:
 		MapMarker(const MapMarkerManager& manager, const irr::video::SMaterial& mat);
 		~MapMarker();
 
 		/// Markiert ein weiteres Feld auf der Map
 		void addField(const MapPosition& position);
+
+		/// Füllt das Gebiet mit der Markierung aus
+		void addMapRectArea(const MapRectArea& area);
 
 		/// Entfernt alle Markierungen von diesem Marker
 		void clear();
