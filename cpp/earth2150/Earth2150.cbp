@@ -279,6 +279,7 @@
 		<Unit filename="src/Map/Map.cpp" />
 		<Unit filename="src/Map/MapBitLayer.cpp" />
 		<Unit filename="src/Map/MapBuildings.cpp" />
+		<Unit filename="src/Map/MapPosition.cpp" />
 		<Unit filename="src/Map/MapRectArea.cpp" />
 		<Unit filename="src/Map/MapViewerManager.cpp" />
 		<Unit filename="src/Network/PlayerNetworkConnection.cpp" />

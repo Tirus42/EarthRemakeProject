@@ -63,6 +63,12 @@ class MapRectArea {
 		/// Prüft ob eine andere Fläche komplett innerhalb dieser ist
 		bool isInside(const MapRectArea& area) const;
 
+		/// Prüft ob das Gebiet auf der Karte gültig ist
+		bool isValidOnMap(const Map& map) const;
+
+		/// Prüft ob das Gebiet im nutzbaren Bereich der Karte liegt
+		bool isValidOnUsableMapArea(const Map& map) const;
+
 };
 
 

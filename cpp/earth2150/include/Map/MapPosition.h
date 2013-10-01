@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+class Map;
+
 /**
 * Stellt eine Position auf einer Karte da
 */
@@ -12,16 +14,25 @@ class MapPosition {
 		uint16_t y;
 
 	public:
-		MapPosition() : x(~0), y(~0) {};
-		MapPosition(uint16_t x, uint16_t y) : x(x), y(y) {};
+		/// Standardkonstruktur, erzeugt eine "InvalidPosition"
+		MapPosition();
+
+		/// Konstruktor
+		MapPosition(uint16_t x, uint16_t y);
 
 		bool operator<(const MapPosition& cc) const {
 			return x < cc.getX() ? true : (x > cc.getX() ? false : (y < cc.getY()));
 		}
 
-		/// Getter
-		uint16_t getX() const {return x;}
-		uint16_t getY() const {return y;}
+		/// Gibt die X-Position zurück
+		uint16_t getX() const {
+			return x;
+		}
+
+		/// Gibt die Y-Position zurück
+		uint16_t getY() const {
+			return y;
+		}
 
 		/// Setter
 		void setX(uint16_t x) {this->x = x;}
@@ -29,9 +40,25 @@ class MapPosition {
 		void setXY(uint16_t x, uint16_t y) {this->x = x; this->y = y;}
 
 		/// Prüft ob eine Position gesetzt wurde
-		bool isValid() const {
-			return (x != (uint16_t)(~0) && y != (uint16_t)(~0));
-		}
+		bool isValid() const;
+
+		/// Prüft ob die Position auf einer bestimmten Karte gültig ist
+		bool isValidOnMap(const Map& map) const;
+
+		/// Prüft ob die Position innerhalb des "MapBorders" liegt
+		bool isValidOnUsableMapArea(const Map& map) const;
+
+		/// Gibt die kleinste Distanz zum Kartenrand auf der X-Achse zurück (Nicht dem nutzbaren Rand!)
+		uint16_t getDistToMapBorderX(const Map& map) const;
+
+		/// Gibt die kleinste Distanz zum Kartenrand auf der Y-Achse zurück (Nicht dem nutzbaren Rand!)
+		uint16_t getDistToMapBorderY(const Map& map) const;
+
+		/// Gibt die kleinste Distanz zum nutzbaren Kartenrand auf der X-Achse zurück
+		uint16_t getDistToUseableMapBorderX(const Map& map) const;
+
+		/// Gibt die kleinste Distanz zum nutzbaren Kartenrand auf der Y-Achse zurück
+		uint16_t getDistToUseableMapBorderY(const Map& map) const;
 
 		/// Gibt eine ungültige Position zurück (isValid == false)
 		static MapPosition InvalidPosition() {

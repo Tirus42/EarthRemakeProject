@@ -82,3 +82,11 @@ bool MapRectArea::isInside(const MapRectArea& area) const {
 
 	return true;
 }
+
+bool MapRectArea::isValidOnMap(const Map& map) const {
+	return minEdge.isValidOnMap(map) && maxEdge.isValidOnMap(map);
+}
+
+bool MapRectArea::isValidOnUsableMapArea(const Map& map) const {
+	return minEdge.isValidOnUsableMapArea(map) && maxEdge.isValidOnUsableMapArea(map);
+}
