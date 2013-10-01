@@ -35,7 +35,8 @@ class IngameGUI : public IGUI {
 			GUI_TEST_CAMPOS_2,
 			GUI_TEST_CAMPOS_3,
 			GUI_TEST_CAMPOS_4,
-			GUI_TEST_CAMPOS_PERFORMANCETEST
+			GUI_TEST_CAMPOS_PERFORMANCETEST,
+			GUI_TEST_ALPHA_CONTROL
 		};
 
 		IngameGUI(irr::gui::IGUIEnvironment* guiEnv, irr::scene::ICameraSceneNode* mainCam);

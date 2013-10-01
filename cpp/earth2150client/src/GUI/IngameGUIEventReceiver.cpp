@@ -57,9 +57,26 @@ bool IngameGUIEventReceiver::OnEvent(const irr::SEvent& event) {
 					gui->getMainCamera()->setPosition(core::vector3df(-100, 100, -100));
 					gui->getMainCamera()->setTarget(core::vector3df(1000, 00, 1000));
 					return true;
-
 			}
 
+		} else if (event.GUIEvent.EventType == gui::EGET_SCROLL_BAR_CHANGED) {
+			// Momentan haben wir nur eine Scroll Bar -> Alpha Control
+			u32 newAlpha = 255 - ((gui::IGUIScrollBar*)event.GUIEvent.Caller)->getPos();
+
+			// Hole Ptr auf Skin der GUI
+			gui::IGUISkin* skin = gui->getGUIEnvironment()->getSkin();
+
+			// Setze von allen GUI Elementen den neuen Alpha Wert
+			for (u32 i = 0; i < gui::EGDC_COUNT; ++i) {
+				// Hole aktuelle Farbe
+				video::SColor col = skin->getColor((gui::EGUI_DEFAULT_COLOR)i);
+
+				col.setAlpha(newAlpha);
+
+				skin->setColor((gui::EGUI_DEFAULT_COLOR)i, col);
+			}
+
+			return true;
 		}
 
 		if (gui->researchWindow)

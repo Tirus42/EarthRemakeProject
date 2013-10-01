@@ -77,6 +77,11 @@ void IngameGUI::buildGUI() {
 	// Einen Position, welche die gesammte Karte überblickt
 	env->addButton(core::rect<s32>(10, 130, 110, 150), camTab, GUI_TEST_CAMPOS_PERFORMANCETEST, L"Performance Test Position", L"Position von wo aus die ganze Karte sichtbar ist");
 
+	// Erstelle eine Scrollbar um die Durchsichtigkeit der gesammten GUI einzustellen
+	gui::IGUIScrollBar* alphaControl = env->addScrollBar(false, core::rect<s32>(950, 10, 970, 190), panel, GUI_TEST_ALPHA_CONTROL);
+	alphaControl->setMax(255);
+	alphaControl->setPos(127);
+	alphaControl->setToolTipText(L"Bestimmt die Durchsichtigkeit der GUI");
 }
 
 void IngameGUI::resize(s32 newWidth, s32 newHeight) {

@@ -18,6 +18,10 @@ class IGUI {
 		IGUI(irr::gui::IGUIEnvironment* guiEnv) : env(guiEnv) {env->grab();};
 		virtual ~IGUI() {env->drop();};
 
+		irr::gui::IGUIEnvironment* getGUIEnvironment() {
+			return env;
+		}
+
 		void show() {};
 		void hide() {};
 
