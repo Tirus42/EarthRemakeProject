@@ -182,6 +182,10 @@
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>
+		<Unit filename="../earth2150client/include/renderer/ScreenRendererHelper.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
 		<Unit filename="../earth2150client/src/GUI/IngameGUI.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
@@ -219,6 +223,10 @@
 			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/renderer/NormalScreenRenderer.cpp">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/src/renderer/ScreenRendererHelper.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>

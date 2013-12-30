@@ -137,6 +137,9 @@ int main(int argc, char** argv) {
     // FirstPerson Kamera erstellen (Steuerung mit Maus + Pfeiltasten)
     cam = smgr->addCameraSceneNodeFPS(0, 100.0f, 0.25f);
 
+    cam->setPosition(core::vector3df(100, 100, 100));
+    cam->setTarget(core::vector3df(512, 0, 512));
+
 	// Karte erstellen
 	VisualMap map(driver, smgr, 1024, 1024);
 
