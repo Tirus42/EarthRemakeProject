@@ -28,11 +28,11 @@ void ScreenRendererHelper::buildQuad(const core::recti& rect, core::triangle3df&
 	core::vector3df& v3 = t2.pointB;
 
 	// Setze Eckpunkte entsprechend der Ecken
-	v0.X = v1.X = -1 + rect.UpperLeftCorner.X * invWidth;
-	v2.X = v3.X = -1 + rect.LowerRightCorner.X * invWidth;
+	v0.X = v1.X = -1 + rect.UpperLeftCorner.X * invWidth * 2.f;
+	v2.X = v3.X = -1 + rect.LowerRightCorner.X * invWidth * 2.f;
 
-	v0.Y = v2.Y = 1 - rect.LowerRightCorner.Y * invHeight;
-	v1.Y = v3.Y = 1 - rect.UpperLeftCorner.Y * invHeight;
+	v0.Y = v2.Y = 1 - rect.LowerRightCorner.Y * invHeight * 2.f;
+	v1.Y = v3.Y = 1 - rect.UpperLeftCorner.Y * invHeight * 2.f;
 
 	v0.Z = v1.Z = v2.Z = v3.Z = 0;
 
