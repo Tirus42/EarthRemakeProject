@@ -34,7 +34,7 @@ class VisualMapPart {
 
 		irr::scene::CMeshBuffer<irr::video::S3DVertex>* getMeshBuffer() const {return meshBuffer;}
 
-
+		void updateMaterial(const VisualMap& map);
 };
 
 

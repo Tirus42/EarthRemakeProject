@@ -43,7 +43,18 @@ class VisualMap : public Map {
 		/// Gibt die 3D Höhe des Feldes auf der Karte zurück (Formel wird ggf. noch angepasst!)
 		double getField3DHeight(uint32_t position) const {return getRawHeight(position) / 2560.0;}
 
-		const irr::video::SMaterial& getMaterial(int32_t index) const {return materials[index];}
+		/// Gibt die Referenz auf das Material zurück
+		const irr::video::SMaterial& getMaterial(int32_t index) const {
+			return materials[index];
+		}
+
+		/// Gibt die Referenz auf das Material zurück
+		irr::video::SMaterial& getMaterial(int32_t index) {
+			return materials[index];
+		}
+
+		/// Aktualisiert die Interne Struktur, muss aufgerufen werden wenn das Material verändert wurde!
+		void updateMaterial();
 
 		/// Test Methode zum erstellen aller Map Parts
 		void build();

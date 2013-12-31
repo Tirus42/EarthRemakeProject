@@ -60,6 +60,19 @@ VisualMap::~VisualMap() {
 	driver->drop();
 }
 
+void VisualMap::updateMaterial() {
+	for (size_t i = 0; i < mapParts.size(); ++i) {
+		mapParts[i]->updateMaterial(*this);
+	}
+
+	for (size_t i = 0; i < mesh->getMeshBufferCount(); ++i) {
+		mesh->getMeshBuffer(i)->getMaterial() = materials[0];
+	}
+
+	node->getMaterial(0) = materials[0];
+	node->setMaterialType(materials[0].MaterialType);
+}
+
 void VisualMap::build() {
 	int32_t width = getWidth() / VISUAL_PART_SIZE;
 	int32_t height = getHeight() / VISUAL_PART_SIZE;

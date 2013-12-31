@@ -82,7 +82,12 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 	}
 
 	// Material zuweißen (temp) und Mesh-Buffer in Mesh setzen
-	meshBuffer->Material = map.getMaterial(0);
+	updateMaterial(map);
 
 	meshBuffer->recalculateBoundingBox();
+}
+
+void VisualMapPart::updateMaterial(const VisualMap& map) {
+	// Todo: richtiges Material verwenden
+	meshBuffer->Material = map.getMaterial(0);
 }
