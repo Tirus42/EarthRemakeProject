@@ -303,6 +303,19 @@ uint16_t Map::getHeightDiffOnField(uint32_t position) const {
 	return maxValue - minValue;
 }
 
+uint16_t Map::getFieldHeight(uint32_t position, float x, float y) const {
+	const uint16_t h1 = heightMap[position];
+	const uint16_t h2 = heightMap[addEast(position)];
+	const uint16_t h3 = heightMap[addSouth(position)];
+	const uint16_t h4 = heightMap[addSouthEast(position)];
+
+	// Bestimme Höhe durch Bilineare Interpolation
+	const uint16_t hTop = (1.f - x) * h1 + x * h2;
+	const uint16_t hBot = (1.f - x) * h3 + x * h4;
+
+	return (1.f - y) * hTop + y * hBot;
+}
+
 bool Map::isFieldFree(uint32_t position) const {
 	// Todo: Auf Gebäude und andere Objekte prüfen
 	return !getFieldStatusFlag(position, STATUS_UNIT);

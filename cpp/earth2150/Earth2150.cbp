@@ -249,6 +249,7 @@
 		<Unit filename="include/Map/MapBitLayer.h" />
 		<Unit filename="include/Map/MapBuildings.h" />
 		<Unit filename="include/Map/MapPosition.h" />
+		<Unit filename="include/Map/MapPositionFloat.h" />
 		<Unit filename="include/Map/MapPositionIterator.h" />
 		<Unit filename="include/Map/MapRectArea.h" />
 		<Unit filename="include/Map/MapViewerManager.h" />
@@ -288,6 +289,7 @@
 		<Unit filename="src/Map/MapBitLayer.cpp" />
 		<Unit filename="src/Map/MapBuildings.cpp" />
 		<Unit filename="src/Map/MapPosition.cpp" />
+		<Unit filename="src/Map/MapPositionFloat.cpp" />
 		<Unit filename="src/Map/MapRectArea.cpp" />
 		<Unit filename="src/Map/MapViewerManager.cpp" />
 		<Unit filename="src/Network/PlayerNetworkConnection.cpp" />

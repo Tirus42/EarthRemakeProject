@@ -20,6 +20,9 @@ class MapPosition {
 		/// Konstruktor
 		MapPosition(uint16_t x, uint16_t y);
 
+		/// Destruktor
+		virtual ~MapPosition() {};
+
 		bool operator<(const MapPosition& cc) const {
 			return x < cc.getX() ? true : (x > cc.getX() ? false : (y < cc.getY()));
 		}

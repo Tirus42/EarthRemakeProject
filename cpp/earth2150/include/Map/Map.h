@@ -152,6 +152,9 @@ class Map {
 		/// des angegebenen Index aus zurück.
 		uint8_t getDirections(uint32_t index) const{return movementMap[index];}
 
+		/// Gibt die Höhe an einer Position auf dem Feld zurück (x, y in [0, 1])
+		uint16_t getFieldHeight(uint32_t position, float x, float y) const;
+
 		/// Gibt true zurück, falls dieses Feld frei ist.
 		/// (Weder ein Gebäude noch eine Einheit darauf)
 		bool isFieldFree(uint32_t position) const;
