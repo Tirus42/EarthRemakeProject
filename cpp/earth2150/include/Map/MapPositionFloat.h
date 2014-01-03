@@ -7,7 +7,7 @@
 * Stellt eine Position auf der Karte dar.
 * Dabei wird die Verschiebung innerhalb eines Feldes zusätzlich gespeichert.
 */
-class MapPositionFloat : private MapPosition {
+class MapPositionFloat : public MapPosition {
 	private:
 		/// Beschreibt verschiebung innerhalb des Feldes [0, 1]
 		float dx;

@@ -19,6 +19,8 @@ class ScreenRendererHelper {
 		/// Setzt die Vertices der Triangles so das diese ein Quader entsprechend des rect bilden
 		void buildQuad(const irr::core::recti& rect, irr::core::triangle3df& t1, irr::core::triangle3df& t2) const;
 
+		void buildFullScreenQuad(irr::core::triangle3df& t1, irr::core::triangle3df& t2) const;
+
 };
 
 

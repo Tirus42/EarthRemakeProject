@@ -40,3 +40,21 @@ void ScreenRendererHelper::buildQuad(const core::recti& rect, core::triangle3df&
 	t2.pointA = v1;
 	t2.pointC = v2;
 }
+
+void ScreenRendererHelper::buildFullScreenQuad(core::triangle3df& t1, core::triangle3df& t2) const {
+	t1.pointA.set(-1, -1, 0);
+	t1.pointB.set(-1, 1, 0);
+	t1.pointC.set(1, -1, 0);
+
+	t2.pointA = t1.pointB;
+	t2.pointC = t1.pointC;
+	t2.pointB.set(1, 1, 0);
+
+	//core::vector3df v0(-1, -1, 0);
+	//core::vector3df v1(-1, 1, 0);
+	//core::vector3df v2(1, -1, 0);
+	//core::vector3df v3(1, 1, 0);
+
+	//core::triangle3df trig1(v0, v1, v2);
+	//core::triangle3df trig2(v1, v3, v2);
+}
