@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <memory.h>
 
+class BuildingDirection;
+
 class BuildingGround {
 	private:
 		/// Gebäude Breite (X Achse)
@@ -47,8 +49,10 @@ class BuildingGround {
 			return height;
 		}
 
-		/// Git den Typ der Bodenfläche zurück
+		/// Gibt den Typ der Bodenfläche zurück
 		GroundType getField(uint8_t x, uint8_t y) const;
+
+		GroundType getField(uint8_t x, uint8_t y, const BuildingDirection& buildingDirection) const;
 
 		/// Setzt den Typ eines Feldes
 		void setField(uint8_t x, uint8_t y, GroundType type);

@@ -241,6 +241,7 @@
 		<Unit filename="../tf/src/tf/time.cpp" />
 		<Unit filename="include/Building/Building.h" />
 		<Unit filename="include/Building/BuildingChassis.h" />
+		<Unit filename="include/Building/BuildingDirection.h" />
 		<Unit filename="include/Building/BuildingGround.h" />
 		<Unit filename="include/Building/BuildingReference.h" />
 		<Unit filename="include/Event/IEntityEventReceiver.h" />
@@ -283,6 +284,7 @@
 			<Option target="Linux - Server - Debug" />
 		</Unit>
 		<Unit filename="src/Building/BuildingChassis.cpp" />
+		<Unit filename="src/Building/BuildingDirection.cpp" />
 		<Unit filename="src/Building/BuildingGround.cpp" />
 		<Unit filename="src/Building/BuildingReference.cpp" />
 		<Unit filename="src/Map/Map.cpp" />
