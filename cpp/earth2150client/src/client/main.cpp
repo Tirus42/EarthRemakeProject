@@ -31,9 +31,10 @@ using namespace gui;
 // Temp, Todo: In eigene Klasse Packen
 static const irr::s32 ID_MAPPICK = 1 << 0;
 
+// Scene Node der Kamera Todo: Eigene Klasse für Kameraverwaltung schreiben
 scene::ICameraSceneNode* cam;
 
-// Kleine Eventhandler Klasse, um das Fangen der Maus Umschalten zu können
+/// Kleine Eventhandler Klasse, um das Fangen der Maus Umschalten zu können
 class CamMouseDisabler : public IEventReceiver {
 	private:
 		IEventReceiver* recv;
@@ -73,36 +74,43 @@ class CamMouseDisabler : public IEventReceiver {
 
 };
 
+/// Läd die Konfiguration des Clienten, erstellt die Datei falls noch nicht vorhanden
+void loadConfig(ClientConfig& config) {
+	// Erzeuge ein Irrlicht Null-Device um zugriff auf das Dateisystem zu erhalten
+	IrrlichtDevice *device = createDevice(EDT_NULL);
+
+	IXMLReader *configReader = device->getFileSystem()->createXMLReader("clientconfig.xml");
+
+	// Wenn Datei lesbar, dann Config lesen
+	if (configReader) {
+		config.loadXMLFile(configReader);
+
+		configReader->drop();
+	} else {
+		// Standardwerte setzten und Config Datei schreiben
+		config.setDefaultValues();
+
+		IXMLWriter *configWriter = device->getFileSystem()->createXMLWriter("clientconfig.xml");
+
+		if (configWriter) {
+			config.saveXMLFile(configWriter);
+
+			configWriter->drop();
+		}
+	}
+
+	device->drop();
+}
+
 int main(int argc, char** argv) {
 
 	ClientConfig config;
 
+	// Config Datei Laden wenn vorhanden, andernfalls mit Standardwerten erstellen.
+	loadConfig(config);
+
 	// Hochauflösenden Timer initiieren (für exakte Zeitmessungen)
 	InitHighResolutionTimer();
-
-	{	// Config Datei Laden wenn vorhanden, andernfalls mit Standardwerten erstellen.
-		IrrlichtDevice *device = createDevice(EDT_NULL);
-
-		IXMLReader *configReader = device->getFileSystem()->createXMLReader("clientconfig.xml");
-
-		if (configReader) {
-			config.loadXMLFile(configReader);
-
-			configReader->drop();
-		} else {
-			config.setDefaultValues();
-
-			IXMLWriter *configWriter = device->getFileSystem()->createXMLWriter("clientconfig.xml");
-
-			if (configWriter) {
-				config.saveXMLFile(configWriter);
-
-				configWriter->drop();
-			}
-		}
-
-		device->drop();
-	}
 
     IrrlichtDevice *device = createDeviceEx(config.Parameter());
 
@@ -110,12 +118,6 @@ int main(int argc, char** argv) {
 	if (!device)
 		return EXIT_FAILURE;
 
-    /*
-    Get a pointer to the video driver, the SceneManager and the
-    graphical user interface environment, so that
-    we do not always have to write device->getVideoDriver(),
-    device->getSceneManager() and device->getGUIEnvironment().
-    */
     IVideoDriver* driver = device->getVideoDriver();
     ISceneManager* smgr = device->getSceneManager();
     IGUIEnvironment* guienv = device->getGUIEnvironment();
@@ -244,16 +246,6 @@ int main(int argc, char** argv) {
         }
     }
 
-    /*
-    After we are finished, we have to delete the Irrlicht Device
-    created before with createDevice(). In the Irrlicht Engine,
-    you will have to delete all objects you created with a method or
-    function which starts with 'create'. The object is simply deleted
-    by calling ->drop().
-    See the documentation at
-    http://irrlicht.sourceforge.net//docu/classirr_1_1IUnknown.html#a3
-    for more information.
-    */
     device->drop();
 
     return 0;
