@@ -81,7 +81,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option='-isystem &quot;$(#irrlicht)\include&quot;' />
+					<Add option='-isystem &quot;$(#irrlicht)/include&quot;' />
 					<Add directory="../earth2150client/include" />
 					<Add directory="$(#irrlicht)/include" />
 				</Compiler>
@@ -117,6 +117,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option='-isystem &quot;$(#irrlicht)/include&quot;' />
 					<Add directory="../earth2150client/include" />
 					<Add directory="$(#irrlicht)/include" />
 				</Compiler>
@@ -151,6 +152,18 @@
 			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/include/GUI/ResearchWindow.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/include/client/AbstractGameState.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/include/client/GameState/MainMenu.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/include/client/GameState/TestGameState.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>
@@ -195,6 +208,18 @@
 			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/GUI/ResearchWindow.cpp">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/src/client/AbstractGameState.cpp">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/src/client/GameState/MainMenu.cpp">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/src/client/GameState/TestGameState.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>
