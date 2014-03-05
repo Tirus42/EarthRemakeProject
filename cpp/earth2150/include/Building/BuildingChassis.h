@@ -3,6 +3,8 @@
 
 #include "Building/BuildingGround.h"
 
+#include <string>
+
 /**
 * Stellt die Gebäude Grundinformationen dar.
 * Speichert Modell, Größe, Typ usw. des Gebäudes.
@@ -14,18 +16,27 @@ class BuildingChassis {
 		/// Objekt das die Bodenfläche des Gebäudes bestimmt
 		BuildingGround ground;
 
+		/// Name des Chassis
+		std::string name;
+
 	public:
-		BuildingChassis(uint8_t width, uint8_t height);
+		BuildingChassis(uint8_t width, uint8_t height, const std::string& name);
 		~BuildingChassis();
 
+		/// Gibt den BuildingGround zurück, die Flächennutzung auf der Karte
 		BuildingGround& getBuildingGround() {
 			return ground;
 		}
 
+		/// Gibt den BuildingGround zurück, die Flächennutzung auf der Karte
 		const BuildingGround& getBuildingGround() const {
 			return ground;
 		}
 
+		/// Gibt den Namen des Gebäudes zurück
+		const std::string& getName() const {
+			return name;
+		}
 
 };
 

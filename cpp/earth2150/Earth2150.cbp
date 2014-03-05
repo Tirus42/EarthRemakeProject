@@ -269,6 +269,7 @@
 		<Unit filename="include/Building/BuildingDirection.h" />
 		<Unit filename="include/Building/BuildingGround.h" />
 		<Unit filename="include/Building/BuildingReference.h" />
+		<Unit filename="include/Building/GlobalBuildingList.h" />
 		<Unit filename="include/Event/IEntityEventReceiver.h" />
 		<Unit filename="include/Map/IMapBuildingsObserver.h" />
 		<Unit filename="include/Map/Map.h" />
@@ -285,6 +286,7 @@
 		<Unit filename="include/PathFinder/NavigatorFactory.h" />
 		<Unit filename="include/PathFinder/TNavigator.h" />
 		<Unit filename="include/PathFinder/TSearcher.h" />
+		<Unit filename="include/Player/PlayerBuildingList.h" />
 		<Unit filename="include/Player/PlayerRelationTable.h" />
 		<Unit filename="include/Unit/MovingUnit.h" />
 		<Unit filename="include/Unit/Unit.h" />
@@ -313,6 +315,7 @@
 		<Unit filename="src/Building/BuildingDirection.cpp" />
 		<Unit filename="src/Building/BuildingGround.cpp" />
 		<Unit filename="src/Building/BuildingReference.cpp" />
+		<Unit filename="src/Building/GlobalBuildingList.cpp" />
 		<Unit filename="src/Map/Map.cpp" />
 		<Unit filename="src/Map/MapBitLayer.cpp" />
 		<Unit filename="src/Map/MapBuildings.cpp" />
@@ -325,6 +328,7 @@
 		<Unit filename="src/Network/TestServer.cpp" />
 		<Unit filename="src/PathFinder/NavigatorFactory.cpp" />
 		<Unit filename="src/PathFinder/TNavigator.cpp" />
+		<Unit filename="src/Player/PlayerBuildingList.cpp" />
 		<Unit filename="src/Player/PlayerRelationTable.cpp" />
 		<Unit filename="src/Unit/MovingUnit.cpp" />
 		<Unit filename="src/Unit/Unit.cpp" />
