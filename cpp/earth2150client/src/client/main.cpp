@@ -1,10 +1,13 @@
-#include <irrlicht.h>
-
 #include "config/ClientConfig.h"
 
 #include "client/GameState/MainMenu.h"
+#include "client/GameState/TestGameState.h"
+
+#include <unistd.h>	// für getopt()
+#include <irrlicht.h>
 
 #include "tf/time.h"
+
 
 using namespace irr;
 
@@ -52,6 +55,17 @@ void loadConfig(ClientConfig& config) {
 
 int main(int argc, char** argv) {
 
+	bool skipMenu = false;
+
+	{
+		int c;
+
+		while ((c = getopt(argc, argv, "s")) != -1) {
+			if (c == 's')
+				skipMenu = true;
+		}
+	}
+
 	ClientConfig config;
 
 	// Config Datei Laden wenn vorhanden, andernfalls mit Standardwerten erstellen.
@@ -77,7 +91,13 @@ int main(int argc, char** argv) {
 	device->setWindowCaption(caption.c_str());
 
 	// Erstelle das Hauptmenü
-	AbstractGameState* currentGameState = new MainMenu(device);
+	AbstractGameState* currentGameState = 0;
+
+	if (skipMenu) {
+		currentGameState = new TestGameState(device);
+	} else {
+		currentGameState = new MainMenu(device);
+	}
 
 	// Alles weitere übernimmt der aktuelle GameState
 	while (currentGameState != 0) {

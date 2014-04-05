@@ -2,21 +2,16 @@
 
 using namespace irr;
 
-ScreenRendererHelper::ScreenRendererHelper(s32 width, s32 height) :
-	invWidth(),
-	invHeight() {
+ScreenRendererHelper::ScreenRendererHelper(const core::dimension2du& newSize) :
+	invSize() {
 
-	setScreenSize(width, height);
-}
-
-ScreenRendererHelper::~ScreenRendererHelper() {
-
+	setScreenSize(newSize);
 }
 
 
-void ScreenRendererHelper::setScreenSize(s32 width, s32 height) {
-	invWidth = 1.f / width;
-	invHeight = 1.f / height;
+void ScreenRendererHelper::setScreenSize(const core::dimension2du& newSize) {
+	invSize.Width = 1.f / newSize.Width;
+	invSize.Height = 1.f / newSize.Height;
 }
 
 
@@ -28,11 +23,11 @@ void ScreenRendererHelper::buildQuad(const core::recti& rect, core::triangle3df&
 	core::vector3df& v3 = t2.pointB;
 
 	// Setze Eckpunkte entsprechend der Ecken
-	v0.X = v1.X = -1 + rect.UpperLeftCorner.X * invWidth * 2.f;
-	v2.X = v3.X = -1 + rect.LowerRightCorner.X * invWidth * 2.f;
+	v0.X = v1.X = -1 + rect.UpperLeftCorner.X * invSize.Width * 2.f;
+	v2.X = v3.X = -1 + rect.LowerRightCorner.X * invSize.Width * 2.f;
 
-	v0.Y = v2.Y = 1 - rect.LowerRightCorner.Y * invHeight * 2.f;
-	v1.Y = v3.Y = 1 - rect.UpperLeftCorner.Y * invHeight * 2.f;
+	v0.Y = v2.Y = 1 - rect.LowerRightCorner.Y * invSize.Height * 2.f;
+	v1.Y = v3.Y = 1 - rect.UpperLeftCorner.Y * invSize.Height * 2.f;
 
 	v0.Z = v1.Z = v2.Z = v3.Z = 0;
 

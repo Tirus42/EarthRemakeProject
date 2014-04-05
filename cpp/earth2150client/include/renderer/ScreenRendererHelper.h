@@ -6,15 +6,13 @@
 class ScreenRendererHelper {
 	private:
 		/// Inventierte Bildbreite und Höhe (1 / width, 1 / height)
-		float invWidth;
-		float invHeight;
+		irr::core::dimension2df invSize;
 
 	public:
-		ScreenRendererHelper(irr::s32 width, irr::s32 height);
-		~ScreenRendererHelper();
+		ScreenRendererHelper(const irr::core::dimension2du& newSize);
 
 		/// Setzt die neue Bildgröße
-		void setScreenSize(irr::s32 width, irr::s32 height);
+		void setScreenSize(const irr::core::dimension2du& newSize);
 
 		/// Setzt die Vertices der Triangles so das diese ein Quader entsprechend des rect bilden
 		void buildQuad(const irr::core::recti& rect, irr::core::triangle3df& t1, irr::core::triangle3df& t2) const;
