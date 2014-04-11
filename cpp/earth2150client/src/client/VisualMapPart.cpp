@@ -52,8 +52,16 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 	meshBuffer = new scene::CMeshBuffer<video::S3DVertex>();
 
 	// Vertex und Zuweisungsarray holen und vorskalieren
-	core::array<video::S3DVertex> &vertices = meshBuffer->Vertices;
-	core::array<u16> &indices = meshBuffer->Indices;
+	core::array<video::S3DVertex>& vertices = meshBuffer->Vertices;
+	core::array<u16>& indices = meshBuffer->Indices;
+
+	// Bestimmen wieviel Einträge gebraucht werden
+	const uint32_t countVertices = (size + 1) * (size + 1);
+	const uint32_t countIndices = size * size * 6;
+
+	// Speicher direkt allokieren um unnötiges realloc zu sparen
+	vertices.reallocate(countVertices);
+	indices.reallocate(countIndices);
 
 	// Setze alle Vertices
 	for (uint16_t y = 0; y <= size; ++y) {
@@ -80,6 +88,10 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 			indices.push_back(offset + (size + 1));
 		}
 	}
+
+	// Prüfen ob vorberechnte Anzahl stimmt
+	assert(vertices.size() == countVertices);
+	assert(indices.size() == countIndices);
 
 	// Material zuweißen (temp) und Mesh-Buffer in Mesh setzen
 	updateMaterial(map);
