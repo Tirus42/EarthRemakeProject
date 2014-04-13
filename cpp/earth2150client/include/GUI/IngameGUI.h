@@ -1,7 +1,7 @@
 #ifndef INGAMEGUI_H_INCLUDED
 #define INGAMEGUI_H_INCLUDED
 
-#include "IGUI.h"
+#include "BasicGameInterface.h"
 
 #include <irrlicht.h>
 
@@ -12,10 +12,13 @@ class ResearchWindow;
 * Hält alle Zeiger auf die einzelnen GUI Elemente,
 * die Ingame verfügbar sind.
 */
-class IngameGUI : public IGUI {
+class IngameGUI : public BasicGameInterface {
 	friend class IngameGUIEventReceiver;
 	private:
-		irr::gui::IGUIWindow* panel;
+		irr::gui::IGUITabControl* testTabControl;
+
+		irr::gui::IGUIScrollBar* testAlphaControl;
+
 		irr::scene::ICameraSceneNode* mainCamera;
 
 		ResearchWindow* researchWindow;
@@ -39,7 +42,7 @@ class IngameGUI : public IGUI {
 			GUI_TEST_ALPHA_CONTROL
 		};
 
-		IngameGUI(irr::gui::IGUIEnvironment* guiEnv, irr::scene::ICameraSceneNode* mainCam);
+		IngameGUI(irr::gui::IGUIEnvironment* guiEnv, irr::IrrlichtDevice* device, irr::scene::ICameraSceneNode* mainCam);
 		virtual ~IngameGUI();
 
 		/// Skaliert die GUI auf eine neue Größe (Fenstergröße)

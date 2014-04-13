@@ -4,7 +4,6 @@
 #include "client/MapMarker.h"
 #include "GUI/IngameGUI.h"
 #include "GUI/IngameGUIEventReceiver.h"
-#include "GUI/BasicGameInterface.h"
 #include "renderer/NormalScreenRenderer.h"
 #include "GUI/ResizeEvent.h"
 
@@ -71,13 +70,12 @@ AbstractGameState* TestGameState::run() {
 	rotation->drop();	// Wir brauchen das Handle nicht mehr, das Objekt (light) hat nun selbst eine referenz darauf
 
 	// Erstelle Ingame GUI
-	//IngameGUI gui(guienv, camera);
-	BasicGameInterface gui(guienv, device);
+	IngameGUI gui(guienv, device, camera);
 	gui.setMapName(L"Testkarte");
 
 	// Füge in diesen EventReceiver den GUI-EventReceiver ein (Themoräre Lösung...)
-	setSubEventReceiver(&gui);
-	//setSubEventReceiver(new IngameGUIEventReceiver(&gui));
+	//setSubEventReceiver(&gui);
+	setSubEventReceiver(new IngameGUIEventReceiver(&gui));
 
 	// Testweiße Marker für die Maus Position erstellen (siehe Hauptschleife)
 	video::ITexture* tex = driver->getTexture("position.png");	// Textur Laden

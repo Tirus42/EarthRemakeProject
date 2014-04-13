@@ -4,9 +4,10 @@
 
 using namespace irr;
 
-IngameGUI::IngameGUI(gui::IGUIEnvironment* guiEnv, scene::ICameraSceneNode* mainCam) :
-	IGUI(guiEnv),
-	panel(0),
+IngameGUI::IngameGUI(gui::IGUIEnvironment* guiEnv, IrrlichtDevice* device, scene::ICameraSceneNode* mainCam) :
+	BasicGameInterface(guiEnv, device),
+	testTabControl(0),
+	testAlphaControl(0),
 	mainCamera(mainCam),
 	researchWindow(0) {
 
@@ -20,20 +21,28 @@ IngameGUI::~IngameGUI() {
 }
 
 void IngameGUI::buildGUI() {
-	// Untere Panele erstellen
-	panel = env->addWindow(core::rect<s32>(0, 568, 1024, 768), false, L"TestFenster", 0, GUI_PANEL);
+	// Karten Panel holen
+	gui::IGUIWindow* mapPanel = getMapPanel();
 
-	// Tielleiste und Close Button nicht zeichen/nutzen
-	panel->setDrawTitlebar(false);
-	panel->getCloseButton()->setVisible(false);
+	const core::recti mapRect = mapPanel->getRelativePosition();
 
-	// Fenster nicht verschiebbar machen
-	panel->setDraggable(false);
+	// Infotext als "Karte" einügen
+	env->addStaticText(L"Mit der Rechten Maustaste kann die Kamera von der Maus geloest werden, und damit diese GUI bedient werden",
+						 core::recti(10, 10, mapRect.getWidth() - 10, mapRect.getHeight() - 10), true, true, mapPanel);
+
+
+	// ControlPanel holen
+	gui::IGUIWindow* panel = getControlPanel();
+
+	// Panel Rect holen
+	const core::recti panelRect = panel->getRelativePosition();
 
 	// Einige Test Elemente eingfügen
 
 	// Tab Control mit 3 Tabs
-	gui::IGUITabControl* tab = env->addTabControl(core::rect<s32>(200, 10, 700, 190), panel, true, true, GUI_TABBER);
+	testTabControl = env->addTabControl(core::rect<s32>(10, 10, panelRect.getWidth() - 40, panelRect.getHeight() - 10), panel, true, true, GUI_TABBER);
+
+	gui::IGUITabControl* tab = testTabControl;
 
 	// Tab Leisten Breite und Höhe festlegen
 	tab->setTabExtraWidth(60);
@@ -60,9 +69,6 @@ void IngameGUI::buildGUI() {
 
 	env->addButton(core::rect<s32>(10, 10, 110, 30), t3, GUI_TEST_RESEARCH_WINDOW, L"Öffne Forschungsfenster");
 
-	env->addStaticText(L"Mit der Rechten Maustaste kann die Kamera von der Maus geloest werden, und damit diese GUI bedient werden",
-						 core::rect<s32>(10, 10, 190, 190), true, true, panel, -1, true);
-
 	// Weiteren Tab für Kamera-Positionierung einfügen
 	gui::IGUITab* camTab = tab->insertTab(3, L"Kamera Position");
 	color.set(63, 0, 255, 0);
@@ -75,17 +81,24 @@ void IngameGUI::buildGUI() {
 	env->addButton(core::rect<s32>(10, 100, 110, 120), camTab, GUI_TEST_CAMPOS_4, L"@950:950", L"Setzt die Kamera an die Spielfeldposition 950:950");
 
 	// Einen Position, welche die gesammte Karte überblickt
-	env->addButton(core::rect<s32>(10, 130, 110, 150), camTab, GUI_TEST_CAMPOS_PERFORMANCETEST, L"Performance Test Position", L"Position von wo aus die ganze Karte sichtbar ist");
+	env->addButton(core::rect<s32>(120, 10, 220, 30), camTab, GUI_TEST_CAMPOS_PERFORMANCETEST, L"Performance Test Position", L"Position von wo aus die ganze Karte sichtbar ist");
 
 	// Erstelle eine Scrollbar um die Durchsichtigkeit der gesammten GUI einzustellen
-	gui::IGUIScrollBar* alphaControl = env->addScrollBar(false, core::rect<s32>(950, 10, 970, 190), panel, GUI_TEST_ALPHA_CONTROL);
-	alphaControl->setMax(255);
-	alphaControl->setPos(127);
-	alphaControl->setToolTipText(L"Bestimmt die Durchsichtigkeit der GUI");
+	testAlphaControl = env->addScrollBar(false, core::recti(panelRect.getWidth() - 30, 10, panelRect.getWidth() - 10, panelRect.getHeight() - 10), panel, GUI_TEST_ALPHA_CONTROL);
+	testAlphaControl->setMax(255);
+	testAlphaControl->setPos(127);
+	testAlphaControl->setToolTipText(L"Bestimmt die Opazität der GUI");
 }
 
 void IngameGUI::onResize(const core::dimension2du& newSize) {
-	panel->setRelativePosition(core::rect<s32>(0, newSize.Height - 200, newSize.Width, newSize.Height));
+	BasicGameInterface::onResize(newSize);
+
+	// Panel größe holen
+	const core::recti panelRect = getControlPanel()->getRelativePosition();
+
+	testTabControl->setRelativePosition(core::recti(10, 10, panelRect.getWidth() - 40, panelRect.getHeight() - 10));
+
+	testAlphaControl->setRelativePosition(core::recti(panelRect.getWidth() - 30, 10, panelRect.getWidth() - 10, panelRect.getHeight() - 10));
 }
 
 void IngameGUI::openResearchWindow() {
