@@ -99,7 +99,7 @@ bool IngameGUIEventReceiver::OnEvent(const irr::SEvent& event) {
 			u32 height = 0;
 
 			sscanf(s.c_str(), "%u %u)", &width, &height);
-			gui->resize(width, height);
+			gui->onResize(core::dimension2du(width, height));
 
 			// Camera richtig skalieren
 			gui->getMainCamera()->setAspectRatio((float)width / (float)height);

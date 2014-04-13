@@ -4,7 +4,9 @@
 #include "client/MapMarker.h"
 #include "GUI/IngameGUI.h"
 #include "GUI/IngameGUIEventReceiver.h"
+#include "GUI/BasicGameInterface.h"
 #include "renderer/NormalScreenRenderer.h"
+#include "GUI/ResizeEvent.h"
 
 #include "tf/time.h"
 
@@ -69,10 +71,13 @@ AbstractGameState* TestGameState::run() {
 	rotation->drop();	// Wir brauchen das Handle nicht mehr, das Objekt (light) hat nun selbst eine referenz darauf
 
 	// Erstelle Ingame GUI
-	IngameGUI gui(guienv, camera);
+	//IngameGUI gui(guienv, camera);
+	BasicGameInterface gui(guienv, device);
+	gui.setMapName(L"Testkarte");
 
 	// Füge in diesen EventReceiver den GUI-EventReceiver ein (Themoräre Lösung...)
-	setSubEventReceiver(new IngameGUIEventReceiver(&gui));
+	setSubEventReceiver(&gui);
+	//setSubEventReceiver(new IngameGUIEventReceiver(&gui));
 
 	// Testweiße Marker für die Maus Position erstellen (siehe Hauptschleife)
 	video::ITexture* tex = driver->getTexture("position.png");	// Textur Laden
@@ -156,12 +161,21 @@ bool TestGameState::OnEvent(const irr::SEvent& event) {
 
 		return true;
 	}
-	// Speichere Maus Position für witere behandlung
+	// Speichere Maus Position für weitere behandlung
 	else if (event.EventType == irr::EET_MOUSE_INPUT_EVENT &&
 		event.MouseInput.Event == irr::EMIE_MOUSE_MOVED) {
 
 		mousePosition.X = event.MouseInput.X;
 		mousePosition.Y = event.MouseInput.Y;
+	}
+
+	if (ResizeEvent::isResizeEvent(event)) {
+		const core::dimension2du newSize = ResizeEvent::getResizeEventData(event);
+
+		// Setze Aspekt Ratio der Kamera auf neue Auflösung
+		camera->setAspectRatio((float)newSize.Width / (float)newSize.Height);
+
+		return true;
 	}
 
 	if (subEventReceiver != 0)

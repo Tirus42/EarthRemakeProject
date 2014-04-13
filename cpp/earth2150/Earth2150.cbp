@@ -135,6 +135,9 @@
 			<Add directory="../tf/include" />
 			<Add directory="../ff/include" />
 		</Compiler>
+		<Unit filename="../earth2150client/include/GUI/BasicGameInterface.h">
+			<Option target="Client - Debug" />
+		</Unit>
 		<Unit filename="../earth2150client/include/GUI/IGUI.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
@@ -154,6 +157,9 @@
 		<Unit filename="../earth2150client/include/GUI/ResearchWindow.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/include/GUI/ResizeEvent.h">
+			<Option target="Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/include/client/AbstractGameState.h">
 			<Option target="Client - Debug" />
@@ -198,6 +204,9 @@
 		<Unit filename="../earth2150client/include/renderer/ScreenRendererHelper.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/src/GUI/BasicGameInterface.cpp">
+			<Option target="Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/GUI/IngameGUI.cpp">
 			<Option target="Client - Debug" />

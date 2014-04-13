@@ -43,7 +43,7 @@ class IngameGUI : public IGUI {
 		virtual ~IngameGUI();
 
 		/// Skaliert die GUI auf eine neue Größe (Fenstergröße)
-		void resize(irr::s32 newWidth, irr::s32 newHeight);
+		void onResize(const irr::core::dimension2du& newSize);
 
 		/// Öffnet bzw. Erstellt das Forschungsfenster
 		void openResearchWindow();

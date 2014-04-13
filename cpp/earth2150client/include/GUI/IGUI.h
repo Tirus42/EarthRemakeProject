@@ -10,7 +10,7 @@
 class IGUI {
 	private:
 		IGUI(const IGUI&);
-		IGUI operator=(const IGUI&);
+		IGUI& operator=(const IGUI&);
 	protected:
 		irr::gui::IGUIEnvironment* env;
 
@@ -21,6 +21,9 @@ class IGUI {
 		irr::gui::IGUIEnvironment* getGUIEnvironment() {
 			return env;
 		}
+
+		/// Methode um die GUI an eine neue Auflösung anzupassen
+		virtual void onResize(const irr::core::dimension2du& newSize) = 0;
 
 		void show() {};
 		void hide() {};

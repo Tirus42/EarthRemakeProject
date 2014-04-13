@@ -84,8 +84,8 @@ void IngameGUI::buildGUI() {
 	alphaControl->setToolTipText(L"Bestimmt die Durchsichtigkeit der GUI");
 }
 
-void IngameGUI::resize(s32 newWidth, s32 newHeight) {
-	panel->setRelativePosition(core::rect<s32>(0, newHeight - 200, newWidth, newHeight));
+void IngameGUI::onResize(const core::dimension2du& newSize) {
+	panel->setRelativePosition(core::rect<s32>(0, newSize.Height - 200, newSize.Width, newSize.Height));
 }
 
 void IngameGUI::openResearchWindow() {
