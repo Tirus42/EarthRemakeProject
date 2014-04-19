@@ -139,6 +139,10 @@
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>
+		<Unit filename="../earth2150client/include/GUI/GUIElementEventHandler.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
 		<Unit filename="../earth2150client/include/GUI/IGUI.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
@@ -208,6 +212,10 @@
 			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/GUI/BasicGameInterface.cpp">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/src/GUI/GUIElementEventHandler.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>
