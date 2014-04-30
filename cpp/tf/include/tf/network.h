@@ -6,7 +6,7 @@
 
 class sockaddr_in;
 
-#ifdef WIN32
+#ifdef _WIN32
 	#include "windows.h"
 #else
 	#include <netinet/in.h>

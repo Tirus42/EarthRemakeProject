@@ -83,7 +83,7 @@ class MemoryBlock {
 
 		/// Findet eine freie Speicherstelle.
 		/// \return Die gefundene Stelle, < 0 wenn kein Platz mehr vorhanden ist.
-		ssize_t findFreeSpace() const {
+		size_t findFreeSpace() const {
 			// Todo: Durch Merken der letzten Position optimieren
 			size_t i = 0;
 
@@ -100,8 +100,8 @@ class MemoryBlock {
 
 		/// Fügt ein Element an eine freie Stelle ein.
 		/// \return Die Stelle an welche das Element eingefügt wurde, < 0 wenn kein Platz mehr vorhanden war.
-		ssize_t addEntry(const T& element) {
-			ssize_t pos = findFreeSpace();
+		size_t addEntry(const T& element) {
+			size_t pos = findFreeSpace();
 
 			if (pos < 0)
 				return pos;

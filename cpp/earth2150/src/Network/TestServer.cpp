@@ -58,7 +58,7 @@ void TestServer::run() {
 
 	// Tirus: Da ich leider noch keine "Timer" Funktion unter Linux finden konnte
 	// hier diese Fallunterscheidung, unter Linux ist die FrameZeit daher z.Z. nicht garantiert
-    #ifdef WIN32
+    #ifdef _WIN32
     void* timer = CreateTimer(frameTime);
     #endif
 
@@ -77,7 +77,7 @@ void TestServer::run() {
 			std::cout << "Warnung: Frame Time dauerte " << (MilliSecs() - rTime) << "ms\n";
 		}
 
-        #ifdef WIN32
+        #ifdef _WIN32
             WaitTimer(timer);
         #else
             Delay(frameTime);

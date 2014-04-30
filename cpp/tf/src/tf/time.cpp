@@ -1,6 +1,6 @@
 #include "tf/time.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 	#include <windows.h>
 
 	// Frequenz Wert von QueryPerformanceFrequency()
@@ -12,7 +12,7 @@
 #endif
 
 uint32_t MilliSecs(){
-	#ifdef WIN32
+	#ifdef _WIN32
         return timeGetTime();
 	#else
 		struct timeval tv;
@@ -22,7 +22,7 @@ uint32_t MilliSecs(){
 }
 
 void* CreateTimer(int ms) {
-	#ifdef WIN32
+	#ifdef _WIN32
 	LARGE_INTEGER liDueTime;
     liDueTime.QuadPart = -10000L * ms;
 
@@ -42,44 +42,44 @@ void* CreateTimer(int ms) {
 }
 
 void WaitTimer(void* hTimer) {
-	#ifdef WIN32
+	#ifdef _WIN32
 	WaitForSingleObject(hTimer, INFINITE);
 	#endif
 }
 
 void FreeTimer(void* hTimer) {
-	#ifdef WIN32
+	#ifdef _WIN32
 	CancelWaitableTimer((void*)hTimer);
 	#endif
 }
 
 void Delay(uint32_t ms) {
-	#ifdef WIN32
+	#ifdef _WIN32
 		Sleep(ms);
 	#else
 		usleep(ms * 1000);
-	#endif // WIN32
+	#endif // _WIN32
 }
 
 
 bool InitHighResolutionTimer() {
-	#ifdef WIN32
+	#ifdef _WIN32
 	return QueryPerformanceFrequency((LARGE_INTEGER*)&COUNTER_FREQ);
 	#else
 	return true;
-	#endif // WIN32
+	#endif // _WIN32
 }
 
 void HighResolutionTime(uint64_t* target) {
-	#ifdef WIN32
+	#ifdef _WIN32
 	QueryPerformanceCounter((LARGE_INTEGER*)target);
 	#else
 	clock_gettime(CLOCK_MONOTONIC, (struct timespec*)target);
-	#endif // WIN32
+	#endif // _WIN32
 }
 
 double HighResolutionDiffSec(uint64_t first, uint64_t second) {
-	#ifdef WIN32
+	#ifdef _WIN32
 	uint64_t diff = second - first;
 
 	return ((double)diff) / (double)COUNTER_FREQ;
@@ -91,11 +91,11 @@ double HighResolutionDiffSec(uint64_t first, uint64_t second) {
 	int32_t ns = tSecond.tv_nsec - tFirst.tv_nsec;
 
 	return sec + ns * 0.000000001d;
-	#endif // WIN32
+	#endif // _WIN32
 }
 
 uint64_t HighResolutionDiffNanoSec(uint64_t first, uint64_t second) {
-	#ifdef WIN32
+	#ifdef _WIN32
 	uint64_t diff = (second - first);
 
 	double ns = ((double)diff / (double)COUNTER_FREQ) * 1000000000;
@@ -109,5 +109,5 @@ uint64_t HighResolutionDiffNanoSec(uint64_t first, uint64_t second) {
 	int64_t ns = tSecond.tv_nsec - tFirst.tv_nsec;
 
 	return sec * 1000000000 + ns;
-	#endif // WIN32
+	#endif // _WIN32
 }

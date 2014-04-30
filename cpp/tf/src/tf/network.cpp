@@ -2,7 +2,7 @@
 
 
 #include <iostream>
-#ifdef WIN32
+#ifdef _WIN32
 	#include <windows.h>
 #else
 	#include <sys/types.h>
@@ -13,10 +13,11 @@
 	#include <fcntl.h>
 	#include <netdb.h>
 	#include <memory.h>
+	#include <unistd.h>
 #endif
 
 bool InitNetwork() {
-    #ifdef WIN32
+    #ifdef _WIN32
 	WORD wVersionRequested = MAKEWORD(2, 2);
 	WSADATA wsaData;
 
@@ -101,7 +102,7 @@ SOCKET CreateUDPStream(uint16_t port) {
 }
 
 bool setSocketBlockmode(SOCKET socket, bool nonblock) {
-    #ifdef WIN32
+    #ifdef _WIN32
         u_long iMode = nonblock;
         return ioctlsocket(socket, FIONBIO, &iMode);
     #else
@@ -114,7 +115,7 @@ bool setSocketBlockmode(SOCKET socket, bool nonblock) {
 }
 
 unsigned int socketReadAvail(SOCKET socket) {
-	#ifdef WIN32
+	#ifdef _WIN32
 		u_long result;
 		ioctlsocket(socket, FIONREAD, &result);
 		return result;
@@ -130,7 +131,7 @@ int socketSend(SOCKET socket, const char* buffer, int size) {
 }
 
 int socketRecv(SOCKET socket, char* buffer, int size, bool peekOnly) {
-    #ifdef WIN32
+    #ifdef _WIN32
         int result = recv(socket, buffer, size, (peekOnly ? MSG_PEEK : 0));
         if (result == SOCKET_ERROR) {
 			if (WSAGetLastError() == WSAECONNRESET) {
@@ -149,7 +150,7 @@ SOCKET socketAccept(SOCKET socket) {
 }
 
 void closeSocket(SOCKET socket) {
-	#ifdef WIN32
+	#ifdef _WIN32
 	closesocket(socket);
 	#else
 	close(socket);
