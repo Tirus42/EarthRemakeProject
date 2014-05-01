@@ -35,7 +35,7 @@ bool InitHighResolutionTimer();
 /// Gibt den aktuellen Timer Wert zurück
 void HighResolutionTime(uint64_t* target);
 
-/// Berechnet den Unterschied zwischen 2 Zeitangaben, Rückgabe in Sekunden (Flieskomma)
+/// Berechnet den Unterschied zwischen 2 Zeitangaben, Rückgabe in Sekunden (Fließkomma)
 double HighResolutionDiffSec(uint64_t first, uint64_t second);
 
 /// Berechnet den Unterschied zwischen 2 Zeitangaben, Rückgabe in Nanosekunden

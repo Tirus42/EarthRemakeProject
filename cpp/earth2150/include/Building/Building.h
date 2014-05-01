@@ -7,8 +7,11 @@
 * Diese Klasse stellt eine Oberklasse für jedliches Gebäude dar, welches in der Spielwelt erstellt wurde.
 */
 class Building : public Entity {
+	private:
+		const BuildingTyp typ;
+
 	protected:
-		Building();
+		Building(BuildingTyp typ): typ(typ) {}
 
 	public:
 		/// Auflistung aller möglichen Gebäudearten
@@ -21,7 +24,7 @@ class Building : public Entity {
 		virtual ~Building();
 
 		/// Gibt den Typ des Gebäudes zurück
-		virtual BuildingTyp getTyp() const = 0;
+		BuildingTyp getTyp() const { return typ; };
 
 };
 
