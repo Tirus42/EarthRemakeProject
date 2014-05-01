@@ -3,11 +3,15 @@
 
 #include "Map/MapPosition.h"
 
+#ifndef M_SQRT2
+#define M_SQRT2 1.41421356237309504880
+#endif
+
 class AStarNode{
 	private:
-		static const uint16_t MULTIPLICATOR;
-		static const uint16_t SQRT_1;
-		static const uint16_t SQRT_2;
+		static const uint16_t MULTIPLICATOR = 5741; // 985, 169, 99, 29;
+		static const uint16_t SQRT_1 = MULTIPLICATOR;
+		static const uint16_t SQRT_2 = M_SQRT2 * MULTIPLICATOR;
 
 		AStarNode *previousNode;
 		uint32_t spentCost;
@@ -18,8 +22,8 @@ class AStarNode{
 		AStarNode(const AStarNode& cc);
 		AStarNode& operator=(const AStarNode& cc);
 	public:
-		static uint32_t farDistance(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
-		static uint32_t nearDistance(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1){return (x0==x1 || y0==y1)?SQRT_1:SQRT_2;}
+		static uint32_t farDistance(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+		static uint32_t nearDistance(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){ return (x1==x2 || y1==y2) ? SQRT_1 : SQRT_2; }
 
 		AStarNode(AStarNode *previousNode, uint32_t spentCost, uint32_t estimationCost, uint32_t position);
 
