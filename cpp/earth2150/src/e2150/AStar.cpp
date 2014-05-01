@@ -12,7 +12,7 @@
 
 bool AStar::buildPathAndEraseRAM(AStarNode *currentNode, const std::map<uint32_t, std::vector<AStarNode*> >& openList, const std::deque<AStarNode*>& gc, std::list<uint32_t>& path_list) const{
 	for (AStarNode *node=currentNode;node;node=node->getPreviousNode()){
-		assert(!currentNode->isOld());
+		assert(!currentNode->isRemoved());
 		path_list.push_front(node->getPosition());
 	}
 	path_list.pop_front();
@@ -55,7 +55,7 @@ bool AStar::getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_
 		} else {
 			openList.erase(openListBegin);
 		}
-		if (!currentNode->isOld()){
+		if (!currentNode->isRemoved()){
 			const uint32_t CURRENT_POSITION = currentNode->getPosition();
 			if (CURRENT_POSITION == goal_index) {
 				delete[] nodePositions;
@@ -77,7 +77,7 @@ bool AStar::getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_
 				uint32_t neighbourSpentCost = currentNode->getSpentCost()+AStarNode::nearDistance(CURRENT_X, CURRENT_Y, NEIGHBOUR_X, NEIGHBOUR_Y);
 				AStarNode *node = nodePositions[neighbour];
 				if (node && neighbourSpentCost < node->getSpentCost()) {
-					node->setOld(); //no delete, will be double on list but doesn't matter :)
+					node->remove(); //no delete, will be double on list but doesn't matter :)
 					node = 0;
 				}
 				if (!node) {

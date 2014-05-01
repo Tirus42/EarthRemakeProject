@@ -17,7 +17,7 @@ class AStarNode{
 		uint32_t spentCost;
 		uint32_t estimationCost;
 		uint32_t position;
-		bool old;
+		bool removed;
 
 		AStarNode(const AStarNode& cc);
 		AStarNode& operator=(const AStarNode& cc);
@@ -34,8 +34,8 @@ class AStarNode{
 		AStarNode *getPreviousNode() const{return previousNode;}
 		uint32_t getSpentCost() const{return spentCost;}
 		uint32_t getPosition() const{return position;}
-		void setOld(){old=true;}
-		bool isOld() const{return old;}
+		void remove(){removed=true;}
+		bool isRemoved() const{return removed;}
 };
 
 #endif // ASTARNODE_H

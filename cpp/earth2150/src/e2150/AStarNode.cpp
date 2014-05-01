@@ -11,5 +11,5 @@ AStarNode::AStarNode(AStarNode *previousNode, uint32_t spentCost, uint32_t estim
 		spentCost(spentCost),
 		estimationCost(estimationCost),
 		position(position),
-		old(false){
+		removed(false){
 }
