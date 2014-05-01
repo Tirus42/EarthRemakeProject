@@ -5,6 +5,7 @@
 #include <bitset>
 
 #include <stdint.h>
+#include <stddef.h>
 #include <cassert>
 
 /**
@@ -83,7 +84,7 @@ class MemoryBlock {
 
 		/// Findet eine freie Speicherstelle.
 		/// \return Die gefundene Stelle, < 0 wenn kein Platz mehr vorhanden ist.
-		size_t findFreeSpace() const {
+		ptrdiff_t findFreeSpace() const {
 			// Todo: Durch Merken der letzten Position optimieren
 			size_t i = 0;
 
@@ -100,8 +101,8 @@ class MemoryBlock {
 
 		/// Fügt ein Element an eine freie Stelle ein.
 		/// \return Die Stelle an welche das Element eingefügt wurde, < 0 wenn kein Platz mehr vorhanden war.
-		size_t addEntry(const T& element) {
-			size_t pos = findFreeSpace();
+		ptrdiff_t addEntry(const T& element) {
+			ptrdiff_t pos = findFreeSpace();
 
 			if (pos < 0)
 				return pos;
