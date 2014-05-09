@@ -23,7 +23,7 @@ class AStarNode{
 		AStarNode& operator=(const AStarNode& cc);
 	public:
 		static uint32_t farDistance(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
-		static uint32_t nearDistance(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){ return (x1==x2 || y1==y2) ? SQRT_1 : SQRT_2; }
+		static uint32_t nearDistance(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 
 		AStarNode(AStarNode *previousNode, uint32_t spentCost, uint32_t estimationCost, uint32_t position);
 
