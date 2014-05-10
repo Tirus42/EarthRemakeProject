@@ -74,6 +74,19 @@ void HighResolutionTime(uint64_t* target) {
 	#ifdef _WIN32
 	QueryPerformanceCounter((LARGE_INTEGER*)target);
 	#else
+    if (sizeof(struct timespec) != 8) {  // Unter Linux x64
+        // Schreibe manuell die Werte als 32 Bit
+        struct timespec curTime;
+
+        clock_gettime(CLOCK_MONOTONIC, &curTime);
+
+        uint32_t* target_ = (uint32_t*)target;
+        target_[0] = curTime.tv_sec;
+        target_[1] = curTime.tv_nsec;
+
+        return;
+    }
+
 	clock_gettime(CLOCK_MONOTONIC, (struct timespec*)target);
 	#endif // _WIN32
 }
@@ -84,11 +97,23 @@ double HighResolutionDiffSec(uint64_t first, uint64_t second) {
 
 	return ((double)diff) / (double)COUNTER_FREQ;
 	#else
-	struct timespec& tFirst = (struct timespec&)first;
-	struct timespec& tSecond = (struct timespec&)second;
+    uint32_t sec;
+    int32_t ns;
 
-	uint32_t sec = tSecond.tv_sec - tFirst.tv_sec;
-	int32_t ns = tSecond.tv_nsec - tFirst.tv_nsec;
+    if (sizeof(struct timespec) == 8) {
+        struct timespec& tFirst = (struct timespec&)first;
+        struct timespec& tSecond = (struct timespec&)second;
+
+        sec = tSecond.tv_sec - tFirst.tv_sec;
+        ns = tSecond.tv_nsec - tFirst.tv_nsec;
+    }
+    else {
+        uint32_t* tFirst = (uint32_t*)&first;
+        uint32_t* tSecond = (uint32_t*)&second;
+
+        sec = tSecond[0] - tFirst[0];
+        ns = tSecond[1] - tFirst[1];
+    }
 
 	return sec + ns * 0.000000001d;
 	#endif // _WIN32
@@ -102,11 +127,23 @@ uint64_t HighResolutionDiffNanoSec(uint64_t first, uint64_t second) {
 
 	return ns;
 	#else
-	struct timespec& tFirst = (struct timespec&)first;
-	struct timespec& tSecond = (struct timespec&)second;
+	uint64_t sec;
+	int64_t ns;
 
-	uint64_t sec = tSecond.tv_sec - tFirst.tv_sec;
-	int64_t ns = tSecond.tv_nsec - tFirst.tv_nsec;
+    if (sizeof(struct timespec) == 8) {
+        struct timespec& tFirst = (struct timespec&)first;
+        struct timespec& tSecond = (struct timespec&)second;
+
+        sec = tSecond.tv_sec - tFirst.tv_sec;
+        ns = tSecond.tv_nsec - tFirst.tv_nsec;
+    }
+    else {
+        uint32_t* tFirst = (uint32_t*)&first;
+        uint32_t* tSecond = (uint32_t*)&second;
+
+        sec = tSecond[0] - tFirst[0];
+        ns = tSecond[1] - tFirst[1];
+    }
 
 	return sec * 1000000000 + ns;
 	#endif // _WIN32
