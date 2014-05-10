@@ -3,11 +3,10 @@
 using namespace irr;
 
 ClientConfig::ClientConfig() :
-	param() {
-}
-
-ClientConfig::~ClientConfig() {
-
+	param(),
+	path_TheMoonProject(),
+	path_LostSouls(),
+	latestConfigVersion(true) {
 }
 
 void ClientConfig::setDefaultValues() {
@@ -20,6 +19,11 @@ void ClientConfig::setDefaultValues() {
 	param.WindowSize	= core::dimension2d<u32>(1024, 768);
 	param.Bits			= 32;
 	param.Fullscreen	= false;
+
+	path_TheMoonProject = "";
+	path_LostSouls = "";
+
+	latestConfigVersion = true;
 }
 
 void ClientConfig::saveXMLFile(io::IXMLWriter* writer) const {
@@ -49,11 +53,27 @@ void ClientConfig::saveXMLFile(io::IXMLWriter* writer) const {
 						);
 	writer->writeLineBreak();
 
+	writer->writeComment(L"Path to orginal games to load gamefiles from them");
+	writer->writeLineBreak();
+	writer->writeElement(L"path", true,
+						L"TheMoonProject", core::stringw(path_TheMoonProject).c_str(),
+						L"LostSouls", core::stringw(path_LostSouls).c_str()
+						);
+	writer->writeLineBreak();
+
+	// Schreibe config in Aktueller Version
+	writer->writeElement(L"version", true,
+						L"ConfigVersion", core::stringw(CONFIG_VERSION).c_str()
+						);
+	writer->writeLineBreak();
+
 	// Wurzel schließen
 	writer->writeClosingTag(L"config");
 }
 
 void ClientConfig::loadXMLFile(io::IXMLReader* reader) {
+	latestConfigVersion = false;
+
 	while (reader->read()) {
 		// Wir wollen nur Einträge lesen, welche vom Typ "Element" sind
 		if (reader->getNodeType() != io::EXN_ELEMENT)
@@ -91,6 +111,21 @@ void ClientConfig::loadXMLFile(io::IXMLReader* reader) {
 
 			if (reader->getAttributeValue(L"vsync"))
 				param.Vsync = reader->getAttributeValueAsInt(L"vsync");
+		}
+
+		if (core::stringw(reader->getNodeName()) == L"path") {
+			if (reader->getAttributeValue(L"TheMoonProject"))
+				path_TheMoonProject = reader->getAttributeValue(L"TheMoonProject");
+
+			if (reader->getAttributeValue(L"LostSouls"))
+				path_LostSouls = reader->getAttributeValue(L"LostSouls");
+		}
+
+		if (core::stringw(reader->getNodeName()) == L"version") {
+			if (reader->getAttributeValue(L"ConfigVersion")) {
+				if (reader->getAttributeValueAsInt(L"ConfigVersion") == CONFIG_VERSION)
+					latestConfigVersion = true;
+			}
 		}
 	}
 }

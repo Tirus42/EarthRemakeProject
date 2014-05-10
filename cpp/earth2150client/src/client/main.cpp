@@ -25,6 +25,18 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
+void saveConfig(IrrlichtDevice* device, const ClientConfig& config) {
+	IXMLWriter *configWriter = device->getFileSystem()->createXMLWriter("clientconfig.xml");
+
+	if (configWriter) {
+		config.saveXMLFile(configWriter);
+
+		configWriter->drop();
+	} else {
+		printf("Warnung: Konnte Config Datei nicht schreiben!\n");
+	}
+}
+
 /// Läd die Konfiguration des Clienten, erstellt die Datei falls noch nicht vorhanden
 void loadConfig(ClientConfig& config) {
 	// Erzeuge ein Irrlicht Null-Device um zugriff auf das Dateisystem zu erhalten
@@ -37,17 +49,15 @@ void loadConfig(ClientConfig& config) {
 		config.loadXMLFile(configReader);
 
 		configReader->drop();
+
+		// Wenn Config veraltet dann neu schreiben
+		if (!config.isLatestConfigVersion())
+			saveConfig(device, config);
 	} else {
 		// Standardwerte setzten und Config Datei schreiben
 		config.setDefaultValues();
 
-		IXMLWriter *configWriter = device->getFileSystem()->createXMLWriter("clientconfig.xml");
-
-		if (configWriter) {
-			config.saveXMLFile(configWriter);
-
-			configWriter->drop();
-		}
+		saveConfig(device, config);
 	}
 
 	device->drop();

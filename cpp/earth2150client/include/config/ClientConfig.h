@@ -9,7 +9,21 @@
 */
 class ClientConfig {
 	private:
+		/// Versionsnr der Config Datei, diese Nr sollte bei jedem Ändern dieser Klasse erhöht werden.
+		/// Immer wenn diese Nr != der gespeicherten ist, sollte die Config neu geschrieben werden.
+		static const irr::u16 CONFIG_VERSION = 1;
+
+		/// Irrlicht Parameter für Grafikeinstellungen
 		irr::SIrrlichtCreationParameters param;
+
+		/// Pfard Angabe zu den Spieldaten von The Moon Project
+		irr::io::path path_TheMoonProject;
+
+		/// PFard Angabe zu den Spieldaten von Lost Souls
+		irr::io::path path_LostSouls;
+
+		/// Angabe ob die geladene Config in der aktuellen Version ist (siehe CONFIG_VERSION)
+		bool latestConfigVersion;
 
 		/// Gibt den Namen für die Config für den Treibertyp zurück.
 		static const wchar_t* DriverName(irr::video::E_DRIVER_TYPE driverType);
@@ -19,7 +33,6 @@ class ClientConfig {
 
 	public:
 		ClientConfig();
-		~ClientConfig();
 
 		/// Setzt die Standardwerte für Auflösung, Ausgabegerät ect.
 		void setDefaultValues();
@@ -31,6 +44,14 @@ class ClientConfig {
 		irr::SIrrlichtCreationParameters& Parameter() {return param;};
 		const irr::SIrrlichtCreationParameters& Parameter() const {return param;};
 
+		/// Gibt den Pfard zu dem Spielordner von The Moon Project zurück (kann "" sein)
+		const irr::io::path& getTheMoonProjectPath() const {return path_TheMoonProject;}
+
+		/// Gibt den PFard zu dem Spielordner von Lost Souls zurück (kann "" sein)
+		const irr::io::path& getLostSoulsPath() const {return path_LostSouls;}
+
+		/// Gibt zurück ob die geladene Config in der aktuellen Version ist (siehe CONFIG_VERSION)
+		bool isLatestConfigVersion() const {return latestConfigVersion;}
 };
 
 
