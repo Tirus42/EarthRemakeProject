@@ -308,6 +308,11 @@
 		<Unit filename="include/PathFinder/TSearcher.h" />
 		<Unit filename="include/Player/PlayerBuildingList.h" />
 		<Unit filename="include/Player/PlayerRelationTable.h" />
+		<Unit filename="include/Tests/PathFinderTester.h">
+			<Option target="Server - Debug" />
+			<Option target="Server - Release" />
+			<Option target="Linux - Server - Debug" />
+		</Unit>
 		<Unit filename="include/Unit/MovingUnit.h" />
 		<Unit filename="include/Unit/Unit.h" />
 		<Unit filename="include/Unit/UnitChassis.h" />
@@ -350,6 +355,11 @@
 		<Unit filename="src/PathFinder/TNavigator.cpp" />
 		<Unit filename="src/Player/PlayerBuildingList.cpp" />
 		<Unit filename="src/Player/PlayerRelationTable.cpp" />
+		<Unit filename="src/Tests/PathFinderTester.cpp">
+			<Option target="Server - Debug" />
+			<Option target="Server - Release" />
+			<Option target="Linux - Server - Debug" />
+		</Unit>
 		<Unit filename="src/Unit/MovingUnit.cpp" />
 		<Unit filename="src/Unit/Unit.cpp" />
 		<Unit filename="src/Unit/UnitChassis.cpp" />
