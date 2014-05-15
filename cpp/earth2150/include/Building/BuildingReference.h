@@ -4,7 +4,7 @@
 #include "Map/MapRectArea.h"
 
 /**
-* Einfache Referenz auf den Eintrag, welcher die Konkreten Gebäudeinformationen
+* Einfache Referenz auf den Eintrag, welcher die konkreten Gebäudeinformationen
 * enthält.
 */
 class BuildingReference {

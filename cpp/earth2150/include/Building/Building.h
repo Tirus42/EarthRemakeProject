@@ -4,7 +4,7 @@
 #include "e2150/Entity.h"
 
 /**
-* Diese Klasse stellt eine Oberklasse für jedliches Gebäude dar, welches in der Spielwelt erstellt wurde.
+* Diese Klasse stellt eine Oberklasse für jegliches Gebäude dar, welches in der Spielwelt erstellt wurde.
 */
 class Building : public Entity {
 	private:
@@ -17,7 +17,7 @@ class Building : public Entity {
 		/// Auflistung aller möglichen Gebäudearten
 		enum BuildingTyp {
 			POWERSTATION,		// Kraftwerk
-			HOMEBASE,			// Haputbasis / Hauptgebäude
+			HOMEBASE,			// Hauptbasis / Hauptgebäude
 			FACTORY				// Fabrik
 		};
 

@@ -19,7 +19,7 @@ class Navigator;
 
 /**
 * Beinhaltet die HeightMap sowie die Wegemap
-* und Verwaltet alle Spielobjekte auf der Karte
+* und verwaltet alle Spielobjekte auf der Karte
 */
 class Map {
 	private:
@@ -29,10 +29,10 @@ class Map {
 		/// Höhe der Karte
 		uint16_t height;
 
-		/// Die Anzahl an Felder am Rand, die nicht nutzbar für die Spieler ist
+		/// Die Anzahl an Feldern am Rand, die nicht nutzbar für die Spieler sind
 		uint16_t borderWidth;
 
-		/// Array mit Höheninformationen, wird Zeilenweise gespeichert.
+		/// Array mit Höheninformationen, wird zeilenweise gespeichert.
 		uint16_t* heightMap;
 
 		/// Karte der Bewegungsmöglichkeiten.
@@ -44,7 +44,7 @@ class Map {
 		///z.B. die A* oder JPS Implementierung
 		Navigator* navigator;
 
-		std::map<uint32_t, Unit*> units;		//Bedarf ggf. überarbeitung
+		std::map<uint32_t, Unit*> units;		//Bedarf ggf. Überarbeitung
 
 		/// Speichert alle sich in Bewegung befindenden Einheiten in der Reihenfolge
 		/// ihrer Ankunft
@@ -54,7 +54,7 @@ class Map {
 
 		MapViewerManager viewerManager;
 
-		/// Anzahl der Felder, auf denen sich Bewegt werden kann (Weggitter hat verbindung)
+		/// Anzahl der Felder, auf denen sich bewegt werden kann (Weggitter hat Verbindung)
 		uint32_t getNumberOfMoveableFields() const;
 
 		/// Gibt den Höhenunterschied auf einem Feld zurück (Unterschied zwischen höchster und tiefster Ecke)
@@ -101,7 +101,7 @@ class Map {
 		// Auf diesem Feld liegt eine Mine
 		static const uint8_t STATUS_MINE = (1 << 1);
 
-		/// Erstellt eine neue map und allokiert den für die
+		/// Erstellt eine neue Map und allokiert den für die
 		/// angegebene Größe notwendigen Speicher.
 		Map(uint16_t width, uint16_t height);
 		virtual ~Map();
@@ -112,19 +112,19 @@ class Map {
 		/// Gibt die Höhe der Karte zurück
 		uint16_t getHeight() const {return height;}
 
-		/// Gibt die breite des Spielfeldrandes zurück
+		/// Gibt die Breite des Spielfeldrandes zurück
 		uint16_t getBorderWidth() const {return borderWidth;}
 
-		/// Gibt die kleinste X Position zurück, worauf Spielobjekte plaziert sein können
+		/// Gibt die kleinste X Position zurück, worauf Spielobjekte platziert sein können
 		uint16_t getMinX() const {return borderWidth;}
 
-		/// Gibt die kleinste Y Position zurück, worauf Spielibjekte plaziert sein können
+		/// Gibt die kleinste Y Position zurück, worauf Spielobjekte platziert sein können
 		uint16_t getMinY() const {return borderWidth;}
 
-		/// Gibt die größte X Position zurück, worauf Spielobjekte plaziert sein können
+		/// Gibt die größte X Position zurück, worauf Spielobjekte platziert sein können
 		uint16_t getMaxX() const {return width-borderWidth;}
 
-		/// Gibt die größe Y Position zurück, worauf Spielobjekte plaziert sein können
+		/// Gibt die größte Y Position zurück, worauf Spielobjekte platziert sein können
 		uint16_t getMaxY() const {return height-borderWidth;}
 
 		/// Gibt die nutzbare Breite der Spielfläche zurück
@@ -137,7 +137,7 @@ class Map {
 		uint16_t positionX(uint32_t position) const {return position % width;}
 		uint16_t positionY(uint32_t position) const {return position / width;}
 
-		/// Gibt die anzahl der begehbaren Nachbarn zurück und speichert diese in neighbours
+		/// Gibt die Anzahl der begehbaren Nachbarn zurück und speichert diese in neighbours
 		size_t getNeighbours(uint32_t position, uint32_t *neighbours) const;
 
 		/// Richtung zum Ziel, dabei wird N/E/S/W eher genommen als NE/SE/SW/NW, falls es nicht eindeutig ist (NNE -> N)
@@ -208,21 +208,21 @@ class Map {
 		///Berechnet die Bewegungsmöglichkeiten innerhalb der angegebenen Felder auf der Map neu
 		void updateMovementMap(uint32_t position1, uint32_t position2);
 
-		/// Läd eine Heightmap 1:1 aus einer Datei
+		/// Lädt eine Heightmap 1:1 aus einer Datei
 		bool loadHeightMapRAW(const std::string& filename);
 
 		/// Fügt einen weiteren Spieler in einen bestimmten Slot (Spawnpoint) hinzu
 		bool addPlayer(Player& player, uint32_t slot);
 
-		/// Entfernt einen Spieler und entfernt ggf. alle ihm gehörende Spielobjekte
+		/// Entfernt einen Spieler und entfernt ggf. alle ihm gehörenden Spielobjekte
 		void removePlayer(Player& player, bool removeEntitys = true);
 
 		const Navigator* getNavigator() { return navigator; }
 
-		/// Berechnet alle Veränderungen die in der zwischenzeit geschehen sind
+		/// Berechnet alle Veränderungen die in der Zwischenzeit geschehen sind
 		void updateGameField(uint32_t currentTime);
 
-		/// Prüft ob ein Feld wirklich auf der Karte ist (und nicht außerhalb)
+		/// Prüft, ob ein Feld wirklich auf der Karte ist (und nicht außerhalb)
 		/// (Für Asserts gedacht)
 		bool fieldOnMap(const MapPosition& position) const {return fieldOnMap(position.getX(), position.getY());}
 		bool fieldOnMap(uint16_t x, uint16_t y) const {return (x < width) && (y < height);}

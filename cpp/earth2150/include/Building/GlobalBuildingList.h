@@ -21,7 +21,7 @@ class GlobalBuildingList {
 		GlobalBuildingList();
 		~GlobalBuildingList();
 
-		/// Fügt eine Test Gebäude ein.
+		/// Fügt einige Test Gebäude ein.
 		void addTestBuildings();
 
 		/// Gibt die Anzahl der Gebäude zurück
