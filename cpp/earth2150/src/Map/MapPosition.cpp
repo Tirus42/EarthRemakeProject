@@ -7,12 +7,12 @@
 MapPosition::MapPosition() :
 	 x(~0),
 	 y(~0) {
-};
+}
 
 MapPosition::MapPosition(uint16_t x, uint16_t y) :
 	x(x),
 	y(y) {
-};
+}
 
 bool MapPosition::isValid() const {
 	// Gibt False zurück, wenn X oder Y == 0xFFFF sind

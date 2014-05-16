@@ -6,11 +6,11 @@ using namespace irr;
 
 ResearchWindow::ResearchWindow(gui::IGUIEnvironment* guiEnv, IngameGUI* ingameGUI) :
 	IGUIWindow(guiEnv),
-	ingameGUI(ingameGUI) {
-
-	buttoncount = 0;
-	buttontop = 10;
-	buttonheight = 30;
+	forschungsfenster(0),
+	ingameGUI(ingameGUI),
+	buttoncount(0),
+	buttontop(10),
+	buttonheight(30) {
 
 
 	forschungsfenster = guiEnv->addWindow(core::rect<s32>(100, 100, 500, 600), false, L"Forschungsfenster",0,GUI_RESEARCHWINDOW);

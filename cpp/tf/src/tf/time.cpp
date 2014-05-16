@@ -115,7 +115,7 @@ double HighResolutionDiffSec(uint64_t first, uint64_t second) {
         ns = tSecond[1] - tFirst[1];
     }
 
-	return sec + ns * 0.000000001d;
+	return sec + ns * 0.000000001f;
 	#endif // _WIN32
 }
 

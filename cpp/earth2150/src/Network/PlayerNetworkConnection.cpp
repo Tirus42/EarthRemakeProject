@@ -36,7 +36,7 @@ void PlayerNetworkConnection::sendPacket(char* pointer, int32_t length) {
 		SendBuffer* b = new SendBuffer(pointer + size, length - size);
 		sendBuffers.push_back(b);
 	}
-};
+}
 
 void PlayerNetworkConnection::sendBufferContent() {
 	for (std::list<SendBuffer*>::iterator i=sendBuffers.begin();i!=sendBuffers.end();/*kein zähler*/) {

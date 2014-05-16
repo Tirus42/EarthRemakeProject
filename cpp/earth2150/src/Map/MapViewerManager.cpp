@@ -38,7 +38,7 @@ void MapViewerManager::removeHumanPlayer(HumanPlayer* player) {
 void MapViewerManager::createEntity(const Entity& entity) {
 	char* buffer = new char[entity.dumpDataSize() + 1];
 
-	buffer[0] = 200;
+	buffer[0] = '\xC8'; //0xC8 = 200
 	int32_t size = entity.dumpData(&buffer[1]);
 
 	for (std::vector<HumanPlayer*>::iterator i = viewers.begin(); i != viewers.end(); ++i) {

@@ -6,12 +6,12 @@
 namespace irr {
 	namespace scene {
 		template <class T> class CMeshBuffer;
-	};
+	}
 	namespace video {
 		class S3DVertex;
 		class SMaterial;
 	}
-};
+}
 
 class MapMarkerManager;
 class MapPosition;

@@ -9,10 +9,6 @@
 
 class AStarNode{
 	private:
-		static const uint16_t MULTIPLICATOR = 5741; // 985, 169, 99, 29;
-		static const uint16_t SQRT_1 = MULTIPLICATOR;
-		static const uint16_t SQRT_2 = M_SQRT2 * MULTIPLICATOR;
-
 		AStarNode *previousNode;
 		uint32_t spentCost;
 		uint32_t estimationCost;

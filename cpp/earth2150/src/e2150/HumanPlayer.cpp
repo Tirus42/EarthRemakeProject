@@ -20,7 +20,7 @@ HumanPlayer::~HumanPlayer() {
 void HumanPlayer::debugPaintFields(const std::list<uint32_t>& fields, uint32_t color) {
 	char* buffer = new char[9 + fields.size()*4];
 
-	buffer[0] = 255;
+	buffer[0] = '\xFF';
 
 	*(uint32_t*)&buffer[1] = color;
 	*(uint32_t*)&buffer[5] = fields.size();

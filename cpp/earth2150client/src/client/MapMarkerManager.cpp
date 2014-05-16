@@ -9,7 +9,8 @@ using namespace irr;
 MapMarkerManager::MapMarkerManager(const VisualMap& map, scene::ISceneManager* smgr) :
 	map(map),
 	smgr(smgr),
-	mesh(0) {
+	mesh(0),
+	node(0) {
 
 		smgr->grab();
 

@@ -4,13 +4,13 @@
 namespace irr {
 	namespace video {
 		class SMaterial;
-	};
+	}
 	namespace scene {
 		class SMesh;
 		class IMeshSceneNode;
 		class ISceneManager;
-	};
-};
+	}
+}
 
 class VisualMap;
 class MapMarker;
