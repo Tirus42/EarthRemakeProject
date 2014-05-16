@@ -53,7 +53,7 @@ void PathFinderTester::runTests(uint32_t countRuns) const {
 
 			// Variablen für Zeitmessung
 			uint64_t sTime, eTime;
-			uint64_t minTime = -1LL;
+			uint64_t minTime = -1;
 			uint64_t maxTime = 0;
 			uint64_t sumTime = 0;
 

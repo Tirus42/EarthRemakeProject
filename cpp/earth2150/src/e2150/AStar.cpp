@@ -11,11 +11,13 @@
 #include <queue>
 
 bool AStar::buildPathAndEraseRAM(AStarNode *currentNode, const std::map<uint32_t, std::vector<AStarNode*> >& openList, const std::deque<AStarNode*>& gc, std::list<uint32_t>& path_list) const{
-	for (AStarNode *node=currentNode;node;node=node->getPreviousNode()){
-		assert(!currentNode->isRemoved());
-		path_list.push_front(node->getPosition());
+	if (currentNode){
+		for (AStarNode *node=currentNode;node;node=node->getPreviousNode()){
+			assert(!currentNode->isRemoved());
+			path_list.push_front(node->getPosition());
+		}
+		path_list.pop_front();
 	}
-	path_list.pop_front();
 	for(std::map<uint32_t, std::vector<AStarNode*> >::const_iterator i=openList.begin();i!=openList.end();i++){
 		for(std::vector<AStarNode*>::const_iterator j=i->second.begin();j!=i->second.end();j++){
 			delete *j;
@@ -38,8 +40,7 @@ bool AStar::getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_
 	const uint16_t MAP_WIDTH = map.getWidth();
 	const uint16_t MAP_HEIGHT = map.getHeight();
 
-	AStarNode **nodePositions = new AStarNode*[MAP_WIDTH * MAP_HEIGHT];
-	std::memset(nodePositions, 0, MAP_WIDTH * MAP_HEIGHT * 2);
+	std::vector<AStarNode*> nodePositions(MAP_WIDTH * MAP_HEIGHT);
 	MapBitLayer closedList(0, 0, MAP_WIDTH, MAP_HEIGHT); //map.getMinX(), map.getMinY()
 	std::deque<AStarNode*> gc; //garbage collector
 
@@ -55,10 +56,9 @@ bool AStar::getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_
 		} else {
 			openList.erase(openListBegin);
 		}
-		if (!currentNode->isRemoved()){
+		if (!currentNode->isRemoved()) {
 			const uint32_t CURRENT_POSITION = currentNode->getPosition();
 			if (CURRENT_POSITION == goal_index) {
-				delete[] nodePositions;
 				return buildPathAndEraseRAM(currentNode, openList, gc, path_list);
 			}
 			const uint16_t CURRENT_X = map.positionX(CURRENT_POSITION);
@@ -94,6 +94,5 @@ bool AStar::getPath(uint32_t start_index, uint32_t goal_index, std::list<uint32_
 		}
 		gc.push_back(currentNode);
 	} while (!openList.empty());
-	delete[] nodePositions;
 	return buildPathAndEraseRAM(0, openList, gc, path_list);
 }
