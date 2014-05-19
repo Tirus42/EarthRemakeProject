@@ -15,8 +15,8 @@ void benchmark(const Map& map) {
 	PathFinderTester pt(map);
 
 	pt.registerPathFinderNavigator(NavigatorFactory::getNavigator(map, NavigatorFactory::NAVIGATOR_ASTAR), "AStar");
-	//pt.registerPathFinderNavigator(NavigatorFactory::getNavigator(map, NavigatorFactory::NAVIGATOR_BSEARCH), "Breitensuche");
-	//pt.registerPathFinderNavigator(NavigatorFactory::getNavigator(map, NavigatorFactory::NAVIGATOR_JPS), "Jump Point Search");
+	pt.registerPathFinderNavigator(NavigatorFactory::getNavigator(map, NavigatorFactory::NAVIGATOR_BSEARCH), "Breitensuche");
+	pt.registerPathFinderNavigator(NavigatorFactory::getNavigator(map, NavigatorFactory::NAVIGATOR_JPS), "Jump Point Search");
 
 	pt.addSearchPoints(MapPosition(10, 10), MapPosition(20, 10), "Kurze Suche ohne Hindernis");
 	pt.addSearchPoints(MapPosition(20, 500), MapPosition(1015, 500), "Horizontal ueber ganze Karte (ohne Hindernis)");
