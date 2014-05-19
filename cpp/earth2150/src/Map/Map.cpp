@@ -3,6 +3,7 @@
 #include "e2150/Navigator.h"
 #include "PathFinder/NavigatorFactory.h"
 #include "Unit/MovingUnit.h"
+#include "Unit/Unit.h"
 #include "tf/file.h"
 #include "tf/time.h"
 #include "e2150/Utils.h"

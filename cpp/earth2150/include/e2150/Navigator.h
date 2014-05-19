@@ -2,7 +2,6 @@
 #define NAVIGATOR_H
 
 #include "Map/Map.h"
-#include "Unit/Unit.h"
 
 #include <list>
 
@@ -27,4 +26,5 @@ class Navigator {
 		virtual void mapDataChanged(uint32_t top_left, uint16_t width, uint16_t height) {}
 };
 
-#endif // NAVIGATOR_H
+#endif
+

@@ -9,29 +9,33 @@
 
 class AStarNode{
 	private:
-		AStarNode *previousNode;
+		uint32_t previousNodeID;
 		uint32_t spentCost;
 		uint32_t estimationCost;
 		uint32_t position;
 		bool removed;
-
-		AStarNode(const AStarNode& cc);
-		AStarNode& operator=(const AStarNode& cc);
 	public:
 		static uint32_t farDistance(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 		static uint32_t nearDistance(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+		static const uint32_t INVAILD_ID;
 
-		AStarNode(AStarNode *previousNode, uint32_t spentCost, uint32_t estimationCost, uint32_t position);
+		AStarNode(uint32_t previousNodeID, uint32_t spentCost, uint32_t estimationCost, uint32_t position):
+				previousNodeID(previousNodeID),
+				spentCost(spentCost),
+				estimationCost(estimationCost),
+				position(position),
+				removed(false) {
+		}
 
 		uint32_t getEstimationCost() {
 			return estimationCost;
 		}
 
-		AStarNode *getPreviousNode() const{return previousNode;}
-		uint32_t getSpentCost() const{return spentCost;}
-		uint32_t getPosition() const{return position;}
-		void remove(){removed=true;}
-		bool isRemoved() const{return removed;}
+		uint32_t getPreviousNode() const { return previousNodeID; }
+		uint32_t getSpentCost() const { return spentCost; }
+		uint32_t getPosition() const { return position; }
+		void remove() { removed = true; }
+		bool isRemoved() const { return removed; }
 };
 
-#endif // ASTARNODE_H
+#endif
