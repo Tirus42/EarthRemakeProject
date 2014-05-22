@@ -1,7 +1,7 @@
 #ifndef TIRUSSEARCH_H_INCLUDED
 #define TIRUSSEARCH_H_INCLUDED
 
-#include "e2150/Navigator.h"
+#include "PathFinder/INavigator.h"
 
 class TSearcher;
 
@@ -9,7 +9,7 @@ class TSearcher;
 * Tirus-Breitensuchen Klasse
 * Identische Implementierung wie in BlitzBasic
 */
-class TNavigator : public Navigator {
+class TNavigator : public INavigator {
 	private:
 		TNavigator(const TNavigator&);
 		TNavigator& operator=(const TNavigator&);

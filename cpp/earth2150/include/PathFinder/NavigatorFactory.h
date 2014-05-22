@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-class Navigator;
+class INavigator;
 class Map;
 
 /**
@@ -20,7 +20,7 @@ class NavigatorFactory {
 
 		static const uint8_t NAVIGATOR_DEFAULT	= NAVIGATOR_JPS;
 
-		static Navigator* getNavigator(const Map& map, uint8_t typ = NAVIGATOR_DEFAULT);
+		static INavigator* getNavigator(const Map& map, uint8_t typ = NAVIGATOR_DEFAULT);
 };
 
 #endif // NAVIGATORFACTORY_H_INCLUDED

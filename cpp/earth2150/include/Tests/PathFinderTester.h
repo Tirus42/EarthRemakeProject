@@ -7,7 +7,7 @@
 #include "Map/MapPosition.h"
 
 class Map;
-class Navigator;
+class INavigator;
 
 /**
 * Klasse welche die Performance und die gültigkeit von PathFindern
@@ -21,11 +21,11 @@ class PathFinderTester {
 	private:
 		const Map& map;
 
-		std::vector<std::pair<Navigator*, std::string> > pathFinders;
+		std::vector<std::pair<INavigator*, std::string> > pathFinders;
 		std::vector<std::pair<MapPosition, MapPosition> > searchPoints;
 		std::vector<std::string> searchNames;
 
-		void searchPath(Navigator* navigator, const MapPosition& p1, const MapPosition& p2);
+		void searchPath(INavigator* navigator, const MapPosition& p1, const MapPosition& p2);
 
 		PathFinderTester(const PathFinderTester&);
 		PathFinderTester operator=(const PathFinderTester&);
@@ -35,7 +35,7 @@ class PathFinderTester {
 		PathFinderTester(const Map& map);
 
 		/// Fügt einen PathFinderNavigator zu den zu Testenden Suchalgorithmen hinzu
-		void registerPathFinderNavigator(Navigator* navigator, const char* name);
+		void registerPathFinderNavigator(INavigator* navigator, const char* name);
 
 		/// Fügt zwei Wegpunkte zwischen denen der Weg gesucht werden soll zu der Testliste hinzu
 		void addSearchPoints(const MapPosition& p1, const MapPosition& p2, const char* description);

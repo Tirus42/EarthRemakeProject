@@ -3,7 +3,7 @@
 #include "PathFinder/TSearcher.h"
 
 TNavigator::TNavigator(const Map& map) :
-	Navigator(map),
+	INavigator(map),
 	searcher(new TSearcher(map)) {
 
 }

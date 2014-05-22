@@ -322,6 +322,7 @@
 		<Unit filename="include/Network/PlayerNetworkConnection.h" />
 		<Unit filename="include/Network/SendBuffer.h" />
 		<Unit filename="include/Network/TestServer.h" />
+		<Unit filename="include/PathFinder/INavigator.h" />
 		<Unit filename="include/PathFinder/NavigatorFactory.h" />
 		<Unit filename="include/PathFinder/TNavigator.h" />
 		<Unit filename="include/PathFinder/TSearcher.h" />
@@ -346,7 +347,6 @@
 		<Unit filename="include/e2150/GameContent.h" />
 		<Unit filename="include/e2150/HumanPlayer.h" />
 		<Unit filename="include/e2150/JPSNavigator.h" />
-		<Unit filename="include/e2150/Navigator.h" />
 		<Unit filename="include/e2150/Player.h" />
 		<Unit filename="include/e2150/Utils.h" />
 		<Unit filename="include/e2150/main.h">

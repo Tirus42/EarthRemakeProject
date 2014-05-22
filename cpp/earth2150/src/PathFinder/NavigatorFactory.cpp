@@ -4,7 +4,7 @@
 #include "e2150/JPSNavigator.h"
 #include "PathFinder/TNavigator.h"
 
-Navigator* NavigatorFactory::getNavigator(const Map& map, uint8_t typ) {
+INavigator* NavigatorFactory::getNavigator(const Map& map, uint8_t typ) {
 	switch (typ) {
 		case NAVIGATOR_ASTAR:
 			return new AStar(map);

@@ -7,7 +7,7 @@
 #include "Map/Map.h"
 #include "e2150/AStar.h"
 #include "Unit/Unit.h"
-#include "e2150/Navigator.h"
+#include "PathFinder/INavigator.h"
 #include "tf/time.h"
 
 #include <iostream>

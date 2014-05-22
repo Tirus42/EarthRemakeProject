@@ -1,7 +1,7 @@
 #include "Tests/PathFinderTester.h"
 
 #include "Map/Map.h"
-#include "e2150/Navigator.h"
+#include "PathFinder/INavigator.h"
 
 #include "tf/time.h"
 #include <stdio.h>
@@ -13,8 +13,8 @@ PathFinderTester::PathFinderTester(const Map& map) :
 	searchNames() {
 }
 
-void PathFinderTester::registerPathFinderNavigator(Navigator* navigator, const char* name) {
-	pathFinders.push_back(std::pair<Navigator*, std::string>(navigator, std::string(name)));
+void PathFinderTester::registerPathFinderNavigator(INavigator* navigator, const char* name) {
+	pathFinders.push_back(std::pair<INavigator*, std::string>(navigator, std::string(name)));
 }
 
 void PathFinderTester::addSearchPoints(const MapPosition& p1, const MapPosition& p2, const char* description) {
@@ -49,7 +49,7 @@ void PathFinderTester::runTests(uint32_t countRuns) const {
 		printf("min\tmax\tavg\tfields\tfound\n");
 
 		for (uint32_t nav = 0; nav < pathFinders.size(); ++nav) {
-			Navigator* navigator = pathFinders[nav].first;
+			INavigator* navigator = pathFinders[nav].first;
 
 			// Variablen für Zeitmessung
 			uint64_t sTime, eTime;

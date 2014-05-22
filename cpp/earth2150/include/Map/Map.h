@@ -15,7 +15,7 @@ class Player;
 class Unit;
 class MovingUnit;
 class Faction;
-class Navigator;
+class INavigator;
 
 /**
 * Beinhaltet die HeightMap sowie die Wegemap
@@ -42,7 +42,7 @@ class Map {
 		uint8_t* statusMap;
 
 		///z.B. die A* oder JPS Implementierung
-		Navigator* navigator;
+		INavigator* navigator;
 
 		std::map<uint32_t, Unit*> units;		//Bedarf ggf. Überarbeitung
 
@@ -217,7 +217,7 @@ class Map {
 		/// Entfernt einen Spieler und entfernt ggf. alle ihm gehörenden Spielobjekte
 		void removePlayer(Player& player, bool removeEntitys = true);
 
-		const Navigator* getNavigator() { return navigator; }
+		const INavigator* getNavigator() { return navigator; }
 
 		/// Berechnet alle Veränderungen die in der Zwischenzeit geschehen sind
 		void updateGameField(uint32_t currentTime);

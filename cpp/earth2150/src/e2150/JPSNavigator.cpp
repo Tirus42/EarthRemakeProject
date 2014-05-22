@@ -3,9 +3,9 @@
 #include "ff/JumpPointSearch.h"
 
 JPSNavigator::JPSNavigator(const Map& map) :
-	Navigator(map),
+	INavigator(map),
 	jps(new ff::JumpPointSearch(map)) {}
-	
+
 JPSNavigator::~JPSNavigator() {
 	delete jps;
 }

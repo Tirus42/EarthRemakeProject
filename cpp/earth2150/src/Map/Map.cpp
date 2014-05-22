@@ -1,6 +1,6 @@
 #include "Map/Map.h"
 
-#include "e2150/Navigator.h"
+#include "PathFinder/INavigator.h"
 #include "PathFinder/NavigatorFactory.h"
 #include "Unit/MovingUnit.h"
 #include "Unit/Unit.h"
