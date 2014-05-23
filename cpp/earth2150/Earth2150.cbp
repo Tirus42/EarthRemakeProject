@@ -374,6 +374,7 @@
 		<Unit filename="src/Network/TestServer.cpp" />
 		<Unit filename="src/PathFinder/NavigatorFactory.cpp" />
 		<Unit filename="src/PathFinder/TNavigator.cpp" />
+		<Unit filename="src/PathFinder/TSearcher.cpp" />
 		<Unit filename="src/Player/PlayerBuildingList.cpp" />
 		<Unit filename="src/Player/PlayerRelationTable.cpp" />
 		<Unit filename="src/Tests/PathFinderTester.cpp">
