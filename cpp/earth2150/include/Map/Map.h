@@ -101,6 +101,10 @@ class Map {
 		static uint32_t addWest(uint32_t position){return position-1;}
 		uint32_t addNorthWest(uint32_t position) const{return position-width-1;}
 
+		/// Verschiebt die Position in die angegebene Richtung (keine Randbereichsprüfung!)
+		uint32_t addDirection(uint32_t position, const WaymapDirection& direction) const;
+		uint32_t addDirection(uint32_t position, const ObjectDirection& direction) const;
+
 		// Auf diesem Feld steht eine Einheit
 		static const uint8_t STATUS_UNIT = (1 << 0);
 		// Auf diesem Feld liegt eine Mine

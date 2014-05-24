@@ -33,6 +33,74 @@ Map::~Map() {
 	delete[] heightMap;
 }
 
+uint32_t Map::addDirection(uint32_t position, const WaymapDirection& direction) const {
+	switch (direction) {
+		case NORTH:
+			return addNorth(position);
+
+		case SOUTH:
+			return addSouth(position);
+
+		case EAST:
+			return addEast(position);
+
+		case WEST:
+			return addWest(position);
+
+		case NORTH_EAST:
+			return addNorthEast(position);
+
+		case NORTH_WEST:
+			return addNorthWest(position);
+
+		case SOUTH_EAST:
+			return addSouthEast(position);
+
+		case SOUTH_WEST:
+			return addSouthWest(position);
+
+		default:
+			assert(false);
+	}
+
+	// Todo: Exception Werfen?
+	return 0;
+}
+
+uint32_t Map::addDirection(uint32_t position, const ObjectDirection& direction) const {
+	switch (direction) {
+		case DIRECTION_NORTH:
+			return addNorth(position);
+
+		case DIRECTION_NORTH_EAST:
+			return addNorthEast(position);
+
+		case DIRECTION_EAST:
+			return addEast(position);
+
+		case DIRECTION_SOUTH_EAST:
+			return addSouthEast(position);
+
+		case DIRECTION_SOUTH:
+			return addSouth(position);
+
+		case DIRECTION_SOUTH_WEST:
+			return addSouthWest(position);
+
+		case DIRECTION_WEST:
+			return addWest(position);
+
+		case DIRECTION_NORTH_WEST:
+			return addNorthWest(position);
+
+		default:
+			assert(false);
+	}
+
+	// Todo: Exception Werfen?
+	return 0;
+}
+
 size_t Map::getNeighbours(uint32_t position, uint32_t *neighbours) const {
 	size_t numberOfNeighbours = 0;
 	uint8_t directions = getDirections(position);
