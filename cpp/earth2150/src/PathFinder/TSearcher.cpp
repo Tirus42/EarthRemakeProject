@@ -5,7 +5,6 @@
 
 #define container std::vector
 
-
 TSearcher::TSearcher(const Map& map) :
 	mapSize(map.getWidth() * map.getHeight()),
 	searchMap(new uint8_t[mapSize]),
@@ -30,46 +29,37 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 	// Zu Begin die Suchkarte leeren
 	clearSearchMap();
 
-	/*
-	Punktliste
-	An das Ende werden weitere "Offene" Suchpunkte eingetragen.
-	Alle vornedran sind bereits fertig abgesucht und werden nur noch für die
-	bestimmung des fertigen Weges benötigt.
-	*/
-	container<Waypoint> waypoints;
+	// Liste der aktuell zu prüfenden Wegpunkte
+	container<Waypoint> currentPoints;
 
-	int32_t waypoints_finishOffset = -1;
+	// Liste der in der nächsten iteration zu prüfenden Wegpunkte
+	container<Waypoint> nextPoints;
 
 	// Genügend Speicher Reservieren, damit es nicht zu unnötigen reallocs kommt
-	waypoints.reserve(map.getWidth() * map.getHeight());
+	// 2x Kartenbreite ist ein guter Wert der fast nie überschritten wird
+	currentPoints.reserve(map.getWidth() * 2);
+	nextPoints.reserve(map.getWidth() * 2);
 
 	// Startpunkt in Suchliste eintragen
-	waypoints.push_back(Waypoint(position1));
+	nextPoints.push_back(Waypoint(position1));
 
 	uint32_t position = 0;
 
 	const uint16_t mapWidth = map.getWidth();
 
-
 	while (true) {
-		// Das nächste Ende für die Offen/Abgeschlossenliste merken
-		int32_t nextFinishOffset = waypoints.size() - 1;
 
-		for (int32_t i = waypoints.size() - 1; i >= 0; --i) {
-			int32_t currentEnd = waypoints.size() - 1;
+		// Listen vertauschen und Alte leeren
+		currentPoints.swap(nextPoints);
+		nextPoints.clear();
 
+		// Wenn nichts mehr in Liste, dann gibt es keine weiteren möglichen Wege -> Abbruch
+		if (currentPoints.size() == 0)
+			return false;
+
+		for (int32_t i = currentPoints.size() - 1; i >= 0; --i) {
 			// Hole aktuell zu untersuchende Position
-			position1 = waypoints[i].position;
-
-			// Prüfe ob bereits alle offenen Wegpunkte untersucht wurden
-			if (i == currentEnd && i == waypoints_finishOffset) {
-				// Abbrechen, da es keinen Weg gibt
-				return false;
-			}
-
-			if (i == waypoints_finishOffset)
-				break;
-
+			position1 = currentPoints[i].position;
 
 			uint8_t byte = map.getDirections(position1);
 
@@ -80,7 +70,7 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 				position = position1 - mapWidth + 1;
 
 				if (searchMap[position] == 0xFF) {
-					waypoints.push_back(Waypoint(position));
+					nextPoints.push_back(Waypoint(position));
 
 					searchMap[position] = Map::SOUTH_WEST;
 				}
@@ -93,7 +83,7 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 				position = position1 + mapWidth + 1;
 
 				if (searchMap[position] == 0xFF) {
-					waypoints.push_back(Waypoint(position));
+					nextPoints.push_back(Waypoint(position));
 
 					searchMap[position] = Map::NORTH_WEST;
 				}
@@ -106,7 +96,7 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 				position = position1 + mapWidth - 1;
 
 				if (searchMap[position] == 0xFF) {
-					waypoints.push_back(Waypoint(position));
+					nextPoints.push_back(Waypoint(position));
 
 					searchMap[position] = Map::NORTH_EAST;
 				}
@@ -119,7 +109,7 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 				position = position1 - mapWidth - 1;
 
 				if (searchMap[position] == 0xFF) {
-					waypoints.push_back(Waypoint(position));
+					nextPoints.push_back(Waypoint(position));
 
 					searchMap[position] = Map::SOUTH_EAST;
 				}
@@ -132,7 +122,7 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 				position = position1 - mapWidth;
 
 				if (searchMap[position] == 0xFF) {
-					waypoints.push_back(Waypoint(position));
+					nextPoints.push_back(Waypoint(position));
 
 					searchMap[position] = Map::SOUTH;
 				}
@@ -145,7 +135,7 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 				position = position1 + 1;
 
 				if (searchMap[position] == 0xFF) {
-					waypoints.push_back(Waypoint(position));
+					nextPoints.push_back(Waypoint(position));
 
 					searchMap[position] = Map::WEST;
 				}
@@ -158,7 +148,7 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 				position = position1 + mapWidth;
 
 				if (searchMap[position] == 0xFF) {
-					waypoints.push_back(Waypoint(position));
+					nextPoints.push_back(Waypoint(position));
 
 					searchMap[position] = Map::NORTH;
 				}
@@ -171,7 +161,7 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 				position = position1 - 1;
 
 				if (searchMap[position] == 0xFF) {
-					waypoints.push_back(Waypoint(position));
+					nextPoints.push_back(Waypoint(position));
 
 					searchMap[position] = Map::EAST;
 				}
@@ -182,19 +172,13 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 
 		}
 
-		// Das Ende der Offen/Geschlossen Liste verschieben, da alle Offenen abgesucht, dafür neue eingetragen wurden
-		waypoints_finishOffset = nextFinishOffset;
 	}
 
 	// Weg gefunden
 	way_found:;
 
-	// Letze eingetragene Position holen
-	Waypoint& w = waypoints.back();
-
-	uint32_t mPos = w.position;
-
-	assert(mPos == position2);
+	// Von Ziel zum Start gehen
+	uint32_t mPos = position2;
 
 	// Ergebnis der Breitensuche Rückwerts ablaufen und in Ausgabe eintragen
 	while (mPos != startPosition) {

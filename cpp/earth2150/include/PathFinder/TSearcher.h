@@ -14,8 +14,6 @@ class TSearcher {
 		TSearcher(const TSearcher&);
 		TSearcher& operator=(const TSearcher&);
 
-		static const uint32_t START_WAYPOINT = 0xFFFFFFFF;
-
 		/// Speichert die Rohdatengröße
 		const size_t mapSize;
 
