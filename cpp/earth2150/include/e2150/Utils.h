@@ -36,7 +36,7 @@ class Utils {
 
 		/// Gibt den Winkel zurück, in dem das 2te Feld in relation zum ersten steht
 		/// (Felder müssen benachbart sein!)
-		static uint8_t getAngle(const Map& map, uint32_t position1, uint32_t position2) {
+		static Map::ObjectDirection getAngle(const Map& map, uint32_t position1, uint32_t position2) {
 			if (position2 == map.addNorth(position1))
 				return Map::DIRECTION_NORTH;
 			if (position2 == map.addNorthEast(position1))
@@ -54,7 +54,7 @@ class Utils {
 			if (position2 == map.addNorthWest(position1))
 				return Map::DIRECTION_NORTH_WEST;
 			assert(false);
-			return ~0;	// Dieser Fall kann/darf nie eintreten!
+			return Map::DIRECTION_INVALID;	// Dieser Fall kann/darf nie eintreten!
 		}
 
 };

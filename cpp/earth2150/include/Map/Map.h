@@ -68,24 +68,29 @@ class Map {
 		const static uint16_t MAX_HEIGHTDIFF = 2000;
 
 		/// Richtungskonstanten um Bewegungsmöglichkeiten auf einem Feld zu speichern.
-		static const uint8_t NORTH      = (1 << 0); //0b00000001;
-		static const uint8_t NORTH_EAST = (1 << 1); //0b00000010;
-		static const uint8_t EAST       = (1 << 2); //0b00000100;
-		static const uint8_t SOUTH_EAST = (1 << 3); //0b00001000;
-		static const uint8_t SOUTH      = (1 << 4); //0b00010000;
-		static const uint8_t SOUTH_WEST = (1 << 5); //0b00100000;
-		static const uint8_t WEST       = (1 << 6); //0b01000000;
-		static const uint8_t NORTH_WEST = (1 << 7); //0b10000000;
+		enum WaymapDirection {
+			NORTH      = (1 << 0), //0b00000001;
+			NORTH_EAST = (1 << 1), //0b00000010;
+			EAST       = (1 << 2), //0b00000100;
+			SOUTH_EAST = (1 << 3), //0b00001000;
+			SOUTH      = (1 << 4), //0b00010000;
+			SOUTH_WEST = (1 << 5), //0b00100000;
+			WEST       = (1 << 6), //0b01000000;
+			NORTH_WEST = (1 << 7), //0b10000000;
+		};
 
 		/// Richtungskonstanten um die Ausrichtung eines Objektes anzugeben (nur 3-Bit nötig)
-		static const uint8_t DIRECTION_NORTH      = 0;
-		static const uint8_t DIRECTION_NORTH_EAST = 1;
-		static const uint8_t DIRECTION_EAST       = 2;
-		static const uint8_t DIRECTION_SOUTH_EAST = 3;
-		static const uint8_t DIRECTION_SOUTH      = 4;
-		static const uint8_t DIRECTION_SOUTH_WEST = 5;
-		static const uint8_t DIRECTION_WEST       = 6;
-		static const uint8_t DIRECTION_NORTH_WEST = 7;
+		enum ObjectDirection {
+			DIRECTION_NORTH      = 0,
+			DIRECTION_NORTH_EAST = 1,
+			DIRECTION_EAST       = 2,
+			DIRECTION_SOUTH_EAST = 3,
+			DIRECTION_SOUTH      = 4,
+			DIRECTION_SOUTH_WEST = 5,
+			DIRECTION_WEST       = 6,
+			DIRECTION_NORTH_WEST = 7,
+			DIRECTION_INVALID
+		};
 
 		uint32_t addNorth(uint32_t position) const{return position-width;}
 		uint32_t addNorthEast(uint32_t position) const{return position-width+1;}
