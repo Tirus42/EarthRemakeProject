@@ -53,3 +53,20 @@ void ScreenRendererHelper::buildFullScreenQuad(core::triangle3df& t1, core::tria
 	//core::triangle3df trig1(v0, v1, v2);
 	//core::triangle3df trig2(v1, v3, v2);
 }
+
+void ScreenRendererHelper::drawViewFrustum(irr::video::IVideoDriver* driver, const irr::scene::SViewFrustum& frustum) const {
+	driver->draw3DLine(frustum.getNearLeftUp(), frustum.getNearRightUp());
+	driver->draw3DLine(frustum.getNearRightUp(), frustum.getNearRightDown());
+	driver->draw3DLine(frustum.getNearRightDown(), frustum.getNearLeftDown());
+	driver->draw3DLine(frustum.getNearLeftDown(), frustum.getNearLeftUp());
+
+	driver->draw3DLine(frustum.getFarLeftUp(), frustum.getFarRightUp());
+	driver->draw3DLine(frustum.getFarRightUp(), frustum.getFarRightDown());
+	driver->draw3DLine(frustum.getFarRightDown(), frustum.getFarLeftDown());
+	driver->draw3DLine(frustum.getFarLeftDown(), frustum.getFarLeftUp());
+
+	driver->draw3DLine(frustum.getNearLeftUp(), frustum.getFarLeftUp());
+	driver->draw3DLine(frustum.getNearLeftDown(), frustum.getFarLeftDown());
+	driver->draw3DLine(frustum.getNearRightUp(), frustum.getFarRightUp());
+	driver->draw3DLine(frustum.getNearRightDown(), frustum.getFarRightDown());
+}

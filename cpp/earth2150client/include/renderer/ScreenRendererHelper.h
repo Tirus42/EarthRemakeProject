@@ -19,6 +19,9 @@ class ScreenRendererHelper {
 
 		void buildFullScreenQuad(irr::core::triangle3df& t1, irr::core::triangle3df& t2) const;
 
+		/// Zeichnet die Ränder des ViewFrustum als Linien
+		void drawViewFrustum(irr::video::IVideoDriver* driver, const irr::scene::SViewFrustum& frustum) const;
+
 };
 
 
