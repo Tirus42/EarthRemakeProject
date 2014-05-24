@@ -1,6 +1,7 @@
 #include "PathFinder/TSearcher.h"
 
 #include <memory.h>
+#include <cassert>
 
 #define container std::vector
 
@@ -16,17 +17,16 @@ TSearcher::~TSearcher() {
 
 /// Hilfsstruktur für abgesuche Wegpunkte
 struct Waypoint {
-	Waypoint(uint32_t previus, uint32_t position) :
-		previus(previus), position(position) {}
-
-	/// Index Eintrag des Vorgängers
-	uint32_t previus;
+	Waypoint(uint32_t position) :
+		position(position) {}
 
 	/// Position des betrachteten Feldes
 	uint32_t position;
 };
 
 bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32_t>& path_list) {
+	const uint32_t startPosition = position1;
+
 	// Zu Begin die Suchkarte leeren
 	clearSearchMap();
 
@@ -44,7 +44,7 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 	waypoints.reserve(map.getWidth() * map.getHeight());
 
 	// Startpunkt in Suchliste eintragen
-	waypoints.push_back(Waypoint(START_WAYPOINT, position1));
+	waypoints.push_back(Waypoint(position1));
 
 	uint32_t position = 0;
 
@@ -79,10 +79,10 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 			if (byte & Map::NORTH_EAST) {
 				position = position1 - mapWidth + 1;
 
-				if (!searchMap[position]) {
-					waypoints.push_back(Waypoint(i, position));
+				if (searchMap[position] == 0xFF) {
+					waypoints.push_back(Waypoint(position));
 
-					searchMap[position] = 1;
+					searchMap[position] = Map::SOUTH_WEST;
 				}
 
 				if (position == position2)
@@ -92,10 +92,10 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 			if (byte & Map::SOUTH_EAST) {
 				position = position1 + mapWidth + 1;
 
-				if (!searchMap[position]) {
-					waypoints.push_back(Waypoint(i, position));
+				if (searchMap[position] == 0xFF) {
+					waypoints.push_back(Waypoint(position));
 
-					searchMap[position] = 1;
+					searchMap[position] = Map::NORTH_WEST;
 				}
 
 				if (position == position2)
@@ -105,10 +105,10 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 			if (byte & Map::SOUTH_WEST) {
 				position = position1 + mapWidth - 1;
 
-				if (!searchMap[position]) {
-					waypoints.push_back(Waypoint(i, position));
+				if (searchMap[position] == 0xFF) {
+					waypoints.push_back(Waypoint(position));
 
-					searchMap[position] = 1;
+					searchMap[position] = Map::NORTH_EAST;
 				}
 
 				if (position == position2)
@@ -118,10 +118,10 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 			if (byte & Map::NORTH_WEST) {
 				position = position1 - mapWidth - 1;
 
-				if (!searchMap[position]) {
-					waypoints.push_back(Waypoint(i, position));
+				if (searchMap[position] == 0xFF) {
+					waypoints.push_back(Waypoint(position));
 
-					searchMap[position] = 1;
+					searchMap[position] = Map::SOUTH_EAST;
 				}
 
 				if (position == position2)
@@ -131,10 +131,10 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 			if (byte & Map::NORTH) {
 				position = position1 - mapWidth;
 
-				if (!searchMap[position]) {
-					waypoints.push_back(Waypoint(i, position));
+				if (searchMap[position] == 0xFF) {
+					waypoints.push_back(Waypoint(position));
 
-					searchMap[position] = 1;
+					searchMap[position] = Map::SOUTH;
 				}
 
 				if (position == position2)
@@ -144,10 +144,10 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 			if (byte & Map::EAST) {
 				position = position1 + 1;
 
-				if (!searchMap[position]) {
-					waypoints.push_back(Waypoint(i, position));
+				if (searchMap[position] == 0xFF) {
+					waypoints.push_back(Waypoint(position));
 
-					searchMap[position] = 1;
+					searchMap[position] = Map::WEST;
 				}
 
 				if (position == position2)
@@ -157,10 +157,10 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 			if (byte & Map::SOUTH) {
 				position = position1 + mapWidth;
 
-				if (!searchMap[position]) {
-					waypoints.push_back(Waypoint(i, position));
+				if (searchMap[position] == 0xFF) {
+					waypoints.push_back(Waypoint(position));
 
-					searchMap[position] = 1;
+					searchMap[position] = Map::NORTH;
 				}
 
 				if (position == position2)
@@ -170,10 +170,10 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 			if (byte & Map::WEST) {
 				position = position1 - 1;
 
-				if (!searchMap[position]) {
-					waypoints.push_back(Waypoint(i, position));
+				if (searchMap[position] == 0xFF) {
+					waypoints.push_back(Waypoint(position));
 
-					searchMap[position] = 1;
+					searchMap[position] = Map::EAST;
 				}
 
 				if (position == position2)
@@ -191,16 +191,21 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 
 	// Letze eingetragene Position holen
 	Waypoint& w = waypoints.back();
-	Waypoint* way = &w;
 
-	while (way->previus != START_WAYPOINT) {
-		path_list.push_back(way->position);
-		way = &waypoints[way->previus];
+	uint32_t mPos = w.position;
+
+	assert(mPos == position2);
+
+	// Ergebnis der Breitensuche Rückwerts ablaufen und in Ausgabe eintragen
+	while (mPos != startPosition) {
+		path_list.push_back(mPos);
+
+		mPos = map.addDirection(mPos, (Map::WaymapDirection)searchMap[mPos]);
 	}
 
 	return true;
 }
 
 void TSearcher::clearSearchMap() {
-	memset(searchMap, 0, mapSize);
+	memset(searchMap, 0xFF, mapSize);
 }
