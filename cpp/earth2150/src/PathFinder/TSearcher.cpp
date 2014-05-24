@@ -17,10 +17,12 @@ TSearcher::~TSearcher() {
 /// Hilfsstruktur für abgesuche Wegpunkte
 struct Waypoint {
 	Waypoint(uint32_t previus, uint32_t position) :
-		searched(false), previus(previus), position(position) {}
+		previus(previus), position(position) {}
 
-	bool searched;
+	/// Index Eintrag des Vorgängers
 	uint32_t previus;
+
+	/// Position des betrachteten Feldes
 	uint32_t position;
 };
 
@@ -28,8 +30,15 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 	// Zu Begin die Suchkarte leeren
 	clearSearchMap();
 
-	// Punktliste
+	/*
+	Punktliste
+	An das Ende werden weitere "Offene" Suchpunkte eingetragen.
+	Alle vornedran sind bereits fertig abgesucht und werden nur noch für die
+	bestimmung des fertigen Weges benötigt.
+	*/
 	container<Waypoint> waypoints;
+
+	int32_t waypoints_finishOffset = -1;
 
 	// Genügend Speicher Reservieren, damit es nicht zu unnötigen reallocs kommt
 	waypoints.reserve(map.getWidth() * map.getHeight());
@@ -41,22 +50,26 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 
 	const uint16_t mapWidth = map.getWidth();
 
+
 	while (true) {
+		// Das nächste Ende für die Offen/Abgeschlossenliste merken
+		int32_t nextFinishOffset = waypoints.size() - 1;
+
 		for (int32_t i = waypoints.size() - 1; i >= 0; --i) {
 			int32_t currentEnd = waypoints.size() - 1;
 
-			Waypoint& way = waypoints[i];
+			// Hole aktuell zu untersuchende Position
+			position1 = waypoints[i].position;
 
-			if (i == currentEnd && way.searched == true) {
+			// Prüfe ob bereits alle offenen Wegpunkte untersucht wurden
+			if (i == currentEnd && i == waypoints_finishOffset) {
 				// Abbrechen, da es keinen Weg gibt
 				return false;
 			}
 
-			if (way.searched == true)
+			if (i == waypoints_finishOffset)
 				break;
 
-			way.searched = true;
-			position1 = way.position;
 
 			uint8_t byte = map.getDirections(position1);
 
@@ -168,6 +181,9 @@ bool TSearcher::FindWay(uint32_t position1, uint32_t position2, std::list<uint32
 			}
 
 		}
+
+		// Das Ende der Offen/Geschlossen Liste verschieben, da alle Offenen abgesucht, dafür neue eingetragen wurden
+		waypoints_finishOffset = nextFinishOffset;
 	}
 
 	// Weg gefunden
