@@ -31,8 +31,26 @@ MapRectArea::MapRectArea(const MapPosition& pos, uint16_t width, uint16_t height
 	assert((uint32_t)pos.getY() + (uint32_t)height < 0xFFFF);
 }
 
-MapRectArea::~MapRectArea() {
+MapRectArea::MapRectArea(const MapPosition& pos, uint16_t radius) :
+	minEdge(pos.getX() - radius, pos.getY() - radius),
+	maxEdge(pos.getX() + radius, pos.getY() + radius) {
 
+	assert(pos.isValid());
+
+	// Auf Unterlauf prüfen
+	if (minEdge.getX() > pos.getX())
+		minEdge.setX(0);
+
+	if (minEdge.getY() > pos.getY())
+		minEdge.setY(0);
+
+	// Auf Überlauf prüfen
+
+	if (maxEdge.getX() < pos.getX())
+		maxEdge.setX(0);
+
+	if (maxEdge.getY() < pos.getY())
+		maxEdge.setY(0);
 }
 
 void MapRectArea::repair() {

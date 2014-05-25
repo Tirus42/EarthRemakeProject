@@ -29,8 +29,8 @@ class MapRectArea {
 		/// Definiert die Fläche durch eine MinEcke sowie die Breite und Länge
 		MapRectArea(const MapPosition& pos, uint16_t width, uint16_t height);
 
-		/// Destruktor
-		~MapRectArea();
+		/// Definiert die Fläche durch das Zentrum um einem Radius (ggf. auf Karte ungültig da > Width/Height)
+		MapRectArea(const MapPosition& pos, uint16_t radius);
 
 		/// Gibt die Ecke der kleineren Koorinaten zurück
 		const MapPosition& getMinEdge() const {
