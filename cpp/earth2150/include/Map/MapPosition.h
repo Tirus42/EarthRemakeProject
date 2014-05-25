@@ -51,6 +51,9 @@ class MapPosition {
 		/// Prüft ob die Position innerhalb des "MapBorders" liegt
 		bool isValidOnUsableMapArea(const Map& map) const;
 
+		/// Verschiebt die Position auf die Kartenfläche
+		void makeValidOnMap(const Map& map);
+
 		/// Gibt die kleinste Distanz zum Kartenrand auf der X-Achse zurück (Nicht dem nutzbaren Rand!)
 		uint16_t getDistToMapBorderX(const Map& map) const;
 

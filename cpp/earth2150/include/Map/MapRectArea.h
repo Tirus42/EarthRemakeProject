@@ -69,6 +69,9 @@ class MapRectArea {
 		/// Prüft ob das Gebiet im nutzbaren Bereich der Karte liegt
 		bool isValidOnUsableMapArea(const Map& map) const;
 
+		/// Verschiebt die Eckpunkte auf den Gültigen Bereich der Karte
+		void makeValidOnMap(const Map& map);
+
 };
 
 

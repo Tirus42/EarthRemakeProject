@@ -90,3 +90,10 @@ bool MapRectArea::isValidOnMap(const Map& map) const {
 bool MapRectArea::isValidOnUsableMapArea(const Map& map) const {
 	return minEdge.isValidOnUsableMapArea(map) && maxEdge.isValidOnUsableMapArea(map);
 }
+
+void MapRectArea::makeValidOnMap(const Map& map) {
+	minEdge.makeValidOnMap(map);
+	maxEdge.makeValidOnMap(map);
+
+	assert(isValidOnMap(map));
+}

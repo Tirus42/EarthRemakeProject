@@ -1,8 +1,9 @@
 #include "Map/MapPosition.h"
 
-#include <cassert>
-
 #include "Map/Map.h"
+
+#include <algorithm>
+#include <cassert>
 
 MapPosition::MapPosition() :
 	 x(~0),
@@ -34,6 +35,13 @@ bool MapPosition::isValidOnUsableMapArea(const Map& map) const {
 		return false;
 
 	return true;
+}
+
+void MapPosition::makeValidOnMap(const Map& map) {
+	x = std::min(x, uint16_t(map.getWidth() - 1));
+	y = std::min(y, uint16_t(map.getHeight() - 1));
+
+	assert(isValid());
 }
 
 uint16_t MapPosition::getDistToMapBorderX(const Map& map) const {
