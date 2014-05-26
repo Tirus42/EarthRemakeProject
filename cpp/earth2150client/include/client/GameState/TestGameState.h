@@ -11,6 +11,9 @@ namespace scene {
 class ISceneManager;
 class ICameraSceneNode;
 }
+namespace gui {
+class ICursorControl;
+}
 }
 
 class TestGameState : public AbstractGameState {
@@ -23,6 +26,9 @@ class TestGameState : public AbstractGameState {
 
 		/// Speichere die Maus Position für die GUI behandlung
 		irr::core::position2di mousePosition;
+
+		/// Cursor Control um die Mouse beeinflussen zu können
+		irr::gui::ICursorControl* cursorControl;
 
 		/// Event Receiver für die GUI
 		irr::IEventReceiver* subEventReceiver;

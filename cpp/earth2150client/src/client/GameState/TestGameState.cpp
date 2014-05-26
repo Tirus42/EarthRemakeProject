@@ -23,10 +23,14 @@ TestGameState::TestGameState(irr::IrrlichtDevice* device) :
 	AbstractGameState(device),
 	camera(0),
 	mousePosition(),
+	cursorControl(device->getCursorControl()),
 	subEventReceiver(0) {
+
+	cursorControl->grab();
 }
 
 TestGameState::~TestGameState() {
+	cursorControl->drop();
 	removeCamera();
 }
 
@@ -154,11 +158,17 @@ AbstractGameState* TestGameState::run() {
 bool TestGameState::OnEvent(const irr::SEvent& event) {
 	// Bei betätigen der rechten Maustaste zwischen Maus fangen umschalten
 	if (event.EventType == irr::EET_MOUSE_INPUT_EVENT &&
-		event.MouseInput.isRightPressed()) {
+		event.MouseInput.Event == EMIE_RMOUSE_LEFT_UP) {
+
+		// Setzte Maus in Mitte um unnötigen Kameraschwenk zu vermeiden
+		cursorControl->setPosition(0.5f, 0.5f);
+
+		// Toggle Maus fangen
 		camera->setInputReceiverEnabled(!camera->isInputReceiverEnabled());
 
 		return true;
 	}
+
 	// Speichere Maus Position für weitere behandlung
 	else if (event.EventType == irr::EET_MOUSE_INPUT_EVENT &&
 		event.MouseInput.Event == irr::EMIE_MOUSE_MOVED) {
