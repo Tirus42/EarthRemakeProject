@@ -62,6 +62,8 @@ class BasicGameInterface : public IGUI, public irr::IEventReceiver {
 		/// Passt die GUI Elemente an eine neue Auflösung an
 		virtual void onResize(const irr::core::dimension2du& newSize);
 
+		virtual bool isMouseOverGUIElement(const irr::core::position2di& mousePosition) const;
+
 		virtual bool OnEvent(const irr::SEvent& event);
 };
 

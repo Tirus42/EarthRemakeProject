@@ -96,6 +96,18 @@ void BasicGameInterface::onResize(const irr::core::dimension2du& newSize) {
 		resizeControlPanel(newSize);
 }
 
+bool BasicGameInterface::isMouseOverGUIElement(const core::position2di& mousePosition) const {
+	if (menuPanel->getAbsoluteClippingRect().isPointInside(mousePosition))
+		return true;
+
+	if (mapPanel && mapPanel->getAbsolutePosition().isPointInside(mousePosition))
+		return true;
+
+	if (controlPanel && controlPanel->getAbsoluteClippingRect().isPointInside(mousePosition))
+		return true;
+
+	return false;
+}
 
 bool BasicGameInterface::OnEvent(const SEvent& event) {
 	// Fange Log-Eintrag Event beim Ändern der Auflösung ab
