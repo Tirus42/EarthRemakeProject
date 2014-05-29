@@ -110,15 +110,20 @@ AbstractGameState* TestGameState::run() {
 		HighResolutionTime(&startTimeFrame);
 		renderer.render();
 
-		// Mesh Seletor Test
-		core::line3d<f32> ray = smgr->getSceneCollisionManager()->getRayFromScreenCoordinates(mousePosition, camera);
 
-		MapPosition pos = map.pickMapPosition(ray.start, ray.getVector());
+		// Map Seletor Test
+		if (!gui.isMouseOverGUIElement(mousePosition)) {
+			core::line3d<f32> ray = smgr->getSceneCollisionManager()->getRayFromScreenCoordinates(mousePosition, camera);
 
-		if (pos.isValid()) {
-			marker->clear();
-			marker->addField(pos);
+			MapPosition pos = map.pickMapPosition(ray.start, ray.getVector());
+
+			if (pos.isValid()) {
+				marker->clear();
+				marker->addField(pos);
+			}
 		}
+
+
 
 		{	// Schreibe die aktuellen FPS Werte neu in das GUI Element (Textfeld)
 			core::stringw text("FPS: ");
