@@ -70,7 +70,7 @@ class VisualMap : public Map {
 		MapPosition pickMapPosition(const irr::core::vector3df& source, const irr::core::vector3df& direction);
 
 		/// Rendert das Sichtbare Terrain
-		void drawTerrain(irr::video::IVideoDriver* driver);
+		void drawTerrain(irr::video::IVideoDriver* driver) const;
 
 };
 

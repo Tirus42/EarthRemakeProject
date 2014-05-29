@@ -187,7 +187,7 @@ MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core
 	return MapPosition::InvalidPosition();
 }
 
-void VisualMap::drawTerrain(video::IVideoDriver* driver) {
+void VisualMap::drawTerrain(video::IVideoDriver* driver) const {
 
 	driver->setTransform(video::ETS_WORLD, core::IdentityMatrix);
 	driver->setMaterial(getMaterial(0));
