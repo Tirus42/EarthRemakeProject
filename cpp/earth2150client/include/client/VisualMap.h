@@ -68,6 +68,10 @@ class VisualMap : public Map {
 		/// Prüft auf welches Feld auf der Map der Richtungsvektor trifft
 		/// \return Die MapPosition mit dem Feld, invalides Feld, falls kein Feld getroffen wird
 		MapPosition pickMapPosition(const irr::core::vector3df& source, const irr::core::vector3df& direction);
+
+		/// Rendert das Sichtbare Terrain
+		void drawTerrain(irr::video::IVideoDriver* driver);
+
 };
 
 #endif // VISUALMAP_H_INCLUDED

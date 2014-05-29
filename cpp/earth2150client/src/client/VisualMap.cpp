@@ -115,7 +115,6 @@ void VisualMap::build() {
 	selector->drop();
 }
 
-
 MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core::vector3df& direction) {
 	// Hole Bounding Box der Map
 	const core::aabbox3df boundingBox = mesh->BoundingBox;
@@ -186,4 +185,19 @@ MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core
 
 	// Nichts gefunden
 	return MapPosition::InvalidPosition();
+}
+
+void VisualMap::drawTerrain(video::IVideoDriver* driver) {
+
+	driver->setTransform(video::ETS_WORLD, core::IdentityMatrix);
+	driver->setMaterial(getMaterial(0));
+
+	// Stur alle Map Parts zeichnen
+	// Todo: Einzelne Parts prüfen ob in Sicht und nur dann Zeichnen
+	for (size_t i = 0; i < mapParts.size(); ++i) {
+		const VisualMapPart* part = mapParts[i];
+
+		driver->drawMeshBuffer(part->getMeshBuffer());
+	}
+
 }
