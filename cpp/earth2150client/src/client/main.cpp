@@ -66,13 +66,19 @@ void loadConfig(ClientConfig& config) {
 int main(int argc, char** argv) {
 
 	bool skipMenu = false;
+	bool testCreateFlyingObjects = false;
 
 	{
 		int c;
 
-		while ((c = getopt(argc, argv, "s")) != -1) {
+		while ((c = getopt(argc, argv, "st")) != -1) {
 			if (c == 's')
 				skipMenu = true;
+
+			if (c == 't') {
+				testCreateFlyingObjects = true;
+				skipMenu = true;
+			}
 		}
 	}
 
@@ -104,7 +110,7 @@ int main(int argc, char** argv) {
 	AbstractGameState* currentGameState = 0;
 
 	if (skipMenu) {
-		currentGameState = new TestGameState(device);
+		currentGameState = new TestGameState(device, testCreateFlyingObjects);
 	} else {
 		currentGameState = new MainMenu(device);
 	}

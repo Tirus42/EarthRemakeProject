@@ -33,6 +33,9 @@ class TestGameState : public AbstractGameState {
 		/// Event Receiver für die GUI
 		irr::IEventReceiver* subEventReceiver;
 
+		/// Testobjekte
+		bool testFlyingObjects:1;
+
 		/// Erstellt die Frei bewegbare Kamera
 		void createCamera(irr::scene::ISceneManager* smgr);
 
@@ -44,7 +47,7 @@ class TestGameState : public AbstractGameState {
 		void setSubEventReceiver(irr::IEventReceiver* receiver);
 
 	public:
-		TestGameState(irr::IrrlichtDevice* device);
+		TestGameState(irr::IrrlichtDevice* device, bool testCreateFlyingObjects = false);
 		~TestGameState();
 
 		/// Main Methode des Zustandes, Rückgabe bestimmt den Folgezustand.

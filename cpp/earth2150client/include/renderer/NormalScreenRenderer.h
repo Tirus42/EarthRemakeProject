@@ -11,6 +11,10 @@ class NormalScreenRenderer : public IScreenRenderer {
 		NormalScreenRenderer(irr::IrrlichtDevice* device, irr::video::SColor backgroundColor);
 		~NormalScreenRenderer();
 
+		bool init();
+
+		virtual void resize(const irr::core::dimension2du& newSize);
+
 		/// Rendert die Szene auf den Bildschirm
 		void render();
 };

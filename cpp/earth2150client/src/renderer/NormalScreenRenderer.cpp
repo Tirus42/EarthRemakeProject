@@ -14,6 +14,15 @@ NormalScreenRenderer::~NormalScreenRenderer() {
 
 }
 
+bool NormalScreenRenderer::init() {
+	// In diesem Renderer gibt es nichts zu initiieren
+	return true;
+}
+
+void NormalScreenRenderer::resize(const irr::core::dimension2du& newSize) {
+	// Nichts zu tun bei Auflösungsänderung
+}
+
 void NormalScreenRenderer::render() {
 	video::IVideoDriver* driver = device->getVideoDriver();
     scene::ISceneManager* smgr = device->getSceneManager();

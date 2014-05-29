@@ -42,6 +42,12 @@ class IScreenRenderer {
 			device->drop();
 		}
 
+		/// Initiiert den Renderer
+		virtual bool init() = 0;
+
+		/// Ändert die Ausgabeauflösung des Renderers
+		virtual void resize(const irr::core::dimension2du& newSize) = 0;
+
 		/// Rendert die Szene und gibt diese auf dem Bildschirm aus
 		virtual void render() = 0;
 

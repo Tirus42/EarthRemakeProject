@@ -7,6 +7,8 @@
 #include "renderer/NormalScreenRenderer.h"
 #include "GUI/ResizeEvent.h"
 
+#include "tests/FlyingObjects.h"
+
 #include "tf/time.h"
 
 #include <irrlicht.h>
@@ -19,12 +21,13 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
-TestGameState::TestGameState(irr::IrrlichtDevice* device) :
+TestGameState::TestGameState(irr::IrrlichtDevice* device, bool testCreateFlyingObjects) :
 	AbstractGameState(device),
 	camera(0),
 	mousePosition(),
 	cursorControl(device->getCursorControl()),
-	subEventReceiver(0) {
+	subEventReceiver(0),
+	testFlyingObjects(testCreateFlyingObjects) {
 
 	cursorControl->grab();
 }
@@ -96,6 +99,24 @@ AbstractGameState* TestGameState::run() {
 	// Den Marker mit dem Material erstellen/holen
 	MapMarker* marker = map.getMapMarkerManager().getMarkerForMaterial(m);
 
+
+	/// -- Test mit Fliegenden Würfeln --------
+	FlyingObjects flyingObjectsTest(map, smgr);
+	if (testFlyingObjects) {
+		const int countObjects = 100;
+
+		scene::IMeshSceneNode* cube = smgr->addCubeSceneNode();
+		cube->getMaterial(0) = map.getMaterial(0);
+		//cube->setMaterialType(map.getMaterial(0).MaterialType);
+
+		flyingObjectsTest.createRotatingObjects(cube, core::vector2df(256, 256), 128.f, 0.0001f, 10);
+		flyingObjectsTest.createRotatingObjects(cube, core::vector2df(256, 768), 200.f, 0.0001f, 20);
+		flyingObjectsTest.createRotatingObjects(cube, core::vector2df(512, 512), 386, 0.0001, countObjects);
+
+        cube->remove();
+	}
+	/// ----------------------------------
+
 	// Ausgabevariablen von der Zeitmessung
 	uint64_t lastRenderTime = 0;
 	uint64_t lastFrameTime = 0;
@@ -108,6 +129,10 @@ AbstractGameState* TestGameState::run() {
 	// Hauptschleife
 	while (device->run()) {
 		HighResolutionTime(&startTimeFrame);
+
+		if (testFlyingObjects)
+			flyingObjectsTest.update();
+
 		renderer.render();
 
 
