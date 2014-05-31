@@ -48,7 +48,7 @@ void benchmark(const Map& map) {
 	}
 
 	Map m(1024, 1024);
-	bool result = m.loadHeightMapRAW("map1024x1024.bin");
+	bool result = m.loadHeightMapRAW("GameData/map1024x1024.bin");
 	std::cout << "Laden der Map " << (result ? "erfolgreich" : "fehlgeschlagen") << std::endl;
 
 	if (!result)

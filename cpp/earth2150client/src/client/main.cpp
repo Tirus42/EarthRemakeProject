@@ -96,6 +96,9 @@ int main(int argc, char** argv) {
 	if (!device)
 		return EXIT_FAILURE;
 
+	// Füge Ordner GameData als Datenquelle ein
+	device->getFileSystem()->addFileArchive("GameData");
+
 	IVideoDriver* driver = device->getVideoDriver();
 
 	// Mache Fenster frei Skalierbar

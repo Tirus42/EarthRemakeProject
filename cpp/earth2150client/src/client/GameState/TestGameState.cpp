@@ -57,7 +57,7 @@ AbstractGameState* TestGameState::run() {
 	VisualMap map(driver, smgr, 1024, 1024);
 
 	// Raw-Heightmap laden
-	if (!map.loadHeightMapRAW("map1024x1024.bin"))
+	if (!map.loadHeightMapRAW("GameData/map1024x1024.bin"))
 		return 0;
 
 	// Selections-ID setzen
