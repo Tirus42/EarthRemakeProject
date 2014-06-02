@@ -226,6 +226,10 @@
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>
+		<Unit filename="../earth2150client/include/renderer/LightManager.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
 		<Unit filename="../earth2150client/include/renderer/NormalScreenRenderer.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
@@ -295,6 +299,10 @@
 			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/config/ClientConfig.cpp">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/src/renderer/LightManager.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>

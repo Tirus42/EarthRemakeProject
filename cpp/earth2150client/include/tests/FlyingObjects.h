@@ -26,7 +26,7 @@ class FlyingObjects {
 		FlyingObjects(const VisualMap& map, scene::ISceneManager* smgr);
 		~FlyingObjects();
 
-		void createRotatingObjects(scene::ISceneNode* object, const core::vector2df& center, float radius, float speed, u32 count);
+		void createRotatingObjects(scene::ISceneNode* object, const core::vector2df& center, irr::f32 radius, irr::f32 speed, irr::u32 count);
 
 		/// passt die Höhe der Objekte an ihrer aktuellen Kartenposition an
 		void update();
