@@ -83,6 +83,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="-t" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option='-isystem &quot;$(#irrlicht)/include&quot;' />
@@ -138,6 +139,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="-t" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option='-isystem &quot;$(#irrlicht)/include&quot;' />
@@ -222,7 +224,15 @@
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>
+		<Unit filename="../earth2150client/include/renderer/DeferredShadingScreenRenderer.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
 		<Unit filename="../earth2150client/include/renderer/IScreenRenderer.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/include/renderer/LightData/SPointLightData.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>
@@ -239,6 +249,18 @@
 			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/include/renderer/ScreenRendererHelper.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/include/renderer/ShaderCallback/GlobalLightCallback.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/include/renderer/ShaderCallback/PointLightCallback.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/include/renderer/ShaderCallback/TerrainShaderCallback.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>
@@ -299,6 +321,10 @@
 			<Option target="Linux - Client - Debug" />
 		</Unit>
 		<Unit filename="../earth2150client/src/config/ClientConfig.cpp">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+		</Unit>
+		<Unit filename="../earth2150client/src/renderer/DeferredShadingScreenRenderer.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 		</Unit>

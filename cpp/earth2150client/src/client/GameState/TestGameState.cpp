@@ -6,8 +6,11 @@
 #include "GUI/IngameGUIEventReceiver.h"
 #include "renderer/NormalScreenRenderer.h"
 #include "GUI/ResizeEvent.h"
+#include "renderer/DeferredShadingScreenRenderer.h"
 
 #include "tests/FlyingObjects.h"
+
+#include "renderer/LightData/SPointLightData.h"
 
 #include "tf/time.h"
 
@@ -124,14 +127,48 @@ AbstractGameState* TestGameState::run() {
 	uint64_t startTimeFrame;
 	uint64_t endTimeFrame;
 
-	NormalScreenRenderer renderer(device, SColor(0, 200, 200, 200));
+	//NormalScreenRenderer renderer(device, SColor(0, 200, 200, 200));
+	DeferredShadingScreenRenderer renderer(device, SColor(0, 255, 255, 255), core::dimension2du(1024, 768));
+
+	renderer.init();
+
+	const video::SMaterial mat = renderer.getMaterial(DeferredShadingScreenRenderer::SHADER_MAP);
+
+	map.getMaterial(0).MaterialType = mat.MaterialType;
+	map.updateMaterial();
+
+	/// ------------------ Lichtquellen einfügen
+	{
+		const core::array<scene::ISceneNode*>& nodeArray = flyingObjectsTest.getNodeArray();
+
+		LightManager& lightManager = renderer.getLightManager();
+
+		srand(42);
+
+		for (u32 i = 0; i < nodeArray.size(); ++i) {
+			lightManager.addPointLight(nodeArray[i]->getAbsolutePosition(), video::SColor(255, rand() % 0xFF, rand() % 0xFF, rand() % 0xFF), 50);
+
+		}
+	}
+	/// -----------------------------
 
 	// Hauptschleife
 	while (device->run()) {
 		HighResolutionTime(&startTimeFrame);
 
-		if (testFlyingObjects)
+		if (testFlyingObjects) {
 			flyingObjectsTest.update();
+
+			const core::array<scene::ISceneNode*>& nodes = flyingObjectsTest.getNodeArray();
+
+			LightManager& lightManager = renderer.getLightManager();
+
+			for (int i = 0; i < nodes.size(); ++i) {
+				SPointLightData& pLight = lightManager.getPointLight(i);
+
+				pLight.position = nodes[i]->getAbsolutePosition();
+			}
+		}
 
 		renderer.render();
 
@@ -147,7 +184,6 @@ AbstractGameState* TestGameState::run() {
 				marker->addField(pos);
 			}
 		}
-
 
 
 		{	// Schreibe die aktuellen FPS Werte neu in das GUI Element (Textfeld)
@@ -175,9 +211,13 @@ AbstractGameState* TestGameState::run() {
 		lastFrameTime = HighResolutionDiffNanoSec(startTimeFrame, endTimeFrame);
 
 		// Wenn das Fenster den Fokus verliert, dann nicht weiter rendern
-		while (!device->isWindowActive()) {
-			device->sleep(10);
-			device->run();
+		if (!device->isWindowActive()) {
+			while (!device->isWindowActive()) {
+				device->sleep(10);
+				device->run();
+			}
+			// Wenn Fenster inaktiv war dann Shader neu Laden lassen (zu debugging zwecken)
+			renderer.init();
 		}
 	}
 
