@@ -16,13 +16,15 @@ DeferredShadingScreenRenderer::DeferredShadingScreenRenderer(IrrlichtDevice* dev
 	screenSize(device->getVideoDriver()->getCurrentRenderTargetSize()),
 	renderTargets(),
 	shaderMaterial(SHADER_COUNT),
-	pointLightShaderCallback(0) {
+	globalLightShaderCallback(new GlobalLightCallback()),
+	pointLightShaderCallback(new PointLightCallback()) {
 
 }
 
 DeferredShadingScreenRenderer::~DeferredShadingScreenRenderer() {
 	freeRenderTargets();
 
+	delete globalLightShaderCallback;
 	delete pointLightShaderCallback;
 }
 
@@ -40,8 +42,6 @@ bool DeferredShadingScreenRenderer::init() {
 	// Setzte passenden ZBuffer Operator und deakiviere schreiben für Lichtquellen
 	shaderMaterial[SHADER_POINTLIGHT].ZBuffer = video::ECFN_GREATER;
 	shaderMaterial[SHADER_POINTLIGHT].ZWriteEnable = false;
-
-	pointLightShaderCallback = new PointLightCallBack();
 
 	resize(screenSize);
 
@@ -144,7 +144,6 @@ bool DeferredShadingScreenRenderer::loadShaders() {
 	s32 MaterialType_PointLight = 0;
 
 	TerrainShaderCallback* mc = new TerrainShaderCallback();
-	GlobalLightCallBack* m2 = new GlobalLightCallBack();
 
 	MaterialType_Map = gpu->addHighLevelShaderMaterialFromFiles(
 		vsFileName, "vertexMain", video::EVST_VS_3_0,
@@ -154,7 +153,7 @@ bool DeferredShadingScreenRenderer::loadShaders() {
 	MaterialType_GlobalLight = gpu->addHighLevelShaderMaterialFromFiles(
 		vsLightName, "vertexMain", video::EVST_VS_3_0,
 		psLightName, "pixelMain", video::EPST_PS_3_0,
-		m2, video::EMT_SOLID, 0, video::EGSL_DEFAULT);
+		globalLightShaderCallback, video::EMT_SOLID, 0, video::EGSL_DEFAULT);
 
 	MaterialType_PointLight = gpu->addHighLevelShaderMaterialFromFiles(
 		vssLightName, "vertexMain", video::EVST_VS_3_0,

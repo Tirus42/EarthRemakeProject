@@ -5,7 +5,8 @@
 
 #include "renderer/ScreenRendererHelper.h"
 
-class PointLightCallBack;
+class GlobalLightCallback;
+class PointLightCallback;
 
 /**
 * --- Groﬂe Baustelle ---
@@ -29,7 +30,8 @@ class DeferredShadingScreenRenderer : public IScreenRenderer {
 
 		irr::core::array<irr::video::SMaterial> shaderMaterial;
 
-		PointLightCallBack* pointLightShaderCallback;
+		GlobalLightCallback* globalLightShaderCallback;
+		PointLightCallback* pointLightShaderCallback;
 
 	private:
 		bool createAndSetRenderTargets(const irr::core::dimension2du& size);

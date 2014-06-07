@@ -5,18 +5,23 @@
 
 #include "renderer/LightData/SPointLightData.h"
 
-class PointLightCallBack : public irr::video::IShaderConstantSetCallBack
+using namespace irr;
+
+class PointLightCallback : public irr::video::IShaderConstantSetCallBack
 {
 public:
 	SPointLightData currentPointLight;
 
-	virtual void OnSetConstants(irr::video::IMaterialRendererServices* services, s32 userData)
+	PointLightCallback() :
+		currentPointLight() {}
+
+	virtual void OnSetConstants(irr::video::IMaterialRendererServices* services, irr::s32 userData)
 	{
-		irr::video::IVideoDriver* driver = services->getVideoDriver();
+		video::IVideoDriver* driver = services->getVideoDriver();
 
 		// set clip matrix
 
-		core::matrix4 worldViewProj;
+		irr::core::matrix4 worldViewProj;
 		worldViewProj = driver->getTransform(video::ETS_PROJECTION);
 		worldViewProj *= driver->getTransform(video::ETS_VIEW);
 		worldViewProj *= driver->getTransform(video::ETS_WORLD);
