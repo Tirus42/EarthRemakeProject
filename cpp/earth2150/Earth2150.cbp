@@ -361,9 +361,11 @@
 		<Unit filename="../ff/src/ff/JumpPointSearch.cpp" />
 		<Unit filename="../tf/include/tf/file.h" />
 		<Unit filename="../tf/include/tf/network.h" />
+		<Unit filename="../tf/include/tf/thread.h" />
 		<Unit filename="../tf/include/tf/time.h" />
 		<Unit filename="../tf/src/tf/file.cpp" />
 		<Unit filename="../tf/src/tf/network.cpp" />
+		<Unit filename="../tf/src/tf/thread.cpp" />
 		<Unit filename="../tf/src/tf/time.cpp" />
 		<Unit filename="include/Building/Building.h" />
 		<Unit filename="include/Building/BuildingChassis.h" />
