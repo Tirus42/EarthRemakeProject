@@ -5,8 +5,6 @@
 
 #include "renderer/ScreenRendererHelper.h"
 
-#include "renderer/LightManager.h"
-
 class PointLightCallBack;
 
 /**
@@ -19,8 +17,8 @@ class DeferredShadingScreenRenderer : public IScreenRenderer {
 
 		irr::core::array<irr::video::IRenderTarget> renderTargets;
 
-		LightManager lightManager;
-
+		DeferredShadingScreenRenderer(const DeferredShadingScreenRenderer&);
+		DeferredShadingScreenRenderer& operator=(const DeferredShadingScreenRenderer&);
 	public:
 		enum ShaderMaterial {
 			SHADER_MAP = 0,
@@ -55,10 +53,6 @@ class DeferredShadingScreenRenderer : public IScreenRenderer {
 
 		/// Rendert die Szene auf den Bildschirm
 		void render();
-
-		LightManager& getLightManager() {
-			return lightManager;
-		}
 };
 
 

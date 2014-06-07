@@ -6,6 +6,8 @@
 #include <stdint.h>
 
 #include "renderer/RenderViewport.h"
+#include "renderer/LightManager.h"
+
 
 class VisualMap;
 
@@ -26,6 +28,8 @@ class IScreenRenderer {
 		/// Array der zu zeichnenden Kameras
 		irr::core::array<RenderViewport*> renderViewports;
 
+		LightManager lightManager;
+
 		IScreenRenderer(const IScreenRenderer&);
 		IScreenRenderer* operator=(const IScreenRenderer&);
 	public:
@@ -33,7 +37,8 @@ class IScreenRenderer {
 			device(device),
 			backgroundColor(backgroundColor),
 			lastRenderTime(0),
-			renderViewports() {
+			renderViewports(),
+			lightManager() {
 
 			device->grab();
 		}
@@ -62,6 +67,10 @@ class IScreenRenderer {
 		void removeRenderViewport(irr::u32 index) {
 			delete renderViewports[index];
 			renderViewports.erase(index);
+		}
+
+		LightManager& getLightManager() {
+			return lightManager;
 		}
 
 		/// Gibt die Zeit zurück, wie lange das letzte Rendern in Nanosekunden gedauert hat

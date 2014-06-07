@@ -134,21 +134,31 @@ AbstractGameState* TestGameState::run() {
 	uint64_t startTimeFrame;
 	uint64_t endTimeFrame;
 
-	//NormalScreenRenderer renderer(device, SColor(0, 200, 200, 200));
-	DeferredShadingScreenRenderer renderer(device, SColor(0, 255, 255, 255), core::dimension2du(1024, 768));
+	IScreenRenderer* renderer;
 
-	renderer.init();
+	bool useCompatibleRenderer = engineData.getConfig().getUseCompatibilityRenderer();
 
-	const video::SMaterial mat = renderer.getMaterial(DeferredShadingScreenRenderer::SHADER_MAP);
+	if (useCompatibleRenderer) {
+		renderer = new NormalScreenRenderer(device, SColor(0, 200, 200, 200));
+	} else {
+		renderer = new DeferredShadingScreenRenderer(device, SColor(0, 255, 255, 255), core::dimension2du(1024, 768));
+	}
 
-	map.getMaterial(0).MaterialType = mat.MaterialType;
-	map.updateMaterial();
+
+	renderer->init();
+
+	if (!useCompatibleRenderer) {
+		const video::SMaterial mat = ((DeferredShadingScreenRenderer*)renderer)->getMaterial(DeferredShadingScreenRenderer::SHADER_MAP);
+
+		map.getMaterial(0).MaterialType = mat.MaterialType;
+		map.updateMaterial();
+	}
 
 	/// ------------------ Lichtquellen einfügen
 	{
 		const core::array<scene::ISceneNode*>& nodeArray = flyingObjectsTest.getNodeArray();
 
-		LightManager& lightManager = renderer.getLightManager();
+		LightManager& lightManager = renderer->getLightManager();
 
 		srand(42);
 
@@ -168,16 +178,16 @@ AbstractGameState* TestGameState::run() {
 
 			const core::array<scene::ISceneNode*>& nodes = flyingObjectsTest.getNodeArray();
 
-			LightManager& lightManager = renderer.getLightManager();
+			LightManager& lightManager = renderer->getLightManager();
 
-			for (int i = 0; i < nodes.size(); ++i) {
+			for (u32 i = 0; i < nodes.size(); ++i) {
 				SPointLightData& pLight = lightManager.getPointLight(i);
 
 				pLight.position = nodes[i]->getAbsolutePosition();
 			}
 		}
 
-		renderer.render();
+		renderer->render();
 
 
 		// Map Seletor Test
@@ -214,7 +224,7 @@ AbstractGameState* TestGameState::run() {
 
 		HighResolutionTime(&endTimeFrame);
 
-		lastRenderTime = renderer.getLastRenderTime();
+		lastRenderTime = renderer->getLastRenderTime();
 		lastFrameTime = HighResolutionDiffNanoSec(startTimeFrame, endTimeFrame);
 
 		// Wenn das Fenster den Fokus verliert, dann nicht weiter rendern
@@ -224,9 +234,11 @@ AbstractGameState* TestGameState::run() {
 				device->run();
 			}
 			// Wenn Fenster inaktiv war dann Shader neu Laden lassen (zu debugging zwecken)
-			renderer.init();
+			renderer->init();
 		}
 	}
+
+	delete renderer;
 
 	return 0;
 }
