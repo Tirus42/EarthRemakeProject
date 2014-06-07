@@ -141,7 +141,7 @@ AbstractGameState* TestGameState::run() {
 	if (useCompatibleRenderer) {
 		renderer = new NormalScreenRenderer(device, SColor(0, 200, 200, 200));
 	} else {
-		renderer = new DeferredShadingScreenRenderer(device, SColor(0, 255, 255, 255), core::dimension2du(1024, 768));
+		renderer = new DeferredShadingScreenRenderer(device, SColor(0, 255, 255, 255));
 	}
 
 

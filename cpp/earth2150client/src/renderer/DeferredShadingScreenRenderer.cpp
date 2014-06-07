@@ -10,10 +10,10 @@
 
 using namespace irr;
 
-DeferredShadingScreenRenderer::DeferredShadingScreenRenderer(IrrlichtDevice* device, video::SColor backgroundColor, const irr::core::dimension2du& screenSize) :
+DeferredShadingScreenRenderer::DeferredShadingScreenRenderer(IrrlichtDevice* device, video::SColor backgroundColor) :
 	IScreenRenderer(device, backgroundColor),
-	helper(screenSize),
-	screenSize(screenSize),
+	helper(device->getVideoDriver()->getCurrentRenderTargetSize()),
+	screenSize(device->getVideoDriver()->getCurrentRenderTargetSize()),
 	renderTargets(),
 	shaderMaterial(SHADER_COUNT),
 	pointLightShaderCallback(0) {

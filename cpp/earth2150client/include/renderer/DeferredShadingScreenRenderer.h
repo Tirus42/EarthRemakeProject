@@ -44,7 +44,7 @@ class DeferredShadingScreenRenderer : public IScreenRenderer {
 
 
 	public:
-		DeferredShadingScreenRenderer(irr::IrrlichtDevice* device, irr::video::SColor backgroundColor, const irr::core::dimension2du& screenSize);
+		DeferredShadingScreenRenderer(irr::IrrlichtDevice* device, irr::video::SColor backgroundColor);
 		~DeferredShadingScreenRenderer();
 
 		bool init();
