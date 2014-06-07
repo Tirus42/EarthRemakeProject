@@ -4,6 +4,7 @@ using namespace irr;
 
 ClientConfig::ClientConfig() :
 	param(),
+	useCompatibilityRenderer(false),
 	path_TheMoonProject(),
 	path_LostSouls(),
 	latestConfigVersion(true) {
@@ -50,6 +51,11 @@ void ClientConfig::saveXMLFile(io::IXMLWriter* writer) const {
 						L"bit", core::stringw(param.Bits).c_str(),
 						L"fullscreen", core::stringw(param.Fullscreen).c_str(),
 						L"vsync", core::stringw(param.Vsync).c_str()
+						);
+	writer->writeLineBreak();
+
+	writer->writeElement(L"rendering", true,
+						L"compatible", core::stringw(useCompatibilityRenderer).c_str()
 						);
 	writer->writeLineBreak();
 
@@ -111,6 +117,11 @@ void ClientConfig::loadXMLFile(io::IXMLReader* reader) {
 
 			if (reader->getAttributeValue(L"vsync"))
 				param.Vsync = reader->getAttributeValueAsInt(L"vsync");
+		}
+
+		if (core::stringw(reader->getNodeName()) == L"rendering") {
+			if (reader->getAttributeValue(L"compatible"))
+				useCompatibilityRenderer = reader->getAttributeValueAsInt(L"compatible");
 		}
 
 		if (core::stringw(reader->getNodeName()) == L"path") {
