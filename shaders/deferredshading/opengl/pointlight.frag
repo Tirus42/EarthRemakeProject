@@ -13,18 +13,20 @@ uniform float constantAttenuation;
 uniform float linearAttenuation;
 uniform float quadAttenuation;
 
-vec2 invResolution = vec2(1.0 / 1024.0, 1.0 / 768.0);
-
 void main (void) {
 	gl_FragColor = vec4(LightColor, 1);
 	//return;
 	
-	vec2 texCoord = (gl_FragCoord.xy + vec2(0.5, 0.5)) * invResolution;
+	ivec2 texCoord = ivec2(gl_FragCoord.xy);
 
-	vec3 position = texture2D(PositionTex, texCoord).rgb;
+	//vec3 position = texture(PositionTex, texCoord).rgb;
+	vec3 position = texelFetch(PositionTex, texCoord, 0);
+	
 	// Farbe des Untergrundes auf welchen das Licht leutet
-	vec4 groundColor = vec4(texture2D(DiffuseTex, texCoord).rgb, 1);
-	vec3 normal = texture2D(NormalTex, texCoord).xyz;
+	vec3 groundColor = texelFetch(DiffuseTex, texCoord, 0);
+	
+	// Normale der Oberfläche holen
+	vec3 normal = texelFetch(NormalTex, texCoord, 0);
 	
 	float distance = length(position - LightPosition);
 	
@@ -62,7 +64,7 @@ void main (void) {
 	//groundColor.rgb = LightColor;
 	//groundColor = vec4(position, 1);
 	
-	gl_FragColor = groundColor;
+	gl_FragColor = vec4(groundColor, 1);
 	//gl_FragColor.rgb = 0;
 	//gl_FragColor.r = lightStrength * diffuseFactor;
 }

@@ -169,8 +169,17 @@ AbstractGameState* TestGameState::run() {
 	}
 	/// -----------------------------
 
+	core::recti currentResolution = device->getVideoDriver()->getViewPort();
+
 	// Hauptschleife
 	while (device->run()) {
+		// Testweise hier prüfen ob sich die Auflösung geändert hat
+		if (currentResolution != device->getVideoDriver()->getViewPort()) {
+			currentResolution = device->getVideoDriver()->getViewPort();
+
+			renderer->resize(core::dimension2du(currentResolution.getWidth(), currentResolution.getHeight()));
+		}
+
 		HighResolutionTime(&startTimeFrame);
 
 		if (testFlyingObjects) {
