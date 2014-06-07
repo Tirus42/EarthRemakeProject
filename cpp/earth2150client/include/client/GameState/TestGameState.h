@@ -47,7 +47,7 @@ class TestGameState : public AbstractGameState {
 		void setSubEventReceiver(irr::IEventReceiver* receiver);
 
 	public:
-		TestGameState(irr::IrrlichtDevice* device, bool testCreateFlyingObjects = false);
+		TestGameState(EngineData& engineData, bool testCreateFlyingObjects = false);
 		~TestGameState();
 
 		/// Main Methode des Zustandes, Rückgabe bestimmt den Folgezustand.

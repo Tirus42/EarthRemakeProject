@@ -14,7 +14,10 @@
 
 #include "tf/time.h"
 
+#include "client/EngineData.h"
 #include <irrlicht.h>
+
+#include <cassert>
 
 using namespace irr;
 
@@ -24,13 +27,15 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
-TestGameState::TestGameState(irr::IrrlichtDevice* device, bool testCreateFlyingObjects) :
-	AbstractGameState(device),
+TestGameState::TestGameState(EngineData& engineData, bool testCreateFlyingObjects) :
+	AbstractGameState(engineData),
 	camera(0),
 	mousePosition(),
-	cursorControl(device->getCursorControl()),
+	cursorControl(engineData.getIrrlichtDevice()->getCursorControl()),
 	subEventReceiver(0),
 	testFlyingObjects(testCreateFlyingObjects) {
+
+	assert(engineData.getIrrlichtDevice() != 0);
 
 	cursorControl->grab();
 }
@@ -44,6 +49,8 @@ TestGameState::~TestGameState() {
 static const irr::s32 ID_MAPPICK = 1 << 0;
 
 AbstractGameState* TestGameState::run() {
+	IrrlichtDevice* device = engineData.getIrrlichtDevice();
+
 	IVideoDriver* driver = device->getVideoDriver();
 	ISceneManager* smgr = device->getSceneManager();
 	IGUIEnvironment* guienv = device->getGUIEnvironment();

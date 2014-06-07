@@ -2,6 +2,7 @@
 
 #include "client/GameState/TestGameState.h"
 
+#include "client/EngineData.h"
 #include <irrlicht.h>
 
 using namespace irr;
@@ -10,13 +11,14 @@ using namespace video;
 using namespace gui;
 using namespace core;
 
-MainMenu::MainMenu(irr::IrrlichtDevice* device) :
-	AbstractGameState(device),
+MainMenu::MainMenu(EngineData& engineData) :
+	AbstractGameState(engineData),
 	changeToState(0),
 	gameStateChanged(false) {
 }
 
 AbstractGameState* MainMenu::run() {
+	IrrlichtDevice* device = engineData.getIrrlichtDevice();
 	IVideoDriver* driver = device->getVideoDriver();
 	IGUIEnvironment* guienv = device->getGUIEnvironment();
 
@@ -76,7 +78,7 @@ bool MainMenu::OnEvent(const SEvent& event) {
 	IGUIElement* caller = event.GUIEvent.Caller;
 
 	if (caller == guiElements[GUI_BUTTON_NEWGME]) {
-		changeGameState(new TestGameState(device));
+		changeGameState(new TestGameState(engineData));
 		return true;
 	}
 

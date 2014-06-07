@@ -1,4 +1,5 @@
 #include "config/ClientConfig.h"
+#include "client/EngineData.h"
 
 #include "client/GameState/MainMenu.h"
 #include "client/GameState/TestGameState.h"
@@ -82,7 +83,8 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	ClientConfig config;
+	EngineData engineData;
+	ClientConfig& config = engineData.getConfig();
 
 	// Config Datei Laden wenn vorhanden, andernfalls mit Standardwerten erstellen.
 	loadConfig(config);
@@ -95,6 +97,8 @@ int main(int argc, char** argv) {
 	// Wenn Device nicht gestartet werden konnte, dann abbrechen
 	if (!device)
 		return EXIT_FAILURE;
+
+	engineData.setDevice(device);
 
 	// Füge Ordner GameData als Datenquelle ein
 	device->getFileSystem()->addFileArchive("GameData");
@@ -113,9 +117,9 @@ int main(int argc, char** argv) {
 	AbstractGameState* currentGameState = 0;
 
 	if (skipMenu) {
-		currentGameState = new TestGameState(device, testCreateFlyingObjects);
+		currentGameState = new TestGameState(engineData, testCreateFlyingObjects);
 	} else {
-		currentGameState = new MainMenu(device);
+		currentGameState = new MainMenu(engineData);
 	}
 
 	// Alles weitere übernimmt der aktuelle GameState

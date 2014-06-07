@@ -43,7 +43,7 @@ class MainMenu : public AbstractGameState {
 		void changeGameState(AbstractGameState* newState);
 
 	public:
-		MainMenu(irr::IrrlichtDevice* device);
+		MainMenu(EngineData& engineData);
 
 		/// Main Methode des Zustandes, Rückgabe bestimmt den Folgezustand.
 		virtual AbstractGameState* run();

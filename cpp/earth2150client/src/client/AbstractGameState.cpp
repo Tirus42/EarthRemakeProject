@@ -1,16 +1,16 @@
 #include "client/AbstractGameState.h"
 
+#include "client/EngineData.h"
+
 #include <irrlicht.h>
 
-AbstractGameState::AbstractGameState(irr::IrrlichtDevice* device) :
-	device(device) {
-
-	device->grab();
+AbstractGameState::AbstractGameState(EngineData& engineData) :
+	engineData(engineData) {
 
 	// Setzt diese Klasse damit diese nun die Events empfängt
-	device->setEventReceiver(this);
+	if (engineData.getIrrlichtDevice())
+		engineData.getIrrlichtDevice()->setEventReceiver(this);
 }
 
 AbstractGameState::~AbstractGameState() {
-	device->drop();
 }

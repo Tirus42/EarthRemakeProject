@@ -5,9 +5,7 @@
 
 #include <IEventReceiver.h>
 
-namespace irr {
-	class IrrlichtDevice;
-}
+class EngineData;
 
 /**
 * Stellt den Zustand der Anwendung dar.
@@ -21,11 +19,11 @@ class AbstractGameState : public irr::IEventReceiver {
 		AbstractGameState& operator= (const AbstractGameState&);
 
 	protected:
-		/// Aktives Irrlicht Device
-		irr::IrrlichtDevice* device;
+		/// Engine Daten mit Config und Device Ptr
+		EngineData& engineData;
 
 	public:
-		AbstractGameState(irr::IrrlichtDevice* device);
+		AbstractGameState(EngineData& engineData);
 		virtual ~AbstractGameState();
 
 		/// Main Methode des Zustandes, Rückgabe bestimmt den Folgezustand.
