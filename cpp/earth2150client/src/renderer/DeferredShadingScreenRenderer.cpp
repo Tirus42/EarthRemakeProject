@@ -24,8 +24,8 @@ DeferredShadingScreenRenderer::DeferredShadingScreenRenderer(IrrlichtDevice* dev
 DeferredShadingScreenRenderer::~DeferredShadingScreenRenderer() {
 	freeRenderTargets();
 
-	delete globalLightShaderCallback;
-	delete pointLightShaderCallback;
+	globalLightShaderCallback->drop();
+	pointLightShaderCallback->drop();
 }
 
 bool DeferredShadingScreenRenderer::init() {
@@ -103,11 +103,7 @@ void DeferredShadingScreenRenderer::freeRenderTargets() {
 	// Texturen freigeben
 	for (u32 i = 0; i < renderTargets.size(); ++i) {
 		driver->removeTexture(renderTargets[i].RenderTexture);
-
-		//renderTargets[i].RenderTexture->drop();
 	}
-
-
 
 	renderTargets.clear();
 }
@@ -159,6 +155,9 @@ bool DeferredShadingScreenRenderer::loadShaders() {
 		vssLightName, "vertexMain", video::EVST_VS_3_0,
 		pssLightName, "pixelMain", video::EPST_PS_3_0,
 		pointLightShaderCallback, video::EMT_TRANSPARENT_ADD_COLOR, 0, video::EGSL_DEFAULT);
+
+	// Pointer wird von Irrlicht übernommen (siehe Reference Counting)
+	mc->drop();
 
 	if (MaterialType_Map == -1 ||MaterialType_GlobalLight == -1 || MaterialType_PointLight == -1)
 		return false;
