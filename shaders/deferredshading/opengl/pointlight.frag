@@ -20,13 +20,13 @@ void main (void) {
 	ivec2 texCoord = ivec2(gl_FragCoord.xy);
 
 	//vec3 position = texture(PositionTex, texCoord).rgb;
-	vec3 position = texelFetch(PositionTex, texCoord, 0);
+	vec3 position = texelFetch(PositionTex, texCoord, 0).rgb;
 	
 	// Farbe des Untergrundes auf welchen das Licht leutet
-	vec3 groundColor = texelFetch(DiffuseTex, texCoord, 0);
+	vec3 groundColor = texelFetch(DiffuseTex, texCoord, 0).rgb;
 	
 	// Normale der Oberfläche holen
-	vec3 normal = texelFetch(NormalTex, texCoord, 0);
+	vec3 normal = texelFetch(NormalTex, texCoord, 0).rgb;
 	
 	float distance = length(position - LightPosition);
 	
