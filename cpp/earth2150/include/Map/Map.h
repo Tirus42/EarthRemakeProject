@@ -220,6 +220,10 @@ class Map {
 		/// Lädt eine Heightmap 1:1 aus einer Datei
 		bool loadHeightMapRAW(const std::string& filename);
 
+		/// Speichert eine komplette Karte der begehbaren Felder als S/W Bitmap
+		/// Unpassable Stellen werden schwarz dargestellt
+		void exportPassablesToBMP(const std::string& fileName) const;
+
 		/// Fügt einen weiteren Spieler in einen bestimmten Slot (Spawnpoint) hinzu
 		bool addPlayer(Player& player, uint32_t slot);
 

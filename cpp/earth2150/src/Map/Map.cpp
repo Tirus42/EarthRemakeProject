@@ -21,7 +21,9 @@ Map::Map(uint16_t width, uint16_t height) :
 		heightMap(new uint16_t[width * height]),
 		movementMap(new uint8_t[width * height]),
 		statusMap(new uint8_t[width * height]),
-		navigator(NavigatorFactory::getNavigator(*this)),		units(),		movingUnits(),
+		navigator(NavigatorFactory::getNavigator(*this)),
+		units(),
+		movingUnits(),
 		spawnPositions(),
 		viewerManager(*this) {
 }
@@ -223,7 +225,8 @@ void Map::UnitDriveTo(Unit& unit, uint32_t target) {
 		uint32_t position = unit.getNextWaypoint();
 		MovingUnit* m = new MovingUnit(unit, Utils::getAngle(*this, startPos, position), MilliSecs(), *this);
 		movingUnits.push(m);
-		std::cout << "Einheit startet Bewegung!\n";
+
+		std::cout << "Einheit startet Bewegung!\n";
 	}
 }
 
@@ -244,7 +247,8 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 
 	uint16_t width = x2 - x1;
 	uint16_t height = y2 - y1;
-	uint16_t width2 = width + 2;	uint16_t height2 = height + 2;
+	uint16_t width2 = width + 2;
+	uint16_t height2 = height + 2;
 	bool *passables = new bool[width2 * height2];
 	::memset(passables, true, width2 * height2 * sizeof(bool));
 
@@ -338,6 +342,54 @@ bool Map::loadHeightMapRAW(const std::string& filename) {
 	return true;
 }
 
+void Map::exportPassablesToBMP(const std::string& fileName) const {
+	std::ofstream file(fileName.c_str(), std::ofstream::out | std::ofstream::binary);
+	if (!file.good()) {
+		throw;
+	}
+	uint8_t header1[] = {
+		0x42, 0x4d, 0x76, 0xff, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x82, 0x00, 0x00, 0x00, 0x6c, 0x00,
+		0x00, 0x00
+	};
+	uint8_t header2[] = {
+		0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0xf4, 0xfe, 0x00, 0x00, 0x13, 0x0b, 0x00, 0x00,
+		0x13, 0x0b, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+		0x02, 0x00, 0x00, 0x00, 0x42, 0x47, 0x52, 0x73,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00
+	};
+	uint32_t width = this->width;
+	uint32_t height = this->height;
+	file.write((char*)header1, sizeof(header1));
+	file.write((char*)&width, 4);
+	file.write((char*)&height, 4);
+	file.write((char*)header2, sizeof(header2));
+	for (uint16_t y = height - 1; y != (uint16_t)-1; y--) {
+		uint8_t byte;
+		for (uint16_t x = 0; x < width; x++) {
+			byte <<= 1;
+			byte |= (x && y) ? getHeightDiffOnField(position(x - 1, y - 1)) >= MAX_HEIGHTDIFF : 1;
+			if (x % 8 == 7) {
+				file.write((char*)&byte, 1);
+			}
+		}
+		if (width % 8 != 0) {
+			byte <<= 8 - (width % 8);
+			file.write((char*)&byte, 1);
+		}
+	}
+	file.close();
+}
+
 bool Map::addPlayer(Player& player, uint32_t slot) {
 	//Todo: Slot verwalten und prüfen ob schon belegt
 
@@ -393,15 +445,35 @@ bool Map::isFieldFree(uint32_t position) const {
 void Map::updateGameField(uint32_t currentTime) {
 	uint32_t currentEndTime;
 
-	while (movingUnits.size() > 0) {		MovingUnit* m = movingUnits.top();
-		currentEndTime = m->getFinishTime();
-		// Wenn Bewegung noch nicht fertig -> return		if (currentEndTime > currentTime)			return;
-		// Bewegung ist abgeschlossen		m->finishMove(*this);		movingUnits.pop();
+	while (movingUnits.size() > 0) {
+		MovingUnit* m = movingUnits.top();
 
-		// Prüfen ob wir eine weitere Bewegung machen sollen		if (m->getUnit().countWaypoints() > 0) {			std::cout << "Starte weitere bewegung\n";			Unit& unit = m->getUnit();
+		currentEndTime = m->getFinishTime();
+
+		// Wenn Bewegung noch nicht fertig -> return
+		if (currentEndTime > currentTime)
+			return;
+
+		// Bewegung ist abgeschlossen
+		m->finishMove(*this);
+		movingUnits.pop();
+
+		// Prüfen ob wir eine weitere Bewegung machen sollen
+		if (m->getUnit().countWaypoints() > 0) {
+			std::cout << "Starte weitere bewegung\n";
+			Unit& unit = m->getUnit();
+
 			viewerManager.debugPaintField(position(unit.getX(), unit.getY()), 0xFF50FF00);
 
-			uint32_t pos = unit.getNextWaypoint();			uint8_t direction = Utils::getAngle(*this, position(unit.getX(), unit.getY()), pos);			m->startMove(direction, currentEndTime, *this);
-			movingUnits.push(m);		}		else {
-			viewerManager.debugPaintField(position(m->getUnit().getX(), m->getUnit().getY()), 0xFF289900);			delete m;		}	}
-}
+			uint32_t pos = unit.getNextWaypoint();
+			uint8_t direction = Utils::getAngle(*this, position(unit.getX(), unit.getY()), pos);
+			m->startMove(direction, currentEndTime, *this);
+
+			movingUnits.push(m);
+		}
+		else {
+			viewerManager.debugPaintField(position(m->getUnit().getX(), m->getUnit().getY()), 0xFF289900);
+			delete m;
+		}
+	}
+}

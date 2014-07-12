@@ -36,8 +36,10 @@ void benchmark(const Map& map) {
 
 	pt.runTests(10);
 }
-int main(int argc, char *argv[]) {
-	bool runBenchmark = false;
+
+int main(int argc, char *argv[]) {
+
+	bool runBenchmark = false;
 	{
 		int c;
 
@@ -48,8 +50,10 @@ void benchmark(const Map& map) {
 	}
 
 	Map m(1024, 1024);
-	bool result = m.loadHeightMapRAW("GameData/map1024x1024.bin");
-	std::cout << "Laden der Map " << (result ? "erfolgreich" : "fehlgeschlagen") << std::endl;
+
+	bool result = m.loadHeightMapRAW("GameData/map1024x1024.bin");
+
+	std::cout << "Laden der Map " << (result ? "erfolgreich" : "fehlgeschlagen") << std::endl;
 
 	if (!result)
 		return EXIT_FAILURE;
@@ -58,6 +62,7 @@ void benchmark(const Map& map) {
 	m.updateMovementMap();
 
 	if (runBenchmark) {
+		// m.exportPassablesToBMP("map.bmp");
 		benchmark(m);
 		return 0;
 	}
