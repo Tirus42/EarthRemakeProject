@@ -86,9 +86,8 @@
 				<Option parameters="-t" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option='-isystem &quot;$(#irrlicht)/include&quot;' />
+					<Add option='-isystem &quot;$(#irrlicht.include)&quot;' />
 					<Add directory="../earth2150client/include" />
-					<Add directory="$(#irrlicht)/include" />
 				</Compiler>
 				<Linker>
 					<Add library="ws2_32" />
@@ -97,7 +96,7 @@
 					<Add library="opengl32" />
 					<Add library="glu32" />
 					<Add library="gdi32" />
-					<Add directory="$(#irrlicht)/lib/Win32-gcc" />
+					<Add directory="$(#irrlicht.lib)" />
 				</Linker>
 			</Target>
 			<Target title="Linux - Server - Debug">
@@ -144,14 +143,13 @@
 				<Option parameters="-t" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option='-isystem &quot;$(#irrlicht)/include&quot;' />
+					<Add option='-isystem &quot;$(#irrlicht.include)&quot;' />
 					<Add directory="../earth2150client/include" />
-					<Add directory="$(#irrlicht)/include" />
 				</Compiler>
 				<Linker>
 					<Add library="Irrlicht" />
 					<Add library="pthread" />
-					<Add directory="$(#irrlicht)/lib/Linux" />
+					<Add directory="$(#irrlicht.lib)" />
 				</Linker>
 			</Target>
 			<Target title="Linux - Client - Release">
@@ -165,16 +163,15 @@
 					<Add option="-fomit-frame-pointer" />
 					<Add option="-fexpensive-optimizations" />
 					<Add option="-O2" />
-					<Add option='-isystem &quot;$(#irrlicht)/include&quot;' />
+					<Add option='-isystem &quot;$(#irrlicht.include)&quot;' />
 					<Add option="-DNDEBUG" />
 					<Add directory="../earth2150client/include" />
-					<Add directory="$(#irrlicht)/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add library="Irrlicht" />
 					<Add library="pthread" />
-					<Add directory="$(#irrlicht)/lib/Linux" />
+					<Add directory="$(#irrlicht.lib)" />
 				</Linker>
 			</Target>
 		</Build>
