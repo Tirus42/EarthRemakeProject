@@ -15,6 +15,8 @@ DeferredShadingScreenRenderer::DeferredShadingScreenRenderer(IrrlichtDevice* dev
 	helper(device->getVideoDriver()->getCurrentRenderTargetSize()),
 	screenSize(device->getVideoDriver()->getCurrentRenderTargetSize()),
 	renderTargets(),
+	postProcessRenderTarget(0),
+	usePostProcessRenderTarget(true),
 	shaderMaterial(SHADER_COUNT),
 	globalLightShaderCallback(new GlobalLightCallback()),
 	pointLightShaderCallback(new PointLightCallback()) {
@@ -66,6 +68,9 @@ bool DeferredShadingScreenRenderer::createAndSetRenderTargets(const irr::core::d
 	video::ITexture* NormTex = driver->addRenderTargetTexture(size, "Normal", video::ECF_R8G8B8);
 	video::ITexture* PosTex = driver->addRenderTargetTexture(size, "Position", video::ECF_A16B16G16R16F);
 
+	if (usePostProcessRenderTarget)
+		postProcessRenderTarget.RenderTexture = driver->addRenderTargetTexture(size, "PostProcess", video::ECF_A16B16G16R16F);
+
 	if (DiffuseTex == 0 || NormTex == 0 || PosTex == 0) {
 		device->getLogger()->log("Failed to create Render Targets!", ELL_ERROR);
 		return false;
@@ -106,6 +111,11 @@ void DeferredShadingScreenRenderer::freeRenderTargets() {
 	}
 
 	renderTargets.clear();
+
+	if (postProcessRenderTarget.RenderTexture) {
+		driver->removeTexture(postProcessRenderTarget.RenderTexture);
+		postProcessRenderTarget.RenderTexture = 0;
+	}
 }
 
 bool DeferredShadingScreenRenderer::loadShaders() {
@@ -202,7 +212,11 @@ void DeferredShadingScreenRenderer::render() {
 	smgr->drawAll();
 
 	// Zeichne Globale Beleuchtung
-	driver->setRenderTarget(video::ERT_FRAME_BUFFER, false, false, backgroundColor);
+	if (usePostProcessRenderTarget) {
+		driver->setRenderTarget(postProcessRenderTarget.RenderTexture, true, false, backgroundColor);
+	} else {
+		driver->setRenderTarget(video::ERT_FRAME_BUFFER, false, false, backgroundColor);
+	}
 	//driver->setRenderTarget(texture[0].RenderTexture, false, false, backgroundColor);
 
 	driver->setMaterial(shaderMaterial[SHADER_GLOBALLIGHT]);
@@ -247,7 +261,10 @@ void DeferredShadingScreenRenderer::render() {
 
 	mesh->drop();
 
-	//driver->setRenderTarget(video::ERT_FRAME_BUFFER, false, false, video::SColor(255, 0, 0, 0));
+	if (usePostProcessRenderTarget) {
+		driver->setRenderTarget(video::ERT_FRAME_BUFFER, false, false, video::SColor(255, 0, 0, 0));
+		driver->draw2DImage(postProcessRenderTarget.RenderTexture, core::position2di(0, 0), core::recti(0, 0, screenSize.Width, screenSize.Height));
+	}
 
 
 	//driver->draw2DImage(tex, core::position2di(0, 0));

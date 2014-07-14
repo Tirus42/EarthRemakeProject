@@ -18,6 +18,9 @@ class DeferredShadingScreenRenderer : public IScreenRenderer {
 
 		irr::core::array<irr::video::IRenderTarget> renderTargets;
 
+		irr::video::IRenderTarget postProcessRenderTarget;
+		bool usePostProcessRenderTarget;
+
 		DeferredShadingScreenRenderer(const DeferredShadingScreenRenderer&);
 		DeferredShadingScreenRenderer& operator=(const DeferredShadingScreenRenderer&);
 	public:
