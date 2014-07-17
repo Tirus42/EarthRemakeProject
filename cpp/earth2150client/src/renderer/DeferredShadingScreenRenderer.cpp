@@ -41,7 +41,7 @@ bool DeferredShadingScreenRenderer::init() {
 	shaderMaterial[SHADER_GLOBALLIGHT].Lighting = false;
 	shaderMaterial[SHADER_POINTLIGHT].Lighting = false;
 
-	// Setzte passenden ZBuffer Operator und deakiviere schreiben für Lichtquellen
+	// Setzte passenden ZBuffer Operator und deakiviere schreiben fÃ¼r Lichtquellen
 	shaderMaterial[SHADER_POINTLIGHT].ZBuffer = video::ECFN_GREATER;
 	shaderMaterial[SHADER_POINTLIGHT].ZWriteEnable = false;
 
@@ -78,12 +78,12 @@ bool DeferredShadingScreenRenderer::createAndSetRenderTargets(const irr::core::d
 
 	assert(renderTargets.size() == 0);
 
-	// Füge diese der Liste an
+	// FÃ¼ge diese der Liste an
 	renderTargets.push_back(DiffuseTex);
 	renderTargets.push_back(NormTex);
 	renderTargets.push_back(PosTex);
 
-	// Setze Texturen als eingabe für die Materials (Shader)
+	// Setze Texturen als eingabe fÃ¼r die Materials (Shader)
 	shaderMaterial[SHADER_GLOBALLIGHT].setTexture(0, DiffuseTex);
 	shaderMaterial[SHADER_GLOBALLIGHT].setTexture(1, NormTex);
 	shaderMaterial[SHADER_GLOBALLIGHT].setTexture(2, PosTex);
@@ -121,7 +121,7 @@ void DeferredShadingScreenRenderer::freeRenderTargets() {
 bool DeferredShadingScreenRenderer::loadShaders() {
 	io::path path("shaders/deferredshading/");
 
-	// PFard bestimmen für richtigen Shader (OpenGL <-> DX9)
+	// PFard bestimmen fÃ¼r richtigen Shader (OpenGL <-> DX9)
 	switch (device->getVideoDriver()->getDriverType()) {
 		case video::EDT_OPENGL:
 			path += "opengl/";
@@ -151,6 +151,8 @@ bool DeferredShadingScreenRenderer::loadShaders() {
 
 	TerrainShaderCallback* mc = new TerrainShaderCallback();
 
+	printf("Kompiliere Shader...");
+
 	MaterialType_Map = gpu->addHighLevelShaderMaterialFromFiles(
 		vsFileName, "vertexMain", video::EVST_VS_3_0,
 		psFileName, "pixelMain", video::EPST_PS_3_0,
@@ -166,11 +168,20 @@ bool DeferredShadingScreenRenderer::loadShaders() {
 		pssLightName, "pixelMain", video::EPST_PS_3_0,
 		pointLightShaderCallback, video::EMT_TRANSPARENT_ADD_COLOR, 0, video::EGSL_DEFAULT);
 
-	// Pointer wird von Irrlicht übernommen (siehe Reference Counting)
+	// Pointer wird von Irrlicht Ã¼bernommen (siehe Reference Counting)
 	mc->drop();
 
-	if (MaterialType_Map == -1 ||MaterialType_GlobalLight == -1 || MaterialType_PointLight == -1)
-		return false;
+	if (MaterialType_Map == -1)
+		printf("Konnte Map Shader nicht kompilieren!\n");
+
+	if (MaterialType_PointLight == -1)
+		printf("Konnte PointLight Shader nicht kompilieren!\n");
+
+	if (MaterialType_GlobalLight == -1)
+		printf("Konnte GlobalLight Shader nicht kompilieren!\n");
+
+	if (MaterialType_Map == -1 || MaterialType_GlobalLight == -1 || MaterialType_PointLight == -1)
+		exit(1);
 
 	video::SMaterial& ground = getMaterial(SHADER_MAP);
 	video::SMaterial& gLight = getMaterial(SHADER_GLOBALLIGHT);
@@ -191,7 +202,7 @@ bool DeferredShadingScreenRenderer::loadShaders() {
 	sLight.MaterialTypeParam = video::pack_textureBlendFunc(video::EBF_ONE_MINUS_DST_ALPHA, video::EBF_DST_ALPHA, video::EMFN_MODULATE_4X);
 
 
-	printf("Loaded Shaders\n");
+	printf("Shader erfolgreich kompiliert\n");
 	return true;
 }
 
@@ -206,7 +217,7 @@ void DeferredShadingScreenRenderer::render() {
 
 	driver->beginScene(true, true, backgroundColor);
 
-	// Setze mehrere Rendertargets für Ausgabe
+	// Setze mehrere Rendertargets fÃ¼r Ausgabe
 	driver->setRenderTarget(renderTargets);
 
 	smgr->drawAll();
