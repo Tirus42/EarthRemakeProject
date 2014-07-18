@@ -1,7 +1,6 @@
 #include "client/GameState/ProfileSelect.h"
 
-#include "client/AbstractGameState.h"
-#include "client/GameState/MainMenu.h"
+#include "client/GameState/GameStateFactory.h"
 
 #include "client/EngineData.h"
 #include <irrlicht.h>
@@ -74,7 +73,7 @@ bool ProfileSelect::OnEvent(const irr::SEvent& event) {
 
 	if (caller == guiElements[GUI_BUTTON_BACK]) {
 		printf("Back\n");
-		changeGameState(new MainMenu(engineData));
+		changeGameState(GameStateFactory::createGameState(GameStateFactory::GS_MainMenu, engineData));
 		return true;
 	}
 

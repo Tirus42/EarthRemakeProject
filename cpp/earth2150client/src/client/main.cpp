@@ -1,7 +1,7 @@
 #include "config/ClientConfig.h"
 #include "client/EngineData.h"
 
-#include "client/GameState/MainMenu.h"
+#include "client/GameState/GameStateFactory.h"
 #include "client/GameState/TestGameState.h"
 
 #include <unistd.h>	// für getopt()
@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
 	if (skipMenu) {
 		currentGameState = new TestGameState(engineData, testCreateFlyingObjects);
 	} else {
-		currentGameState = new MainMenu(engineData);
+		currentGameState = GameStateFactory::createGameState(GameStateFactory::GS_MainMenu, engineData);
 	}
 
 	// Alles weitere übernimmt der aktuelle GameState
