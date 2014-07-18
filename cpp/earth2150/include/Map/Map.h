@@ -22,6 +22,7 @@ class INavigator;
 * und verwaltet alle Spielobjekte auf der Karte
 */
 class Map {
+	friend class MapManipulator;
 	private:
 		/// Breite der Karte
 		uint16_t width;

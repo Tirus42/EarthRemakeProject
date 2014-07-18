@@ -450,6 +450,7 @@
 		<Unit filename="include/Map/Map.h" />
 		<Unit filename="include/Map/MapBitLayer.h" />
 		<Unit filename="include/Map/MapBuildings.h" />
+		<Unit filename="include/Map/MapManipulator.h" />
 		<Unit filename="include/Map/MapPosition.h" />
 		<Unit filename="include/Map/MapPositionFloat.h" />
 		<Unit filename="include/Map/MapPositionIterator.h" />
@@ -501,6 +502,7 @@
 		<Unit filename="src/Map/Map.cpp" />
 		<Unit filename="src/Map/MapBitLayer.cpp" />
 		<Unit filename="src/Map/MapBuildings.cpp" />
+		<Unit filename="src/Map/MapManipulator.cpp" />
 		<Unit filename="src/Map/MapPosition.cpp" />
 		<Unit filename="src/Map/MapPositionFloat.cpp" />
 		<Unit filename="src/Map/MapRectArea.cpp" />
