@@ -5,6 +5,8 @@
 #include <irrlicht.h>
 
 AbstractGameState::AbstractGameState(EngineData& engineData) :
+	changeToGameState(0),
+	nextGameState(false),
 	engineData(engineData) {
 
 	// Setzt diese Klasse damit diese nun die Events empfängt
@@ -13,4 +15,9 @@ AbstractGameState::AbstractGameState(EngineData& engineData) :
 }
 
 AbstractGameState::~AbstractGameState() {
+}
+
+void AbstractGameState::changeGameState(AbstractGameState* newState) {
+	changeToGameState = newState;
+	nextGameState = true;
 }

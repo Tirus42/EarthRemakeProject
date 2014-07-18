@@ -30,17 +30,11 @@ class MainMenu : public AbstractGameState {
 		/// Array der GUI Elemente.
 		irr::gui::IGUIElement* guiElements[GUI_COUNT];
 
-		/// GameState in den gewechselt werden soll
-		AbstractGameState* changeToState;
-		bool gameStateChanged;
-
 		/// Erstellt die GUI Elemente
 		void createGUI(irr::gui::IGUIEnvironment * guienv);
 
 		/// Entfernt die GUI Elemente
 		void removeGUI();
-
-		void changeGameState(AbstractGameState* newState);
 
 	public:
 		MainMenu(EngineData& engineData);

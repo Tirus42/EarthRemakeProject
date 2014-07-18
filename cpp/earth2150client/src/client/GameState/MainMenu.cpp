@@ -12,9 +12,7 @@ using namespace gui;
 using namespace core;
 
 MainMenu::MainMenu(EngineData& engineData) :
-	AbstractGameState(engineData),
-	changeToState(0),
-	gameStateChanged(false) {
+	AbstractGameState(engineData) {
 }
 
 AbstractGameState* MainMenu::run() {
@@ -24,7 +22,7 @@ AbstractGameState* MainMenu::run() {
 
 	createGUI(guienv);
 
-	while (device->run() && !gameStateChanged) {
+	while (device->run() && !shouldChangeGameState()) {
 		driver->beginScene(true, true);
 
 		guienv->drawAll();
@@ -34,7 +32,7 @@ AbstractGameState* MainMenu::run() {
 
 	removeGUI();
 
-	return changeToState;
+	return getNextGameState();
 }
 
 void MainMenu::createGUI(irr::gui::IGUIEnvironment * guienv) {
@@ -61,11 +59,6 @@ void MainMenu::createGUI(irr::gui::IGUIEnvironment * guienv) {
 
 void MainMenu::removeGUI() {
 	guiElements[GUI_WINDOW_MAIN]->remove();
-}
-
-void MainMenu::changeGameState(AbstractGameState* newState) {
-	changeToState = newState;
-	gameStateChanged = true;
 }
 
 bool MainMenu::OnEvent(const SEvent& event) {

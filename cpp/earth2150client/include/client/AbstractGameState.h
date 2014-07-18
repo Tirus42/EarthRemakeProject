@@ -18,9 +18,26 @@ class AbstractGameState : public irr::IEventReceiver {
 		AbstractGameState (const AbstractGameState&);
 		AbstractGameState& operator= (const AbstractGameState&);
 
+		/// GameState in den gewechselt werden soll
+		AbstractGameState* changeToGameState;
+
+		/// Wird gesetzt wenn ein folgender GameState gesetzt wurde
+		bool nextGameState;
 	protected:
 		/// Engine Daten mit Config und Device Ptr
 		EngineData& engineData;
+
+		void changeGameState(AbstractGameState* newState);
+
+		/// Gibt true zurück wenn ein Folgezustand gesetzt wurde
+		bool shouldChangeGameState() const {
+			return nextGameState;
+		}
+
+		/// Gibt das Objekt des folgezustandes zurück
+		AbstractGameState* getNextGameState() const {
+			return changeToGameState;
+		}
 
 	public:
 		AbstractGameState(EngineData& engineData);

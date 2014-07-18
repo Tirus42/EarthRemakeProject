@@ -13,9 +13,7 @@ using namespace gui;
 using namespace core;
 
 ProfileSelect::ProfileSelect(EngineData& engineData) :
-	AbstractGameState(engineData),
-	changeToState(0),
-	gameStateChanged(false) {
+	AbstractGameState(engineData) {
 }
 
 AbstractGameState* ProfileSelect::run() {
@@ -25,7 +23,7 @@ AbstractGameState* ProfileSelect::run() {
 
 	createGUI(guienv);
 
-	while (device->run() && !gameStateChanged) {
+	while (device->run() && !shouldChangeGameState()) {
 		driver->beginScene(true, true);
 
 		guienv->drawAll();
@@ -35,7 +33,7 @@ AbstractGameState* ProfileSelect::run() {
 
 	removeGUI();
 
-	return changeToState;
+	return getNextGameState();
 }
 
 void ProfileSelect::createGUI(irr::gui::IGUIEnvironment * guienv) {
@@ -60,11 +58,6 @@ void ProfileSelect::removeGUI() {
 	guiElements[GUI_WINDOW_MAIN]->remove();
 }
 
-void ProfileSelect::changeGameState(AbstractGameState* newState) {
-	changeToState = newState;
-	gameStateChanged = true;
-}
-
 bool ProfileSelect::OnEvent(const irr::SEvent& event) {
 	if (event.EventType != EET_GUI_EVENT)
 		return false;
@@ -84,4 +77,6 @@ bool ProfileSelect::OnEvent(const irr::SEvent& event) {
 		changeGameState(new MainMenu(engineData));
 		return true;
 	}
+
+	return false;
 }
