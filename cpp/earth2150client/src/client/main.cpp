@@ -113,6 +113,11 @@ int main(int argc, char** argv) {
 
 	device->setWindowCaption(caption.c_str());
 
+	gui::IGUIFont* font = device->getGUIEnvironment()->getFont("verdana.png");
+
+	if (font)
+		device->getGUIEnvironment()->getSkin()->setFont(font);
+
 	// Erstelle das Hauptmenü
 	AbstractGameState* currentGameState = 0;
 

@@ -53,12 +53,19 @@ AbstractGameState* TestGameState::run() {
 
 	IVideoDriver* driver = device->getVideoDriver();
 	ISceneManager* smgr = device->getSceneManager();
-	IGUIEnvironment* guienv = device->getGUIEnvironment();
+	gui::IGUIEnvironment* guienv = device->getGUIEnvironment();
+
+	gui::IGUIFont* defaultFont = guienv->getBuiltInFont();
 
 	 // Kleines Text Feld zur FPS Anzeige erstellen
-	IGUIStaticText* fpsDisplay = guienv->addStaticText(L"FPS: -", rect<int>(10,10,100,22), true);
-	IGUIStaticText* frameTimeDisplay = guienv->addStaticText(L"", rect<s32>(10, 25, 100, 37), true);
-	IGUIStaticText* renderTimeDisplay = guienv->addStaticText(L"", rect<s32>(10, 40, 100, 52), true);
+	gui::IGUIStaticText* fpsDisplay = guienv->addStaticText(L"FPS: -", recti(10,10,100,22), true);
+	gui::IGUIStaticText* frameTimeDisplay = guienv->addStaticText(L"", recti(10, 25, 120, 37), true);
+	gui::IGUIStaticText* renderTimeDisplay = guienv->addStaticText(L"", recti(10, 40, 120, 52), true);
+
+	// Irrlicht Default Font setzen, da diese schön klein ist
+	fpsDisplay->setOverrideFont(defaultFont);
+	frameTimeDisplay->setOverrideFont(defaultFont);
+	renderTimeDisplay->setOverrideFont(defaultFont);
 
 	// Erstelle Kamera
 	createCamera(smgr);
