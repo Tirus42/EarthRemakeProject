@@ -42,6 +42,9 @@ class ProfileSelect : public AbstractGameState {
 
 		/// Irrlicht Events von GUI, Maus, Tastatur ect...
 		bool OnEvent(const irr::SEvent& event);
+
+		/// Fügt ein Profilname der Liste an Profilen hinzu
+		irr::u32 addProfile(const wchar_t* names);
 };
 
 

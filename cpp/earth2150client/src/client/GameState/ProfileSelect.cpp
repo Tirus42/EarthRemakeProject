@@ -51,6 +51,7 @@ void ProfileSelect::createGUI(irr::gui::IGUIEnvironment * guienv) {
 	guiElements[GUI_BUTTON_USEPROFILE] = guienv->addButton(recti(20, 380, 380, 420), window, -1, L"Ausgewähltes Profil verwenden");
 	guiElements[GUI_BUTTON_BACK] = guienv->addButton(recti(20, 440, 380, 480), window, -1, L"Zurück zum Hauptmenü");
 
+	guiElements[GUI_BUTTON_USEPROFILE]->setEnabled(false);
 }
 
 void ProfileSelect::removeGUI() {
@@ -61,21 +62,30 @@ bool ProfileSelect::OnEvent(const irr::SEvent& event) {
 	if (event.EventType != EET_GUI_EVENT)
 		return false;
 
+	IGUIElement* caller = event.GUIEvent.Caller;
+
+	// User in Combobox ausgewählt:
+	if (caller == guiElements[GUI_COMBOBOX_USERSELECT] &&
+		event.GUIEvent.EventType == gui::EGET_LISTBOX_CHANGED) {
+
+		guiElements[GUI_BUTTON_USEPROFILE]->setEnabled(true);
+		return true;
+	}
+
+	// Ab hier nurnoch behandlung von Buttons
 	if (event.GUIEvent.EventType != gui::EGET_BUTTON_CLICKED)
 		return false;
 
-	IGUIElement* caller = event.GUIEvent.Caller;
-
-	/*if (caller == guiElements[GUI_BUTTON_NEWGME]) {
-		changeGameState(new TestGameState(engineData));
-		return true;
-	}*/
-
 	if (caller == guiElements[GUI_BUTTON_BACK]) {
-		printf("Back\n");
 		changeGameState(GameStateFactory::createGameState(GameStateFactory::GS_MainMenu, engineData));
 		return true;
 	}
 
 	return false;
+}
+
+u32 ProfileSelect::addProfile(const wchar_t* name) {
+	gui::IGUIListBox* box = (gui::IGUIListBox*)guiElements[GUI_COMBOBOX_USERSELECT];
+
+	return box->addItem(name);
 }
