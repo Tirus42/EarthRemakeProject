@@ -261,6 +261,11 @@
 			<Option target="Linux - Client - Debug" />
 			<Option target="Linux - Client - Release" />
 		</Unit>
+		<Unit filename="../earth2150client/include/client/MousePicker.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+			<Option target="Linux - Client - Release" />
+		</Unit>
 		<Unit filename="../earth2150client/include/client/VisualMap.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
@@ -387,6 +392,11 @@
 			<Option target="Linux - Client - Release" />
 		</Unit>
 		<Unit filename="../earth2150client/src/client/MapMarkerManager.cpp">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+			<Option target="Linux - Client - Release" />
+		</Unit>
+		<Unit filename="../earth2150client/src/client/MousePicker.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 			<Option target="Linux - Client - Release" />
