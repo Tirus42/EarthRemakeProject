@@ -27,6 +27,14 @@ class MapPosition {
 			return x < cc.getX() ? true : (x > cc.getX() ? false : (y < cc.getY()));
 		}
 
+		bool operator==(const MapPosition& other) const {
+			return x == other.x && y == other.y;
+		}
+
+		bool operator!=(const MapPosition& other) const {
+			return x != other.x || y != other.y;
+		}
+
 		/// Gibt die X-Position zurück
 		uint16_t getX() const {
 			return x;

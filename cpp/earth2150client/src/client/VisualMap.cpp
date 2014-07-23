@@ -115,7 +115,7 @@ void VisualMap::build() {
 	selector->drop();
 }
 
-MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core::vector3df& direction) {
+MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core::vector3df& direction) const {
 	// Hole Bounding Box der Map
 	const core::aabbox3df boundingBox = mesh->BoundingBox;
 
