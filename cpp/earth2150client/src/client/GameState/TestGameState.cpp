@@ -2,6 +2,7 @@
 
 #include "client/VisualMap.h"
 #include "client/MapMarker.h"
+#include "client/MousePicker.h"
 #include "GUI/IngameGUI.h"
 #include "renderer/NormalScreenRenderer.h"
 #include "GUI/ResizeEvent.h"
@@ -176,6 +177,8 @@ AbstractGameState* TestGameState::run() {
 
 	core::recti currentResolution = device->getVideoDriver()->getViewPort();
 
+	MousePicker mPicker(map, smgr->getSceneCollisionManager());
+
 	// Hauptschleife
 	while (device->run()) {
 		// Testweise hier prüfen ob sich die Auflösung geändert hat
@@ -206,14 +209,13 @@ AbstractGameState* TestGameState::run() {
 
 		// Map Seletor Test
 		if (!gui.isMouseOverGUIElement(mousePosition)) {
-			core::line3d<f32> ray = smgr->getSceneCollisionManager()->getRayFromScreenCoordinates(mousePosition, camera);
-
-			MapPosition pos = map.pickMapPosition(ray.start, ray.getVector());
-
-			if (pos.isValid()) {
+			if (mPicker.pick(mousePosition)) {
 				marker->clear();
-				marker->addField(pos);
+
+				if (mPicker.getPickedType() == MousePicker::PickedGround)
+					marker->addField(mPicker.getPickedPosition());
 			}
+
 		}
 
 
