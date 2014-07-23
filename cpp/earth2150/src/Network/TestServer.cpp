@@ -1,5 +1,7 @@
 #include "Network/TestServer.h"
 
+#include "Network/NetworkPacket.h"
+
 #include "e2150/Utils.h"
 
 #include "e2150/HumanPlayer.h"
@@ -110,17 +112,17 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 	SOCKET socket = player.getConnection().getSocket();
 
 	switch (netbuffer[0]) {
-		case 0x01:	/// Anfrage des Clients der ganzen Map
+		case NetworkPacket::REQUEST_MAP:	/// Anfrage des Clients der ganzen Map
 			socketRecv(socket, netbuffer, 1, false);
 			sendMapDataRaw(map, player);
 			break;
 
-		case 0x02:	/// Anfrage des Clients nach der Wegekarte
+		case NetworkPacket::REQUEST_WAYMAP:	/// Anfrage des Clients nach der Wegekarte
 			socketRecv(socket, netbuffer, 1, false);
 			sendMapWaymapRaw(map, player);
 			break;
 
-		case 0x03: {	/// Anfrage des Clients nach einer Wegberechnung
+		case NetworkPacket::REQUEST_PATH: {	/// Anfrage des Clients nach einer Wegberechnung
 			if (socketRecv(socket, netbuffer, 9, true) != 9)
 				return;
 
@@ -145,12 +147,12 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 		}
 		break;
 
-		case 0x04:		/// Anfrage des Clients nach der Chassis Liste
+		case NetworkPacket::REQUEST_CHASSIS_LIST:		/// Anfrage des Clients nach der Chassis Liste
 			socketRecv(socket, netbuffer, 1, false);
 			sendChassisList(player);
 			break;
 
-		case 0x05: {		/// Client möchte eine Unit spawnen
+		case NetworkPacket::CLIENT_SPAWN_UNIT: {		/// Client möchte eine Unit spawnen
 			if (socketRecv(socket, netbuffer, 9, true) != 9)
 				return;
 
@@ -177,13 +179,13 @@ void TestServer::handleIncommingData(HumanPlayer& player, int32_t size) {
 		}
 		break;
 
-		case 0x06: {	/// Anfrage der Einheiten auf der ganzen Karte
+		case NetworkPacket::REQUEST_UNITS: {	/// Anfrage der Einheiten auf der ganzen Karte
 			socketRecv(socket, netbuffer, 1, false);
 			sendUnitList(player);
 			break;
 		}
 
-		case 0x07: {	/// Eine Einheit soll zu einer Position fahren
+		case NetworkPacket::CLIENT_SEND_UNIT_TO: {	/// Eine Einheit soll zu einer Position fahren
 			if (socketRecv(socket, netbuffer, 9, true) != 9)
 				return;
 
@@ -237,7 +239,7 @@ void TestServer::handleNewConnections() {
             return;
 		} else if (size >= 4) {
 			//Kleine Test-Header erkennung
-			if (*(unsigned int*)netbuffer == 0xABCDEF01) {
+			if (*(unsigned int*)netbuffer == NetworkPacket::PROTOCOL_NEGOTIATION_HEADER) {
 				//Nachricht komplett lesen
 				socketRecv(socket, netbuffer, 4, false);
 
