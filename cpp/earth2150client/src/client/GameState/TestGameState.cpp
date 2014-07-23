@@ -3,7 +3,6 @@
 #include "client/VisualMap.h"
 #include "client/MapMarker.h"
 #include "GUI/IngameGUI.h"
-#include "GUI/IngameGUIEventReceiver.h"
 #include "renderer/NormalScreenRenderer.h"
 #include "GUI/ResizeEvent.h"
 #include "renderer/DeferredShadingScreenRenderer.h"
@@ -97,9 +96,8 @@ AbstractGameState* TestGameState::run() {
 	IngameGUI gui(guienv, device, camera);
 	gui.setMapName(L"Testkarte");
 
-	// Füge in diesen EventReceiver den GUI-EventReceiver ein (Themoräre Lösung...)
-	//setSubEventReceiver(&gui);
-	setSubEventReceiver(new IngameGUIEventReceiver(&gui));
+	// Setzte GUI als Event Receiver
+	setSubEventReceiver(&gui);
 
 	// Testweiße Marker für die Maus Position erstellen (siehe Hauptschleife)
 	video::ITexture* tex = driver->getTexture("position.png");	// Textur Laden

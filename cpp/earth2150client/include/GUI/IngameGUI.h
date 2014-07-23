@@ -13,7 +13,6 @@ class ResearchWindow;
 * die Ingame verfügbar sind.
 */
 class IngameGUI : public BasicGameInterface {
-	friend class IngameGUIEventReceiver;
 	private:
 		irr::gui::IGUITabControl* testTabControl;
 
@@ -55,6 +54,8 @@ class IngameGUI : public BasicGameInterface {
 		void closeResearchWindow();
 
 		irr::scene::ICameraSceneNode* getMainCamera() const {return mainCamera;}
+
+		virtual bool OnEvent(const irr::SEvent& event);
 
 };
 

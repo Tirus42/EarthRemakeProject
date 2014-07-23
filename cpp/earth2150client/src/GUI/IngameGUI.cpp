@@ -113,3 +113,99 @@ void IngameGUI::closeResearchWindow() {
 	delete researchWindow;
 	researchWindow = 0;
 }
+
+
+bool IngameGUI::OnEvent(const irr::SEvent& event) {
+	if (event.EventType == EET_GUI_EVENT) {
+		s32 id = event.GUIEvent.Caller->getID();
+
+		if (event.GUIEvent.EventType == gui::EGET_BUTTON_CLICKED) {
+			switch (id) {
+				case IngameGUI::GUI_TEST_BTN1:
+					printf("Button 1 gedrueckt!\n");
+					return true;
+
+				case IngameGUI::GUI_TEST_BTN2:
+					printf("Button 2 gedrueckt!\n");
+					return true;
+
+				case IngameGUI::GUI_TEST_RESEARCH_WINDOW:
+					openResearchWindow();
+					return true;
+
+				case IngameGUI::GUI_TEST_CAMPOS_1:
+					getMainCamera()->setPosition(core::vector3df(50, 50, 950));
+					getMainCamera()->setTarget(core::vector3df(50, 30, 1000));
+					return true;
+
+				case IngameGUI::GUI_TEST_CAMPOS_2:
+					getMainCamera()->setPosition(core::vector3df(950, 50, 950));
+					getMainCamera()->setTarget(core::vector3df(950, 30, 1000));
+					return true;
+
+				case IngameGUI::GUI_TEST_CAMPOS_3:
+					getMainCamera()->setPosition(core::vector3df(50, 50, 50));
+					getMainCamera()->setTarget(core::vector3df(50, 30, 100));
+					return true;
+
+				case IngameGUI::GUI_TEST_CAMPOS_4:
+					getMainCamera()->setPosition(core::vector3df(950, 50, 50));
+					getMainCamera()->setTarget(core::vector3df(950, 30, 100));
+					return true;
+
+				case IngameGUI::GUI_TEST_CAMPOS_PERFORMANCETEST:
+					getMainCamera()->setPosition(core::vector3df(-100, 100, -100));
+					getMainCamera()->setTarget(core::vector3df(1000, 00, 1000));
+					return true;
+			}
+
+		} else if (event.GUIEvent.EventType == gui::EGET_SCROLL_BAR_CHANGED) {
+			// Momentan haben wir nur eine Scroll Bar -> Alpha Control
+			u32 newAlpha = 255 - ((gui::IGUIScrollBar*)event.GUIEvent.Caller)->getPos();
+
+			// Hole Ptr auf Skin der GUI
+			gui::IGUISkin* skin = getGUIEnvironment()->getSkin();
+
+			// Setze von allen GUI Elementen den neuen Alpha Wert
+			for (u32 i = 0; i < gui::EGDC_COUNT; ++i) {
+				// Hole aktuelle Farbe
+				video::SColor col = skin->getColor((gui::EGUI_DEFAULT_COLOR)i);
+
+				col.setAlpha(newAlpha);
+
+				skin->setColor((gui::EGUI_DEFAULT_COLOR)i, col);
+			}
+
+			return true;
+		}
+
+		if (researchWindow)
+			researchWindow->OnEvent(event);
+
+	}
+
+	// Fange Log-Eintrag Event beim Ändern der Auflösung ab
+	if (event.EventType == EET_LOG_TEXT_EVENT) {
+		// we check for log message like "Resizing window (640 480)"
+		const char* b = "Resizing window (";
+		const u32 strLength = 17;
+
+		core::string<c8> s = event.LogEvent.Text;
+
+		if (s.equalsn(b, strLength)) {
+			s = s.subString(strLength, s.size() - strLength);
+
+			u32 width = 0;
+			u32 height = 0;
+
+			sscanf(s.c_str(), "%u %u)", &width, &height);
+			onResize(core::dimension2du(width, height));
+
+			// Camera richtig skalieren
+			getMainCamera()->setAspectRatio((float)width / (float)height);
+		}
+	 }
+
+
+	return false;
+}
