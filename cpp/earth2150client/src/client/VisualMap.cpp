@@ -2,12 +2,14 @@
 
 #include "client/VisualMapPart.h"
 
+#include "Map/MapRectArea.h"
+
 #include <cassert>
 #include <iostream>
 
 using namespace irr;
 
-VisualMap::VisualMap(irr::video::IVideoDriver* driver, scene::ISceneManager* smgr,  uint16_t width, uint16_t height) :
+VisualMap::VisualMap(irr::video::IVideoDriver* driver, scene::ISceneManager* smgr, uint16_t width, uint16_t height) :
 	Map(width, height),
 	driver(driver),
 	smgr(smgr),
@@ -21,7 +23,7 @@ VisualMap::VisualMap(irr::video::IVideoDriver* driver, scene::ISceneManager* smg
 	driver->grab();
 	smgr->grab();
 
-	// Testweiße eine Textur laden
+	// TestweiÃŸe eine Textur laden
 	video::IImage* img = driver->createImageFromFile("sand1.jpg");
 	video::ITexture* tex = driver->addTexture("test", img);
 
@@ -60,6 +62,14 @@ VisualMap::~VisualMap() {
 	driver->drop();
 }
 
+VisualMapPart* VisualMap::getMapPart(uint16_t partX, uint16_t partY) const {
+	uint32_t index = partY * (getWidth() / VISUAL_PART_SIZE) + partX;
+
+	assert(index < mapParts.size());
+
+	return mapParts[index];
+}
+
 void VisualMap::updateMaterial() {
 	for (size_t i = 0; i < mapParts.size(); ++i) {
 		mapParts[i]->updateMaterial(*this);
@@ -71,6 +81,28 @@ void VisualMap::updateMaterial() {
 
 	node->getMaterial(0) = materials[0];
 	node->setMaterialType(materials[0].MaterialType);
+}
+
+void VisualMap::updateTerrainHeight(const MapRectArea& area) {
+	const MapPosition& minEdge = area.getMinEdge();
+	const MapPosition& maxEdge = area.getMaxEdge();
+
+	uint16_t chunkMinX = minEdge.getX() / VISUAL_PART_SIZE;
+	uint16_t chunkMinY = minEdge.getY() / VISUAL_PART_SIZE;
+	uint16_t chunkMaxX = maxEdge.getX() / VISUAL_PART_SIZE;
+	uint16_t chunkMaxY = maxEdge.getY() / VISUAL_PART_SIZE;
+
+	for (uint16_t y = chunkMinY; y <= chunkMaxY; ++y) {
+		for (uint16_t x = chunkMinX; x <= chunkMaxX; ++x) {
+			// Todo: Bereich auf den wirklich nÃ¶tigen Bereich einschrÃ¤nken
+			getMapPart(x, y)->updateTerrainHeight(*this, 0, 0, VISUAL_PART_SIZE, VISUAL_PART_SIZE);
+		}
+	}
+}
+
+void VisualMap::updateTerrainTexture(const MapRectArea& area) {
+	// Todo
+	assert(false);
 }
 
 void VisualMap::build() {
@@ -99,7 +131,7 @@ void VisualMap::build() {
 
 	scene::IMeshManipulator* manipulator = smgr->getMeshManipulator();
 
-	// Vorerst Mesh-Normale automatisch berechnen lassen (Gibt unschöne Kanten)
+	// Vorerst Mesh-Normale automatisch berechnen lassen (Gibt unschÃ¶ne Kanten)
 	manipulator->recalculateNormals(mesh);
 
 	// Flag setzen, damit das Mesh im VRAM gehalten wird (deutlich schneller)
@@ -109,7 +141,7 @@ void VisualMap::build() {
 
 	this->node = smgr->addMeshSceneNode(mesh, 0, meshID);
 
-	// Triangle Selector für das Mesh Setzen
+	// Triangle Selector fÃ¼r das Mesh Setzen
 	scene::ITriangleSelector* selector = smgr->createTriangleSelector(mesh, node);
 	node->setTriangleSelector(selector);
 	selector->drop();
@@ -121,7 +153,7 @@ MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core
 
 	core::vector3df myDirection(0);
 
-	// Prüfen ob Richtungsvektor gleich dem Nullvektor ist
+	// PrÃ¼fen ob Richtungsvektor gleich dem Nullvektor ist
 	if (direction == myDirection)
 		return MapPosition::InvalidPosition();
 
@@ -131,12 +163,12 @@ MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core
 
 	core::vector3df position = source + this->node->getPosition();
 
-	// Zielposition, falls die Oberfläche geschnitten wird
+	// Zielposition, falls die OberflÃ¤che geschnitten wird
 	core::vector3df target;
 
-	// Vektor ablaufen und prüfen, ob wir auf ein Feld der Map treffen
+	// Vektor ablaufen und prÃ¼fen, ob wir auf ein Feld der Map treffen
 	while (true) {
-		// Prüfen ob wir irgendwo aus der Karte raus sind
+		// PrÃ¼fen ob wir irgendwo aus der Karte raus sind
 		if (myDirection.X > 0 && position.X > boundingBox.MaxEdge.X)
 			break;
 		if (myDirection.X < 0 && position.X < boundingBox.MinEdge.X)
@@ -150,31 +182,31 @@ MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core
 		if (myDirection.Z < 0 && position.Z < boundingBox.MinEdge.Z)
 			break;
 
-		// Prüfen ob wir auf der Karte sind
+		// PrÃ¼fen ob wir auf der Karte sind
 		if (boundingBox.isPointInside(position)) {
 
-			// Höhe des Feldes an dieser Position holen
+			// HÃ¶he des Feldes an dieser Position holen
 			double f0 = getField3DHeight(this->position((int)position.X, getHeight() - (int)position.Z));
 			double f1 = getField3DHeight(this->position((int)position.X + 1, getHeight() - (int)position.Z));
 			double f2 = getField3DHeight(this->position((int)position.X, getHeight() - ((int)position.Z + 1)));
 			double f3 = getField3DHeight(this->position((int)position.X + 1, getHeight() - ((int)position.Z + 1)));
 
 			// Eckpunkte als Vektoren anlegen
-			core::vector3df v0((int)position.X, 	f0, (int)position.Z);
+			core::vector3df v0((int)position.X,		f0, (int)position.Z);
 			core::vector3df v1((int)position.X + 1, f1, (int)position.Z);
-			core::vector3df v2((int)position.X, 	f2, (int)position.Z + 1);
+			core::vector3df v2((int)position.X,		f2, (int)position.Z + 1);
 			core::vector3df v3((int)position.X + 1, f3, (int)position.Z + 1);
 
 			// Zu Dreieck verbinden
-            core::triangle3df t1(v0, v1, v2);
+			core::triangle3df t1(v0, v1, v2);
 
-			// Gegen erstes Dreieck prüfen
-            if (t1.getIntersectionWithLine(position, myDirection, target))
+			// Gegen erstes Dreieck prÃ¼fen
+			if (t1.getIntersectionWithLine(position, myDirection, target))
 				return MapPosition(target.X, getHeight() - target.Z);
 
 			core::triangle3df t2(v1, v3, v2);
 
-			// Gegen zweites Dreieck prüfen
+			// Gegen zweites Dreieck prÃ¼fen
 			if (t2.getIntersectionWithLine(position, myDirection, target))
 				return MapPosition(target.X, getHeight() - target.Z);
 		}
@@ -193,7 +225,7 @@ void VisualMap::drawTerrain(video::IVideoDriver* driver) const {
 	driver->setMaterial(getMaterial(0));
 
 	// Stur alle Map Parts zeichnen
-	// Todo: Einzelne Parts prüfen ob in Sicht und nur dann Zeichnen
+	// Todo: Einzelne Parts prÃ¼fen ob in Sicht und nur dann Zeichnen
 	for (size_t i = 0; i < mapParts.size(); ++i) {
 		const VisualMapPart* part = mapParts[i];
 

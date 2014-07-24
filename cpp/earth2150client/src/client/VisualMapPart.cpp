@@ -19,12 +19,12 @@ VisualMapPart::~VisualMapPart() {
 }
 
 void VisualMapPart::updateNormals() {
-	/// Lagere "teure" Randfallprüfung in Extra Methoden aus (und nicht in Schleife)
+	/// Lagere "teure" RandfallprÃ¼fung in Extra Methoden aus (und nicht in Schleife)
 	updateNormalsBorderTop();
 
 	const uint16_t size = VisualMap::VISUAL_PART_SIZE;
 
-	/// Iteriere über inneres Feld und setze Normalen
+	/// Iteriere Ã¼ber inneres Feld und setze Normalen
 	for (uint16_t y = 1; y < size; ++y) {
 		for (uint16_t x = 1; x < size; ++x) {
 
@@ -55,18 +55,18 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 	core::array<video::S3DVertex>& vertices = meshBuffer->Vertices;
 	core::array<u16>& indices = meshBuffer->Indices;
 
-	// Bestimmen wieviel Einträge gebraucht werden
+	// Bestimmen wieviel EintrÃ¤ge gebraucht werden
 	const uint32_t countVertices = (size + 1) * (size + 1);
 	const uint32_t countIndices = size * size * 6;
 
-	// Speicher direkt allokieren um unnötiges realloc zu sparen
+	// Speicher direkt allokieren um unnÃ¶tiges realloc zu sparen
 	vertices.reallocate(countVertices);
 	indices.reallocate(countIndices);
 
 	// Setze alle Vertices
 	for (uint16_t y = 0; y <= size; ++y) {
 		for (uint16_t x = 0; x <= size; ++x) {
-			// Hole 3D-Höhe der Map
+			// Hole 3D-HÃ¶he der Map
 			double dHeight = map.getField3DHeight(map.position(partX + x, partY + y));
 
 			// Setze den Vertice an die 3D Position
@@ -74,7 +74,7 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 		}
 	}
 
-	// Verbinde die Vertices zu Dreiecken (d.h. Baue eine Feld-Fläche auf)
+	// Verbinde die Vertices zu Dreiecken (d.h. Baue eine Feld-FlÃ¤che auf)
 	for (uint16_t y = 0; y < size; ++y) {
 		for (uint16_t x = 0; x < size; ++x) {
 			int offset = y * (size + 1)  + x;
@@ -89,11 +89,11 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 		}
 	}
 
-	// Prüfen ob vorberechnte Anzahl stimmt
+	// PrÃ¼fen ob vorberechnte Anzahl stimmt
 	assert(vertices.size() == countVertices);
 	assert(indices.size() == countIndices);
 
-	// Material zuweißen (temp) und Mesh-Buffer in Mesh setzen
+	// Material zuweiÃŸen (temp) und Mesh-Buffer in Mesh setzen
 	updateMaterial(map);
 
 	meshBuffer->recalculateBoundingBox();
@@ -102,4 +102,28 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 void VisualMapPart::updateMaterial(const VisualMap& map) {
 	// Todo: richtiges Material verwenden
 	meshBuffer->Material = map.getMaterial(0);
+}
+
+void VisualMapPart::updateTerrainHeight(const VisualMap& map, uint16_t startX, uint16_t startY, uint16_t endX, uint16_t endY) {
+	assert(startX <= VisualMap::VISUAL_PART_SIZE);
+	assert(startY <= VisualMap::VISUAL_PART_SIZE);
+
+	assert(endX <= VisualMap::VISUAL_PART_SIZE);
+	assert(endY <= VisualMap::VISUAL_PART_SIZE);
+
+	uint16_t partX = this->x * VisualMap::VISUAL_PART_SIZE;
+	uint16_t partY = this->y * VisualMap::VISUAL_PART_SIZE;
+
+	core::array<video::S3DVertex>& vertices = meshBuffer->Vertices;
+
+	for (uint16_t y = startY; y <= endY; ++y) {
+		for (uint16_t x = startX; x <= endX; ++x) {
+			double dHeight = map.getField3DHeight(map.position(partX + x, partY + y));
+
+			vertices[y * (VisualMap::VISUAL_PART_SIZE + 1) + x].Pos.Y = dHeight;
+		}
+	}
+
+	// Setzte MeshBuffer als VerÃ¤ndert, damit es neu zur Grafikkarte gesendet wird
+	meshBuffer->setDirty();
 }

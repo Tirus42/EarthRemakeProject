@@ -35,6 +35,9 @@ class VisualMapPart {
 		irr::scene::CMeshBuffer<irr::video::S3DVertex>* getMeshBuffer() const {return meshBuffer;}
 
 		void updateMaterial(const VisualMap& map);
+
+		/// Setzt die Vertex Höhen in dem Bereich neu aus der Map
+		void updateTerrainHeight(const VisualMap& map, uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 };
 
 
