@@ -2,8 +2,11 @@
 #define MAPUPDATECORE_H_INCLUDED
 
 #include <stdint.h>
+#include <vector>
 
 #include "BuildingUpdater.h"
+
+#include "Map/MapRectArea.h"
 
 class Map;
 
@@ -25,6 +28,8 @@ class MapUpdateCore {
 
 		uint32_t tickCount;
 
+		std::vector<MapRectArea> updatedTerrainHeight;
+
 		MapUpdateCore(const MapUpdateCore&);
 		MapUpdateCore operator=(const MapUpdateCore&);
 
@@ -38,6 +43,10 @@ class MapUpdateCore {
 		uint32_t getTickCount() const {
 			return tickCount;
 		}
+
+		/// Schreibt die Liste der Änderungen an der Terrain-Höhe in die Liste,
+		/// und entfernt diese aus dieser Klasse.
+		void extractChangedTerrainHeight(std::vector<MapRectArea>& target);
 
 };
 
