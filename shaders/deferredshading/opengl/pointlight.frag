@@ -43,7 +43,12 @@ void main (void) {
 	//float lightStrength = 1.f - (distance / strength);
 	//float lightStrength = max(0, cos(distance * 1.570796f / strength));
 	//float lightStrength = 1.f - ((distance * distance) / (strength * strength));
+	
+	/*
 	float lightStrength = max(0, 1.f - (distance / strength));
+	/*/
+	float lightStrength = max(0, (strength * 10 / (distance * distance) - 0.2));
+	//*/
 	
 	//float lightStrength = max(0, cos(distance * 1.570796f / (strength * 0.75)));
 	
@@ -51,7 +56,6 @@ void main (void) {
 		//gl_FragColor = vec4(1,0,0,1);
 		//return;
 	}
-		
 	
 	/*float lightStrength = strength / (constantAttenuation 
 		+ distance * linearAttenuation
