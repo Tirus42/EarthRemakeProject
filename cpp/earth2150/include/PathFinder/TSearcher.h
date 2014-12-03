@@ -1,9 +1,11 @@
 #ifndef TSEARCHER_H_INCLUDED
 #define TSEARCHER_H_INCLUDED
 
-#include "Map/Map.h"
-
+#include <list>
+#include <stddef.h>
 #include <stdint.h>
+
+class Map;
 
 /**
 * Breitensuchen Suchalgorithmus

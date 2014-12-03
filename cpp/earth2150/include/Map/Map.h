@@ -4,10 +4,10 @@
 #include "Map/MapPosition.h"
 #include "Map/MapViewerManager.h"
 #include "Unit/MovingUnit.h"
-#include <stdint.h>
+
 #include <map>
 #include <queue>
-#include <memory>
+#include <stdint.h>
 #include <string>
 #include <vector>
 

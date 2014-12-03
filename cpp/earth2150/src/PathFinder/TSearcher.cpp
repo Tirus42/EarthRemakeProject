@@ -1,5 +1,7 @@
 #include "PathFinder/TSearcher.h"
 
+#include "Map/Map.h"
+
 #include <memory.h>
 #include <cassert>
 

@@ -1,12 +1,11 @@
 #ifndef MAPBUILDINGS_H_INCLUDED
 #define MAPBUILDINGS_H_INCLUDED
 
+#include "Util/MemoryBlock.h"
+#include "Building/BuildingReference.h"
+
 #include <stdint.h>
 #include <vector>
-
-#include "Util/MemoryBlock.h"
-
-#include "Building/BuildingReference.h"
 
 class IMapBuildingsObserver;
 

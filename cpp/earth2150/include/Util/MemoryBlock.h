@@ -2,7 +2,6 @@
 #define MEMORYBLOCK_H_INCLUDED
 
 #include <vector>
-#include <bitset>
 
 #include <stdint.h>
 #include <stddef.h>
@@ -25,7 +24,7 @@ class MemoryBlock {
 		std::vector<T> entry;
 
 		/// Speicher für die Flags, ob das Element gesetzt wurde/gültig ist
-		std::vector<bool> entryUse;		// Todo: Durch eigene "bitset" Klasse ersetzen
+		std::vector<bool> entryUse;
 
 	public:
 		MemoryBlock(size_t maxElements) :

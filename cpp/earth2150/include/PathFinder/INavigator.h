@@ -1,8 +1,7 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
 
-#include "Map/Map.h"
-
+#include <stdint.h>
 #include <list>
 
 class Map;

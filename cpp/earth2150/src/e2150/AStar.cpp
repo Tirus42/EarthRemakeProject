@@ -1,7 +1,10 @@
 #include "e2150/AStar.h"
 
 #include "e2150/AStarNode.h"
+#include "Map/Map.h"
 #include "Map/MapBitLayer.h"
+
+#include <vector>
 #include <cassert>
 
 static bool buildPath(uint32_t currentNodeID, const std::vector<AStarNode>& nodes, std::list<uint32_t>& path_list) {

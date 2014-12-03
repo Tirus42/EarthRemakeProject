@@ -1,7 +1,7 @@
 #ifndef ASTARNODE_H
 #define ASTARNODE_H
 
-#include "Map/MapPosition.h"
+#include <stdint.h>
 
 #ifndef M_SQRT2
 #define M_SQRT2 1.41421356237309504880
