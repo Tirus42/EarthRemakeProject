@@ -3,6 +3,7 @@
 #include "client/VisualMapPart.h"
 
 #include "Map/MapRectArea.h"
+#include "renderer/ScreenRendererHelper.h"
 
 #include <cassert>
 #include <iostream>
@@ -220,16 +221,22 @@ MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core
 }
 
 void VisualMap::drawTerrain(video::IVideoDriver* driver) const {
-
 	driver->setTransform(video::ETS_WORLD, core::IdentityMatrix);
 	driver->setMaterial(getMaterial(0));
 
-	// Stur alle Map Parts zeichnen
-	// Todo: Einzelne Parts prüfen ob in Sicht und nur dann Zeichnen
+	const scene::SViewFrustum* frust = smgr->getActiveCamera()->getViewFrustum();
+
+	const core::vector3df camPos = smgr->getActiveCamera()->getAbsolutePosition();
+
 	for (size_t i = 0; i < mapParts.size(); ++i) {
 		const VisualMapPart* part = mapParts[i];
 
-		driver->drawMeshBuffer(part->getMeshBuffer());
+		const core::aabbox3df& aabb = part->getMeshBuffer()->getBoundingBox();
+
+		// Zeichne nur Parts in welchem die Kamera ist, oder welche im ViewFrustum liegen
+		if (aabb.isPointInside(camPos) || ScreenRendererHelper::isInViewFrustum(*frust, aabb)) {
+			driver->drawMeshBuffer(part->getMeshBuffer());
+		}
 	}
 
 }
