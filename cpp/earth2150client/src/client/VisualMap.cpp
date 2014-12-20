@@ -18,7 +18,6 @@ VisualMap::VisualMap(irr::video::IVideoDriver* driver, scene::ISceneManager* smg
 	materials(),
 	meshID(-1),
 	mesh(0),
-	node(0),
 	MarkerManager(*this, smgr) {
 
 	driver->grab();
@@ -53,9 +52,6 @@ VisualMap::~VisualMap() {
 		delete *i;
 	}
 
-	if (node)
-		node->remove();
-
 	if (mesh)
 		mesh->drop();
 
@@ -79,9 +75,6 @@ void VisualMap::updateMaterial() {
 	for (size_t i = 0; i < mesh->getMeshBufferCount(); ++i) {
 		mesh->getMeshBuffer(i)->getMaterial() = materials[0];
 	}
-
-	node->getMaterial(0) = materials[0];
-	node->setMaterialType(materials[0].MaterialType);
 }
 
 void VisualMap::updateTerrainHeight(const MapRectArea& area) {
@@ -139,13 +132,6 @@ void VisualMap::build() {
 	mesh->setHardwareMappingHint(scene::EHM_STATIC, scene::EBT_VERTEX_AND_INDEX);
 
 	mesh->recalculateBoundingBox();
-
-	this->node = smgr->addMeshSceneNode(mesh, 0, meshID);
-
-	// Triangle Selector für das Mesh Setzen
-	scene::ITriangleSelector* selector = smgr->createTriangleSelector(mesh, node);
-	node->setTriangleSelector(selector);
-	selector->drop();
 }
 
 MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core::vector3df& direction) const {
@@ -162,7 +148,7 @@ MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core
 	myDirection = direction;
 	myDirection.normalize();
 
-	core::vector3df position = source + this->node->getPosition();
+	core::vector3df position = source;
 
 	// Zielposition, falls die Oberfläche geschnitten wird
 	core::vector3df target;

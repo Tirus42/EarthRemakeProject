@@ -54,7 +54,7 @@ class IScreenRenderer {
 		virtual void resize(const irr::core::dimension2du& newSize) = 0;
 
 		/// Rendert die Szene und gibt diese auf dem Bildschirm aus
-		virtual void render() = 0;
+		virtual void render(const VisualMap& map) = 0;
 
 		/// Fügt einen Viewport hinzu, gibt dessen Index zurück
 		irr::u32 addRenderViewport(const irr::scene::ICameraSceneNode* camera, const VisualMap& map, const irr::core::recti& viewport) {

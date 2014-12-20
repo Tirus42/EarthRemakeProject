@@ -57,7 +57,7 @@ class DeferredShadingScreenRenderer : public IScreenRenderer {
 		virtual void resize(const irr::core::dimension2du& newSize);
 
 		/// Rendert die Szene auf den Bildschirm
-		void render();
+		void render(const VisualMap& map);
 };
 
 

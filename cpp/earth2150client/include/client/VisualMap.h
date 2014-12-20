@@ -25,9 +25,6 @@ class VisualMap : public Map {
 		/// Das Mesh welchem die Map besteht.
 		irr::scene::SMesh* mesh;
 
-		/// Irrlicht Scene Node der Map
-		irr::scene::IMeshSceneNode* node;
-
 		/// Manager für Markierungen auf der Map
 		MapMarkerManager MarkerManager;
 

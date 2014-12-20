@@ -204,7 +204,7 @@ AbstractGameState* TestGameState::run() {
 			}
 		}
 
-		renderer->render();
+		renderer->render(map);
 
 
 		// Map Seletor Test

@@ -4,6 +4,8 @@
 #include "renderer/ShaderCallback/PointLightCallback.h"
 #include "renderer/ShaderCallback/TerrainShaderCallback.h"
 
+#include "client/VisualMap.h"
+
 #include "tf/time.h"
 
 #include <cassert>
@@ -206,7 +208,7 @@ bool DeferredShadingScreenRenderer::loadShaders() {
 	return true;
 }
 
-void DeferredShadingScreenRenderer::render() {
+void DeferredShadingScreenRenderer::render(const VisualMap& map) {
 	video::IVideoDriver* driver = device->getVideoDriver();
     scene::ISceneManager* smgr = device->getSceneManager();
     gui::IGUIEnvironment* guienv = device->getGUIEnvironment();
@@ -219,6 +221,8 @@ void DeferredShadingScreenRenderer::render() {
 
 	// Setze mehrere Rendertargets für Ausgabe
 	driver->setRenderTarget(renderTargets);
+
+	map.drawTerrain(driver);
 
 	smgr->drawAll();
 

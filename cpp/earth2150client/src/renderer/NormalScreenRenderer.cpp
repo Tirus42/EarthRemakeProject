@@ -1,5 +1,7 @@
 #include "renderer/NormalScreenRenderer.h"
 
+#include "client/VisualMap.h"
+
 #include "tf/time.h"
 
 using namespace irr;
@@ -23,7 +25,7 @@ void NormalScreenRenderer::resize(const irr::core::dimension2du& newSize) {
 	// Nichts zu tun bei Auflösungsänderung
 }
 
-void NormalScreenRenderer::render() {
+void NormalScreenRenderer::render(const VisualMap& map) {
 	video::IVideoDriver* driver = device->getVideoDriver();
     scene::ISceneManager* smgr = device->getSceneManager();
     gui::IGUIEnvironment* guienv = device->getGUIEnvironment();
@@ -34,6 +36,8 @@ void NormalScreenRenderer::render() {
     HighResolutionTime(&startTime);
 
 	driver->beginScene(true, true, backgroundColor);
+
+	map.drawTerrain(driver);
 
 	smgr->drawAll();
 	guienv->drawAll();
