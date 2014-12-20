@@ -54,7 +54,7 @@ void ScreenRendererHelper::buildFullScreenQuad(core::triangle3df& t1, core::tria
 	//core::triangle3df trig2(v1, v3, v2);
 }
 
-void ScreenRendererHelper::drawViewFrustum(irr::video::IVideoDriver* driver, const irr::scene::SViewFrustum& frustum) const {
+void ScreenRendererHelper::drawViewFrustum(irr::video::IVideoDriver* driver, const irr::scene::SViewFrustum& frustum) {
 	driver->draw3DLine(frustum.getNearLeftUp(), frustum.getNearRightUp());
 	driver->draw3DLine(frustum.getNearRightUp(), frustum.getNearRightDown());
 	driver->draw3DLine(frustum.getNearRightDown(), frustum.getNearLeftDown());
@@ -69,4 +69,45 @@ void ScreenRendererHelper::drawViewFrustum(irr::video::IVideoDriver* driver, con
 	driver->draw3DLine(frustum.getNearLeftDown(), frustum.getFarLeftDown());
 	driver->draw3DLine(frustum.getNearRightUp(), frustum.getFarRightUp());
 	driver->draw3DLine(frustum.getNearRightDown(), frustum.getFarRightDown());
+}
+
+bool ScreenRendererHelper::isInViewFrustum(const scene::SViewFrustum& frustum, const core::vector3df& point) {
+	// Prüfe ob der Punkt außerhalb einer der Frustum-Ebenen ist
+	for (u32 i = 0; i < scene::SViewFrustum::VF_PLANE_COUNT; ++i) {
+		if (frustum.planes[i].classifyPointRelation(point) == core::ISREL3D_FRONT) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool ScreenRendererHelper::isInViewFrustum(const scene::SViewFrustum& frustum, const core::vector3df& point, f32 radius) {
+	// Prüfe ob der Punkt außerhalb einer der Frustum-Ebenen ist
+	for (u32 i = 0; i < scene::SViewFrustum::VF_PLANE_COUNT; ++i) {
+		const f32 d = frustum.planes[i].Normal.dotProduct(point) + frustum.planes[i].D;
+
+		if (d > radius)
+			return false;
+
+	}
+
+	return true;
+}
+
+
+bool ScreenRendererHelper::isInViewFrustum(const irr::scene::SViewFrustum& frustum, const irr::core::aabbox3df& aabb) {
+	// Alle Eckpunkte prüfen ob einer innerhalb des Frustums liegt
+	core::vector3df edges[8];
+
+	aabb.getEdges(edges);
+
+	u32 pointRadius = core::max_(aabb.MaxEdge.X - aabb.MinEdge.X, aabb.MaxEdge.Y - aabb.MinEdge.Y, aabb.MaxEdge.Z - aabb.MinEdge.Z) / 2;
+
+	for (u32 i = 0; i < 8; ++i) {
+		if (isInViewFrustum(frustum, edges[i], pointRadius))
+			return true;
+	}
+
+	return false;
 }
