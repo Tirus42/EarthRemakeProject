@@ -1,7 +1,8 @@
 #version 330 compatibility
 
-uniform mat4 mWorldViewProj;
+uniform mat4 mMVP;
 uniform mat4 mInvWorld;
+uniform vec3 mOrigin;
 
 out vec3 in_position;
 out vec3 in_normal;
@@ -9,9 +10,9 @@ out vec2 in_texcoord;
 
 void main(void)
 {
-	gl_Position = mWorldViewProj * gl_Vertex;
+	gl_Position = mMVP * gl_Vertex;
 	
-	in_position = gl_Vertex.xyz;
+	in_position = mOrigin + gl_Vertex.xyz;
 	
 	vec4 normal = vec4(gl_Normal, 0.0);
 	normal = mInvWorld * normal;

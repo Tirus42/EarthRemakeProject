@@ -13,6 +13,10 @@ uniform float constantAttenuation;
 uniform float linearAttenuation;
 uniform float quadAttenuation;
 
+vec3 unpackNormal(vec3 normal) {
+	return (normal - 0.5) * 2;
+}
+
 void main (void) {
 	gl_FragColor = vec4(LightColor, 1);
 	//return;
@@ -26,7 +30,7 @@ void main (void) {
 	vec3 groundColor = texelFetch(DiffuseTex, texCoord, 0).rgb;
 	
 	// Normale der Oberfläche holen
-	vec3 normal = texelFetch(NormalTex, texCoord, 0).rgb;
+	vec3 normal = unpackNormal(texelFetch(NormalTex, texCoord, 0).rgb);
 	
 	float distance = length(position - LightPosition);
 	

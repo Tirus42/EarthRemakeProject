@@ -115,6 +115,24 @@ AbstractGameState* TestGameState::run() {
 	// Den Marker mit dem Material erstellen/holen
 	MapMarker* marker = map.getMapMarkerManager().getMarkerForMaterial(m);
 
+	IScreenRenderer* renderer;
+
+	bool useCompatibleRenderer = engineData.getConfig().getUseCompatibilityRenderer();
+
+	if (useCompatibleRenderer) {
+		renderer = new NormalScreenRenderer(device, SColor(0, 200, 200, 200));
+	} else {
+		renderer = new DeferredShadingScreenRenderer(device, SColor(0, 255, 255, 255));
+	}
+
+	renderer->init();
+
+	if (!useCompatibleRenderer) {
+		const video::SMaterial mat = ((DeferredShadingScreenRenderer*)renderer)->getMaterial(DeferredShadingScreenRenderer::SHADER_MAP);
+
+		map.getMaterial(0).MaterialType = mat.MaterialType;
+		map.updateMaterial();
+	}
 
 	/// -- Test mit Fliegenden Würfeln --------
 	FlyingObjects flyingObjectsTest(map, smgr);
@@ -123,11 +141,10 @@ AbstractGameState* TestGameState::run() {
 
 		scene::IMeshSceneNode* cube = smgr->addCubeSceneNode();
 		cube->getMaterial(0) = map.getMaterial(0);
-		//cube->setMaterialType(map.getMaterial(0).MaterialType);
 
 		flyingObjectsTest.createRotatingObjects(cube, core::vector2df(256, 256), 128.f, 0.0001f, 10);
 		flyingObjectsTest.createRotatingObjects(cube, core::vector2df(256, 768), 200.f, 0.0001f, 20);
-		flyingObjectsTest.createRotatingObjects(cube, core::vector2df(512, 512), 386, 0.0001, countObjects);
+		flyingObjectsTest.createRotatingObjects(cube, core::vector2df(512, 512), 386, 0.0001f, countObjects);
 
         cube->remove();
 	}
@@ -140,25 +157,6 @@ AbstractGameState* TestGameState::run() {
 	uint64_t startTimeFrame;
 	uint64_t endTimeFrame;
 
-	IScreenRenderer* renderer;
-
-	bool useCompatibleRenderer = engineData.getConfig().getUseCompatibilityRenderer();
-
-	if (useCompatibleRenderer) {
-		renderer = new NormalScreenRenderer(device, SColor(0, 200, 200, 200));
-	} else {
-		renderer = new DeferredShadingScreenRenderer(device, SColor(0, 255, 255, 255));
-	}
-
-
-	renderer->init();
-
-	if (!useCompatibleRenderer) {
-		const video::SMaterial mat = ((DeferredShadingScreenRenderer*)renderer)->getMaterial(DeferredShadingScreenRenderer::SHADER_MAP);
-
-		map.getMaterial(0).MaterialType = mat.MaterialType;
-		map.updateMaterial();
-	}
 
 	/// ------------------ Lichtquellen einfügen
 	{

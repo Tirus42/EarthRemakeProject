@@ -8,6 +8,10 @@ uniform vec3 LightDirection;
 uniform vec3 LightColor;
 uniform vec3 AmbientColor;
 
+vec3 unpackNormal(vec3 normal) {
+	return (normal - 0.5) * 2;
+}
+
 void main (void)
 {	
 	gl_FragColor = vec4(1,0,0,1);
@@ -17,7 +21,7 @@ void main (void)
 	ivec2 texCoord = ivec2(gl_FragCoord.xy);
 	
 	vec3 col = texelFetch(DiffuseTex, texCoord, 0).rgb;
-	vec3 normal = texelFetch(NormalTex, texCoord, 0).rgb;
+	vec3 normal = unpackNormal(texelFetch(NormalTex, texCoord, 0).rgb);
 	float depth = texelFetch(PositionTex, texCoord, 0).w;
 	
 	if (col == vec3(0))

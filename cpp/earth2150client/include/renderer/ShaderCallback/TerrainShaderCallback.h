@@ -12,42 +12,27 @@ public:
 	{
 		video::IVideoDriver* driver = services->getVideoDriver();
 
-		// set inverted world matrix
-		// if we are using highlevel shaders (the user can select this when
-		// starting the program), we must set the constants by name.
-
 		core::matrix4 invWorld = driver->getTransform(video::ETS_WORLD);
 		invWorld.makeInverse();
 
-
 		services->setVertexShaderConstant("mInvWorld", invWorld.pointer(), 16);
 
+		// Hole Koordinantes des Objekts Zentrums und übergebe diese an den Shader
+		core::vector3df origin = driver->getTransform(video::ETS_WORLD).getTranslation();
+		services->setVertexShaderConstant("mOrigin", &origin.X, 3);
 
-		// set clip matrix
-
+		// Bestimme Model-View-Projection Matrix und übergebe an Shader
 		core::matrix4 worldViewProj;
-		worldViewProj = driver->getTransform(video::ETS_PROJECTION);
-		worldViewProj *= driver->getTransform(video::ETS_VIEW);
-		worldViewProj *= driver->getTransform(video::ETS_WORLD);
+		worldViewProj = driver->getTransform(video::ETS_PROJECTION)
+						* driver->getTransform(video::ETS_VIEW)
+						* driver->getTransform(video::ETS_WORLD);
 
+		services->setVertexShaderConstant("mMVP", worldViewProj.pointer(), 16);
 
-		services->setVertexShaderConstant("mWorldViewProj", worldViewProj.pointer(), 16);
-
-
-		/* // set transposed world matrix
-
-		core::matrix4 world = driver->getTransform(video::ETS_WORLD);
-		world = world.getTransposed();
-
-
-		services->setVertexShaderConstant("mTransWorld", world.pointer(), 16);
-
-		/*/
 		// set texture, for textures you can use both an int and a float setPixelShaderConstant interfaces (You need it only for an OpenGL driver).
 		s32 TextureLayerID = 0;
 
 		services->setPixelShaderConstant("myTexture", &TextureLayerID, 1);
-		//*/
 
 	}
 };
