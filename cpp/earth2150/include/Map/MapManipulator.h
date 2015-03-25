@@ -24,11 +24,8 @@ class MapManipulator {
 		/// Setzt die Höhe in dem Gebiet
 		void setHeight(const MapRectArea& area, uint16_t height);
 
-		/// Bestimmt die minimale Höhe die in dem Gebiet vorkommt
-		uint16_t getMinHeight(const MapRectArea& area) const;
-
-		/// Bestimmt die maximale Höhe die in dem Gebiet vorkommt
-		uint16_t getMaxHeight(const MapRectArea& area) const;
+		/// Bestimmt die minimale und maximale Höhe welche in dem Gebiet vorkommt
+		bool getMinMaxHeight(const MapRectArea& area, uint16_t& min, uint16_t& max) const;
 
 		/// Bestimmt die durchschnittliche Höhe innerhalb des Gebiets
 		uint16_t getAvgHeight(const MapRectArea& area) const;
