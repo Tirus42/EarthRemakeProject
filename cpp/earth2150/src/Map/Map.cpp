@@ -36,6 +36,8 @@ Map::~Map() {
 }
 
 uint32_t Map::addDirection(uint32_t position, const WaymapDirection& direction) const {
+	assert(fieldOnMap(position));
+
 	switch (direction) {
 		case NORTH:
 			return addNorth(position);
@@ -70,6 +72,8 @@ uint32_t Map::addDirection(uint32_t position, const WaymapDirection& direction) 
 }
 
 uint32_t Map::addDirection(uint32_t position, const ObjectDirection& direction) const {
+	assert(fieldOnMap(position));
+
 	switch (direction) {
 		case DIRECTION_NORTH:
 			return addNorth(position);
@@ -94,16 +98,16 @@ uint32_t Map::addDirection(uint32_t position, const ObjectDirection& direction) 
 
 		case DIRECTION_NORTH_WEST:
 			return addNorthWest(position);
-
-		default:
-			assert(false);
 	}
 
-	// Todo: Exception Werfen?
+	assert(false);
+
 	return 0;
 }
 
 size_t Map::getNeighbours(uint32_t position, uint32_t *neighbours) const {
+	assert(fieldOnMap(position));
+
 	size_t numberOfNeighbours = 0;
 	uint8_t directions = getDirections(position);
 	if (directions & NORTH)      {neighbours[numberOfNeighbours++] = addNorth(position);}
@@ -118,6 +122,9 @@ size_t Map::getNeighbours(uint32_t position, uint32_t *neighbours) const {
 }
 
 uint8_t Map::getDirection(uint32_t start_index, uint32_t goal_index) const {
+	assert(fieldOnMap(start_index));
+	assert(fieldOnMap(goal_index));
+
 	int16_t x = positionX(goal_index) - positionX(start_index);
 	int16_t y = positionY(goal_index) - positionY(start_index);
 	bool x0 = x < 0;
@@ -182,7 +189,7 @@ bool Map::addUnit(Unit& unit, uint16_t x, uint16_t y) {
 
 	uint32_t pos = position(x, y);
 
-	//Prüfen ob das Feld frei ist um eine Einheit darauf zu setzen
+	// PrÃ¼fen ob das Feld frei ist um eine Einheit darauf zu setzen
 	if (!isFieldFree(pos)) {
 		return false;
 	}
@@ -196,7 +203,7 @@ bool Map::addUnit(Unit& unit, uint16_t x, uint16_t y) {
 	//Auf der Karte verzeichnen, dass hier nun eine Einheit steht
 	setFieldStatusFlag(position(x, y), STATUS_UNIT, true);
 
-	//Spieler über neue Einheit informieren
+	//Spieler Ã¼ber neue Einheit informieren
 	viewerManager.createEntity(unit);
 
 	std::cout << "Neue Einheit (ID: " << unit.getID() << ") auf die Karte gesetzt ("
@@ -245,6 +252,8 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 	assert(x1 < x2);
 	assert(y1 < y2);
 
+	assert(fieldOnMap(x2, y2));
+
 	uint16_t width = x2 - x1;
 	uint16_t height = y2 - y1;
 	uint16_t width2 = width + 2;
@@ -252,7 +261,7 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 	bool *passables = new bool[width2 * height2];
 	::memset(passables, true, width2 * height2 * sizeof(bool));
 
-	//Felder definieren, welche nicht "zu schief" sind
+	// Felder definieren, welche nicht "zu schief" sind
 	for (uint16_t y = 0; y != height2; y++) {
 		for (uint16_t x = 0; x != width2; x++) {
 			uint16_t realX = x1 - 1 + x;
@@ -269,7 +278,7 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 		}
 	}
 
-	//Nun Komplette Map durchgehen, und in prüfen, welche Nachbarfelder auch begehbar sind
+	//Nun Komplette Map durchgehen, und in prÃ¼fen, welche Nachbarfelder auch begehbar sind
 	for (uint16_t y = 1; y <= height; y++) {
 		for (uint16_t x = 1; x <= width; x++) {
 			uint32_t position = y * width2 + x;
@@ -309,6 +318,9 @@ void Map::updateMovementMap(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) 
 }
 
 void Map::updateMovementMap(uint32_t position1, uint32_t position2) {
+	assert(fieldOnMap(position1));
+	assert(fieldOnMap(position2));
+
 	uint16_t x1 = positionX(position1);
 	uint16_t y1 = positionY(position1);
 	uint16_t x2 = positionX(position2);
@@ -336,7 +348,7 @@ bool Map::loadHeightMapRAW(const std::string& filename) {
 	//Daten einlesen
 	file.read((char*)heightMap, fileSize);
 
-	//Datei wieder schließen
+	//Datei wieder schlieÃŸen
 	file.close();
 
 	return true;
@@ -391,7 +403,7 @@ void Map::exportPassablesToBMP(const std::string& fileName) const {
 }
 
 bool Map::addPlayer(Player& player, uint32_t slot) {
-	//Todo: Slot verwalten und prüfen ob schon belegt
+	//Todo: Slot verwalten und prÃ¼fen ob schon belegt
 
 
 	HumanPlayer* hPlayer = dynamic_cast<HumanPlayer*>(&player);
@@ -413,6 +425,8 @@ void Map::removePlayer(Player& player, bool removeEntitys) {
 }
 
 uint16_t Map::getHeightDiffOnField(uint32_t position) const {
+	assert(fieldOnMap(position));
+
 	uint16_t h1 = heightMap[position];
 	uint16_t h2 = heightMap[addEast(position)];
 	uint16_t h3 = heightMap[addSouth(position)];
@@ -425,12 +439,14 @@ uint16_t Map::getHeightDiffOnField(uint32_t position) const {
 }
 
 uint16_t Map::getFieldHeight(uint32_t position, float x, float y) const {
+	assert(fieldOnMap(position));
+
 	const uint16_t h1 = heightMap[position];
 	const uint16_t h2 = heightMap[addEast(position)];
 	const uint16_t h3 = heightMap[addSouth(position)];
 	const uint16_t h4 = heightMap[addSouthEast(position)];
 
-	// Bestimme Höhe durch Bilineare Interpolation
+	// Bestimme HÃ¶he durch Bilineare Interpolation
 	const uint16_t hTop = (1.f - x) * h1 + x * h2;
 	const uint16_t hBot = (1.f - x) * h3 + x * h4;
 
@@ -438,7 +454,8 @@ uint16_t Map::getFieldHeight(uint32_t position, float x, float y) const {
 }
 
 bool Map::isFieldFree(uint32_t position) const {
-	// Todo: Auf Gebäude und andere Objekte prüfen
+	assert(fieldOnMap(position));
+	// Todo: Auf GebÃ¤ude und andere Objekte prÃ¼fen
 	return !getFieldStatusFlag(position, STATUS_UNIT);
 }
 
@@ -458,7 +475,7 @@ void Map::updateGameField(uint32_t currentTime) {
 		m->finishMove(*this);
 		movingUnits.pop();
 
-		// Prüfen ob wir eine weitere Bewegung machen sollen
+		// PrÃ¼fen ob wir eine weitere Bewegung machen sollen
 		if (m->getUnit().countWaypoints() > 0) {
 			std::cout << "Starte weitere bewegung\n";
 			Unit& unit = m->getUnit();
