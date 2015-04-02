@@ -2,6 +2,8 @@
 #define GAMECONTENT_H_INCLUDED
 
 #include "e2150/FactionManager.h"
+#include "Unit/UnitChassisList.h"
+#include "Building/GlobalBuildingList.h"
 
 class GameContent {
 	private:
@@ -9,6 +11,10 @@ class GameContent {
 		GameContent operator=(const GameContent&);
 
 		FactionManager factionManager;
+
+		UnitChassisList unitChassisList;
+
+		GlobalBuildingList buildingList;
 
 	public:
 		GameContent();
@@ -24,7 +30,21 @@ class GameContent {
 			return factionManager;
 		}
 
+		const UnitChassisList& getUnitChassisList() const {
+			return unitChassisList;
+		}
 
+		UnitChassisList& getUnitChassisList() {
+			return unitChassisList;
+		}
+
+		const GlobalBuildingList& getBuildingList() const {
+			return buildingList;
+		}
+
+		GlobalBuildingList& getBuildingList() {
+			return buildingList;
+		}
 
 
 };
