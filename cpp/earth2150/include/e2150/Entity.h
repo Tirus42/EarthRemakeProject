@@ -23,8 +23,7 @@ class Entity {
 		uint32_t getID() const {return id;}
 
 		/// Gibt die Position zurück
-		uint32_t getX() const {return mapPosition.getX();}
-		uint32_t getY() const {return mapPosition.getY();}
+		const MapPosition& getPosition() const {return mapPosition;}
 
 		/// Gibt die Ausrichtung zurück
 		uint8_t getDirection() const {return direction;}

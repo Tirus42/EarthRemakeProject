@@ -31,8 +31,8 @@ bool Unit::getStatusFlag(uint8_t statusFlag) const {
 }
 
 void Unit::move(uint8_t direction) {
-	uint16_t x = getX();
-	uint16_t y = getY();
+	uint16_t x = getPosition().getX();
+	uint16_t y = getPosition().getY();
 
 	switch(direction) {
 		case Map::DIRECTION_NORTH:

@@ -29,7 +29,7 @@ void MovingUnit::startMove(uint8_t direction, uint32_t currentTime, Map& map) {
 		turn = true;
 	} else { // Wenn wir auf ein anderes Feld fahren, belegen wir dieses
 		turn = false;
-		map.setFieldStatusFlag(map.position(unit.getX(), unit.getY()), Map::STATUS_UNIT, true);
+		map.setFieldStatusFlag(map.position(unit.getPosition()), Map::STATUS_UNIT, true);
 	}
 }
 
@@ -42,7 +42,7 @@ void MovingUnit::finishMove(Map& map) {
 		unit.setDirection(direction);
 	} else {
 		// Vorheriges Feld freigeben
-		map.setFieldStatusFlag(map.position(unit.getX(), unit.getY()), Map::STATUS_UNIT, false);
+		map.setFieldStatusFlag(map.position(unit.getPosition()), Map::STATUS_UNIT, false);
 		// Und Einheit bewegen
 		unit.move(direction);
 		// Wegpunkt entfernen

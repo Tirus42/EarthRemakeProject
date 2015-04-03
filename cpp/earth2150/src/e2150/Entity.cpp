@@ -22,8 +22,8 @@ Entity::~Entity() {
 
 int32_t Entity::dumpData(char* buffer) const {
 	*(uint32_t*)(&buffer[0])	= getID();
-	*(uint16_t*)(&buffer[4])	= getX();
-	*(uint16_t*)(&buffer[6])	= getY();
+	*(uint16_t*)(&buffer[4])	= getPosition().getX();
+	*(uint16_t*)(&buffer[6])	= getPosition().getY();
 	*(int32_t*)(&buffer[8])		= getHitPoints();
 	*(int32_t*)(&buffer[12])	= getHitPointsMax();
 

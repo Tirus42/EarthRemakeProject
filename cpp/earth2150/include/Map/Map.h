@@ -144,6 +144,7 @@ class Map {
 		uint16_t getInnerHeight() const {return height-2*borderWidth;}
 
 		uint32_t position(uint16_t x, uint16_t y) const {return y * width + x;}
+		uint32_t position(const MapPosition& pos) const {return position(pos.getX(), pos.getY());}
 		uint16_t positionX(uint32_t position) const {return position % width;}
 		uint16_t positionY(uint32_t position) const {return position / width;}
 

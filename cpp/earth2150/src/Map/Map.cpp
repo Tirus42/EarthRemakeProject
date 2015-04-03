@@ -224,7 +224,7 @@ void Map::UnitDriveTo(Unit& unit, uint32_t target) {
 
 	std::list<uint32_t> way;
 
-	uint32_t startPos = position(unit.getX(), unit.getY());
+	uint32_t startPos = position(unit.getPosition());
 	if (getWay(startPos, target, way)) {
 
 		unit.setWay(way);
@@ -480,16 +480,16 @@ void Map::updateGameField(uint32_t currentTime) {
 			std::cout << "Starte weitere bewegung\n";
 			Unit& unit = m->getUnit();
 
-			viewerManager.debugPaintField(position(unit.getX(), unit.getY()), 0xFF50FF00);
+			viewerManager.debugPaintField(position(unit.getPosition()), 0xFF50FF00);
 
 			uint32_t pos = unit.getNextWaypoint();
-			uint8_t direction = Utils::getAngle(*this, position(unit.getX(), unit.getY()), pos);
+			uint8_t direction = Utils::getAngle(*this, position(unit.getPosition()), pos);
 			m->startMove(direction, currentEndTime, *this);
 
 			movingUnits.push(m);
 		}
 		else {
-			viewerManager.debugPaintField(position(m->getUnit().getX(), m->getUnit().getY()), 0xFF289900);
+			viewerManager.debugPaintField(position(m->getUnit().getPosition()), 0xFF289900);
 			delete m;
 		}
 	}
