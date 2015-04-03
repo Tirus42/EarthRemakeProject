@@ -10,7 +10,7 @@ MapManipulator::MapManipulator(Map& map) :
 
 }
 
-void MapManipulator::setHeight(const MapRectArea& area, uint16_t height) {
+void MapManipulator::setHeight(const MapRectArea& area, uint16_t height) const {
 	if (!area.isValidOnMap(map))
 		return;
 
@@ -23,7 +23,7 @@ void MapManipulator::setHeight(const MapRectArea& area, uint16_t height) {
 
 bool MapManipulator::getMinMaxHeight(const MapRectArea& area, uint16_t& min, uint16_t& max) const {
 	if (!area.isValidOnMap(map))
-		return false;	// Todo: bessser behandeln? oder ausschlie�en?
+		return false;	// Todo: bessser behandeln? oder ausschließen?
 
 	uint16_t minHeight = 0xFFFF;
 	uint16_t maxHeight = 0;
@@ -42,6 +42,30 @@ bool MapManipulator::getMinMaxHeight(const MapRectArea& area, uint16_t& min, uin
 
 	min = minHeight;
 	max = maxHeight;
+
+	return true;
+}
+
+bool MapManipulator::copyAreaHeight(const MapRectArea& from, const MapPosition& to, const Map* sourceMap) const {
+	// Todo: Fall beachten wenn Quelle und Ziel sich überlappen
+	if (!sourceMap)
+		sourceMap = &map;
+
+	if (!from.isValidOnMap(*sourceMap))
+		return false;
+
+	MapRectArea targetArea(to, from.getWidth(), from.getHeight());
+	targetArea.makeValidOnMap(map);
+
+	const MapPosition& origin = from.getMinEdge();
+
+	for (uint16_t y = 0; y < targetArea.getHeight(); ++y) {
+		for (uint16_t x = 0; x < targetArea.getWidth(); ++x) {
+			uint16_t height = sourceMap->heightMap[sourceMap->position(origin.getX() + x, origin.getY() + y)];
+
+			map.heightMap[map.position(to.getX() + x, to.getY() + y)] = height;
+		}
+	}
 
 	return true;
 }

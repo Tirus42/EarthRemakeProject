@@ -1,9 +1,9 @@
-#ifndef MAPMANIPULATOR_H_INCLUDED
-#define MAPMANIPULATOR_H_INCLUDED
+#pragma once
 
 #include <stdint.h>
 
 class Map;
+class MapPosition;
 class MapRectArea;
 
 /**
@@ -22,7 +22,7 @@ class MapManipulator {
 		MapManipulator(Map& map);
 
 		/// Setzt die Höhe in dem Gebiet
-		void setHeight(const MapRectArea& area, uint16_t height);
+		void setHeight(const MapRectArea& area, uint16_t height) const;
 
 		/// Bestimmt die minimale und maximale Höhe welche in dem Gebiet vorkommt
 		bool getMinMaxHeight(const MapRectArea& area, uint16_t& min, uint16_t& max) const;
@@ -30,7 +30,7 @@ class MapManipulator {
 		/// Bestimmt die durchschnittliche Höhe innerhalb des Gebiets
 		uint16_t getAvgHeight(const MapRectArea& area) const;
 
+		/// Kopiert einen Teil der Höhenkarte von einer Karte auf die andere
+		bool copyAreaHeight(const MapRectArea& from, const MapPosition& to, const Map* sourceMap = 0) const;
+
 };
-
-
-#endif // MAPMANIPULATOR_H_INCLUDED
