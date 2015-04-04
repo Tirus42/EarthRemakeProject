@@ -18,7 +18,7 @@ Map::Map(uint16_t width, uint16_t height) :
 		width(width),
 		height(height),
 		borderWidth(1),
-		heightMap(new uint16_t[width * height]),
+		heightMap(width + 1, height + 1),
 		movementMap(new uint8_t[width * height]),
 		statusMap(new uint8_t[width * height]),
 		navigator(NavigatorFactory::getNavigator(*this)),
@@ -32,7 +32,6 @@ Map::~Map() {
 	delete navigator;
 	delete[] statusMap;
 	delete[] movementMap;
-	delete[] heightMap;
 }
 
 uint32_t Map::addDirection(uint32_t position, const WaymapDirection& direction) const {
@@ -346,7 +345,8 @@ bool Map::loadHeightMapRAW(const std::string& filename) {
 	}
 
 	//Daten einlesen
-	file.read((char*)heightMap, fileSize);
+	// Todo: Richtig laden
+	file.read((char*)&heightMap[0], fileSize);
 
 	//Datei wieder schließen
 	file.close();

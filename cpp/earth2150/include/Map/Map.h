@@ -3,6 +3,7 @@
 
 #include "Map/MapPosition.h"
 #include "Map/MapViewerManager.h"
+#include "Map/HeightMap.h"
 #include "Unit/MovingUnit.h"
 
 #include <map>
@@ -33,8 +34,8 @@ class Map {
 		/// Die Anzahl an Feldern am Rand, die nicht nutzbar für die Spieler sind
 		uint16_t borderWidth;
 
-		/// Array mit Höheninformationen, wird zeilenweise gespeichert.
-		uint16_t* heightMap;
+		/// Höhenkarte
+		HeightMap heightMap;
 
 		/// Karte der Bewegungsmöglichkeiten.
 		uint8_t* movementMap;

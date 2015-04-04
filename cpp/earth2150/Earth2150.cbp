@@ -469,6 +469,7 @@
 		<Unit filename="include/Building/BuildingReference.h" />
 		<Unit filename="include/Building/GlobalBuildingList.h" />
 		<Unit filename="include/Event/IEntityEventReceiver.h" />
+		<Unit filename="include/Map/HeightMap.h" />
 		<Unit filename="include/Map/IMapBuildingsObserver.h" />
 		<Unit filename="include/Map/Map.h" />
 		<Unit filename="include/Map/MapBitLayer.h" />
@@ -528,6 +529,7 @@
 		<Unit filename="src/Building/BuildingGround.cpp" />
 		<Unit filename="src/Building/BuildingReference.cpp" />
 		<Unit filename="src/Building/GlobalBuildingList.cpp" />
+		<Unit filename="src/Map/HeightMap.cpp" />
 		<Unit filename="src/Map/Map.cpp" />
 		<Unit filename="src/Map/MapBitLayer.cpp" />
 		<Unit filename="src/Map/MapBuildings.cpp" />
