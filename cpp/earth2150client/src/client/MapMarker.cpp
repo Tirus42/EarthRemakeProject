@@ -15,7 +15,7 @@ MapMarker::MapMarker(const MapMarkerManager& manager, const video::SMaterial& ma
 	manager(manager),
 	meshBuffer(0) {
 
-		meshBuffer = new scene::CMeshBuffer<video::S3DVertex>();
+		meshBuffer = new scene::SMeshBuffer();
 
 		meshBuffer->Material = mat;
 

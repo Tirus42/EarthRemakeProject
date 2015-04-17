@@ -4,12 +4,13 @@
 #include <stdint.h>
 
 namespace irr {
-	namespace scene {
-		template <class T> class CMeshBuffer;
-	}
 	namespace video {
 		class S3DVertex;
 		class SMaterial;
+	}
+	namespace scene {
+		template <class T> class CMeshBuffer;
+		typedef CMeshBuffer<video::S3DVertex> SMeshBuffer;
 	}
 }
 
@@ -34,7 +35,7 @@ class MapMarker {
 		const MapMarkerManager& manager;
 
 		/// MeshBuffer welcher auf die Map gezeichnet wird
-		irr::scene::CMeshBuffer<irr::video::S3DVertex>* meshBuffer;
+		irr::scene::SMeshBuffer* meshBuffer;
 
 		void addFieldToMesh(const VisualMap& map, uint16_t x, uint16_t y);
 
@@ -51,7 +52,7 @@ class MapMarker {
 		/// Entfernt alle Markierungen von diesem Marker
 		void clear();
 
-		irr::scene::CMeshBuffer<irr::video::S3DVertex>* getMeshBuffer() const {return meshBuffer;}
+		irr::scene::SMeshBuffer* getMeshBuffer() const {return meshBuffer;}
 
 		irr::video::SMaterial& getMaterial();
 
