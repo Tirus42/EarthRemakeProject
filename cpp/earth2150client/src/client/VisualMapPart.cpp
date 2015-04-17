@@ -8,15 +8,12 @@ using namespace irr;
 VisualMapPart::VisualMapPart(const VisualMap& map, uint16_t x, uint16_t y) :
 	x(x),
 	y(y),
-	meshBuffer(0) {
+	meshBuffer() {
 
 	buildMesh(map);
 }
 
-VisualMapPart::~VisualMapPart() {
-	// Wir geben unsere Referenz auf das Mesh ab
-	meshBuffer->drop();
-}
+VisualMapPart::~VisualMapPart() {}
 
 void VisualMapPart::updateNormals() {
 	/// Lagere "teure" Randfallprüfung in Extra Methoden aus (und nicht in Schleife)
@@ -45,15 +42,12 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 
 	const uint16_t mapHeight = map.getHeight();
 
-	// Mesh-Buffer erstellen
-	if (meshBuffer)
-		meshBuffer->drop();
-
-	meshBuffer = new scene::CMeshBuffer<video::S3DVertex>();
-
 	// Vertex und Zuweisungsarray holen und vorskalieren
-	core::array<video::S3DVertex>& vertices = meshBuffer->Vertices;
-	core::array<u16>& indices = meshBuffer->Indices;
+	core::array<video::S3DVertex>& vertices = meshBuffer.Vertices;
+	core::array<u16>& indices = meshBuffer.Indices;
+
+	vertices.clear();
+	indices.clear();
 
 	// Bestimmen wieviel Einträge gebraucht werden
 	const uint32_t countVertices = (size + 1) * (size + 1);
@@ -96,12 +90,12 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 	// Material zuweißen (temp) und Mesh-Buffer in Mesh setzen
 	updateMaterial(map);
 
-	meshBuffer->recalculateBoundingBox();
+	meshBuffer.recalculateBoundingBox();
 }
 
 void VisualMapPart::updateMaterial(const VisualMap& map) {
 	// Todo: richtiges Material verwenden
-	meshBuffer->Material = map.getMaterial(0);
+	meshBuffer.Material = map.getMaterial(0);
 }
 
 void VisualMapPart::updateTerrainHeight(const VisualMap& map, uint16_t startX, uint16_t startY, uint16_t endX, uint16_t endY) {
@@ -114,7 +108,7 @@ void VisualMapPart::updateTerrainHeight(const VisualMap& map, uint16_t startX, u
 	uint16_t partX = this->x * VisualMap::VISUAL_PART_SIZE;
 	uint16_t partY = this->y * VisualMap::VISUAL_PART_SIZE;
 
-	core::array<video::S3DVertex>& vertices = meshBuffer->Vertices;
+	core::array<video::S3DVertex>& vertices = meshBuffer.Vertices;
 
 	for (uint16_t y = startY; y <= endY; ++y) {
 		for (uint16_t x = startX; x <= endX; ++x) {
@@ -125,5 +119,5 @@ void VisualMapPart::updateTerrainHeight(const VisualMap& map, uint16_t startX, u
 	}
 
 	// Setzte MeshBuffer als Verändert, damit es neu zur Grafikkarte gesendet wird
-	meshBuffer->setDirty();
+	meshBuffer.setDirty();
 }

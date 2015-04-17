@@ -115,7 +115,7 @@ void VisualMap::build() {
 		for (int32_t x = 0; x < width; ++x) {
 			VisualMapPart* part = new VisualMapPart(*this, x, y);
 
-			irr::scene::CMeshBuffer<irr::video::S3DVertex>* mPart = part->getMeshBuffer();
+			irr::scene::SMeshBuffer* mPart = part->getMeshBuffer();
 
 			mesh->addMeshBuffer(mPart);
 

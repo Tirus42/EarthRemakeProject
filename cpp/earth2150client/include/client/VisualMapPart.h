@@ -15,7 +15,7 @@ class VisualMapPart {
 		uint16_t y;
 
 		/// Zeiger auf den Meshbuffer
-		irr::scene::CMeshBuffer<irr::video::S3DVertex>* meshBuffer;
+		irr::scene::SMeshBuffer meshBuffer;
 
 		void buildMesh(const VisualMap& map);
 
@@ -32,7 +32,8 @@ class VisualMapPart {
 		VisualMapPart(const VisualMap& map, uint16_t x, uint16_t y);
 		~VisualMapPart();
 
-		irr::scene::CMeshBuffer<irr::video::S3DVertex>* getMeshBuffer() const {return meshBuffer;}
+		const irr::scene::SMeshBuffer* getMeshBuffer() const {return &meshBuffer;}
+		irr::scene::SMeshBuffer* getMeshBuffer() {return &meshBuffer;}
 
 		void updateMaterial(const VisualMap& map);
 
