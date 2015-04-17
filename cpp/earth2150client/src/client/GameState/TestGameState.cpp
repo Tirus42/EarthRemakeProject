@@ -45,9 +45,6 @@ TestGameState::~TestGameState() {
 	removeCamera();
 }
 
-// Temp, Todo: In eigene Klasse Packen
-static const irr::s32 ID_MAPPICK = 1 << 0;
-
 AbstractGameState* TestGameState::run() {
 	IrrlichtDevice* device = engineData.getIrrlichtDevice();
 
@@ -76,9 +73,6 @@ AbstractGameState* TestGameState::run() {
 	// Raw-Heightmap laden
 	if (!map.loadHeightMapRAW("GameData/map1024x1024.bin"))
 		return 0;
-
-	// Selections-ID setzen
-	map.setMeshID(ID_MAPPICK);
 
 	// Komplette Map als Mesh aufbauen
 	map.build();

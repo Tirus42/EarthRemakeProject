@@ -16,8 +16,6 @@ VisualMap::VisualMap(irr::video::IVideoDriver* driver, scene::ISceneManager* smg
 	smgr(smgr),
 	mapParts(),
 	materials(),
-	meshID(-1),
-	mesh(0),
 	MarkerManager(*this, smgr) {
 
 	driver->grab();
@@ -52,9 +50,6 @@ VisualMap::~VisualMap() {
 		delete *i;
 	}
 
-	if (mesh)
-		mesh->drop();
-
 	smgr->drop();
 	driver->drop();
 }
@@ -70,10 +65,6 @@ VisualMapPart* VisualMap::getMapPart(uint16_t partX, uint16_t partY) const {
 void VisualMap::updateMaterial() {
 	for (size_t i = 0; i < mapParts.size(); ++i) {
 		mapParts[i]->updateMaterial(*this);
-	}
-
-	for (size_t i = 0; i < mesh->getMeshBufferCount(); ++i) {
-		mesh->getMeshBuffer(i)->getMaterial() = materials[0];
 	}
 }
 
@@ -105,11 +96,8 @@ void VisualMap::build() {
 
 	//width = 16;
 	//height = 16;
-	if (mesh) {
-		mesh->clear();
-	} else {
-		mesh = new scene::SMesh();
-	}
+
+	scene::IMeshManipulator* manipulator = smgr->getMeshManipulator();
 
 	for (int32_t y = 0; y < height; ++y) {
 		for (int32_t x = 0; x < width; ++x) {
@@ -117,27 +105,18 @@ void VisualMap::build() {
 
 			irr::scene::SMeshBuffer* mPart = part->getMeshBuffer();
 
-			mesh->addMeshBuffer(mPart);
+			// Vorerst Mesh-Normale automatisch berechnen lassen (Gibt unschöne Kanten)
+			manipulator->recalculateNormals(mPart);
+
+			boundingBox.addInternalBox(mPart->getBoundingBox());
 
 			mapParts.push_back(part);
 		}
 	}
 
-	scene::IMeshManipulator* manipulator = smgr->getMeshManipulator();
-
-	// Vorerst Mesh-Normale automatisch berechnen lassen (Gibt unschöne Kanten)
-	manipulator->recalculateNormals(mesh);
-
-	// Flag setzen, damit das Mesh im VRAM gehalten wird (deutlich schneller)
-	mesh->setHardwareMappingHint(scene::EHM_STATIC, scene::EBT_VERTEX_AND_INDEX);
-
-	mesh->recalculateBoundingBox();
 }
 
 MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core::vector3df& direction) const {
-	// Hole Bounding Box der Map
-	const core::aabbox3df boundingBox = mesh->BoundingBox;
-
 	core::vector3df myDirection(0);
 
 	// Prüfen ob Richtungsvektor gleich dem Nullvektor ist

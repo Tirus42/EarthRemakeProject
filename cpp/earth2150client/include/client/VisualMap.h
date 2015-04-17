@@ -20,10 +20,7 @@ class VisualMap : public Map {
 		std::vector<VisualMapPart*> mapParts;
 		std::vector<irr::video::SMaterial> materials;
 
-		irr::s32 meshID;
-
-		/// Das Mesh welchem die Map besteht.
-		irr::scene::SMesh* mesh;
+		irr::core::aabbox3df boundingBox;
 
 		/// Manager für Markierungen auf der Map
 		MapMarkerManager MarkerManager;
@@ -65,9 +62,6 @@ class VisualMap : public Map {
 
 		/// Test Methode zum erstellen aller Map Parts
 		void build();
-
-		/// Setzt die Mesh ID, welche bei allen MapParts gesetzt wird
-		void setMeshID(irr::s32 id) {meshID = id;}
 
 		/// Gibt die Referenz auf den MapMarkerManager zurück
 		MapMarkerManager& getMapMarkerManager() {return MarkerManager;}

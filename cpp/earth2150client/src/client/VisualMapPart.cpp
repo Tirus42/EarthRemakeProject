@@ -90,6 +90,9 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 	// Material zuweißen (temp) und Mesh-Buffer in Mesh setzen
 	updateMaterial(map);
 
+	// Flag setzen, damit das Mesh im VRAM gespeichert wird
+	meshBuffer.setHardwareMappingHint(scene::EHM_STATIC, scene::EBT_VERTEX_AND_INDEX);
+
 	meshBuffer.recalculateBoundingBox();
 }
 
