@@ -16,6 +16,7 @@ VisualMap::VisualMap(irr::video::IVideoDriver* driver, scene::ISceneManager* smg
 	smgr(smgr),
 	mapParts(),
 	materials(),
+	boundingBox(),
 	MarkerManager(*this, smgr) {
 
 	driver->grab();
@@ -47,6 +48,7 @@ VisualMap::VisualMap(irr::video::IVideoDriver* driver, scene::ISceneManager* smg
 VisualMap::~VisualMap() {
 	// Alle Map Parts entfernen
 	for (std::vector<VisualMapPart*>::const_iterator i = mapParts.begin(); i != mapParts.end(); ++i) {
+		(*i)->removeHardwareBuffer(driver);
 		delete *i;
 	}
 
@@ -98,6 +100,8 @@ void VisualMap::build() {
 	//height = 16;
 
 	scene::IMeshManipulator* manipulator = smgr->getMeshManipulator();
+
+	boundingBox.reset(core::vector3df(0));
 
 	for (int32_t y = 0; y < height; ++y) {
 		for (int32_t x = 0; x < width; ++x) {

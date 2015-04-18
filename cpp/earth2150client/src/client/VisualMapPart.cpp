@@ -1,7 +1,6 @@
 #include "client/VisualMapPart.h"
 
 #include <cassert>
-#include <iostream>
 
 using namespace irr;
 
@@ -13,7 +12,9 @@ VisualMapPart::VisualMapPart(const VisualMap& map, uint16_t x, uint16_t y) :
 	buildMesh(map);
 }
 
-VisualMapPart::~VisualMapPart() {}
+VisualMapPart::~VisualMapPart() {
+	assert(meshBuffer.getReferenceCount() == 1 && "MeshBuffer Reference Count > 1");
+}
 
 void VisualMapPart::updateNormals() {
 	/// Lagere "teure" Randfallprüfung in Extra Methoden aus (und nicht in Schleife)
@@ -123,4 +124,8 @@ void VisualMapPart::updateTerrainHeight(const VisualMap& map, uint16_t startX, u
 
 	// Setzte MeshBuffer als Verändert, damit es neu zur Grafikkarte gesendet wird
 	meshBuffer.setDirty();
+}
+
+void VisualMapPart::removeHardwareBuffer(irr::video::IVideoDriver* driver) {
+	driver->removeHardwareBuffer(&meshBuffer);
 }

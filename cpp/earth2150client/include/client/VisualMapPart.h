@@ -39,6 +39,10 @@ class VisualMapPart {
 
 		/// Setzt die Vertex Höhen in dem Bereich neu aus der Map
 		void updateTerrainHeight(const VisualMap& map, uint16_t x, uint16_t y, uint16_t width, uint16_t height);
+
+		/// Gibt dem IVideoTreiber die anweisung alle Speicher auf der GPU freizugeben
+		/// Muss vor dem Destruktur aufgerufen werden
+		void removeHardwareBuffer(irr::video::IVideoDriver* driver);
 };
 
 
