@@ -251,6 +251,11 @@
 			<Option target="Linux - Client - Debug" />
 			<Option target="Linux - Client - Release" />
 		</Unit>
+		<Unit filename="../earth2150client/include/client/MapGlobalLight.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+			<Option target="Linux - Client - Release" />
+		</Unit>
 		<Unit filename="../earth2150client/include/client/MapMarker.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
@@ -382,6 +387,11 @@
 			<Option target="Linux - Client - Release" />
 		</Unit>
 		<Unit filename="../earth2150client/src/client/GameState/TestGameState.cpp">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+			<Option target="Linux - Client - Release" />
+		</Unit>
+		<Unit filename="../earth2150client/src/client/MapGlobalLight.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 			<Option target="Linux - Client - Release" />

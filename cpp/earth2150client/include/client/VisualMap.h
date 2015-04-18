@@ -3,6 +3,7 @@
 
 #include "Map/Map.h"
 #include "client/MapMarkerManager.h"
+#include "client/MapGlobalLight.h"
 
 #include <irrlicht.h>
 
@@ -21,6 +22,8 @@ class VisualMap : public Map {
 		std::vector<irr::video::SMaterial> materials;
 
 		irr::core::aabbox3df boundingBox;
+
+		MapGlobalLight mapLight;
 
 		/// Manager für Markierungen auf der Map
 		MapMarkerManager MarkerManager;
@@ -52,6 +55,14 @@ class VisualMap : public Map {
 		uint32_t addMaterial(const irr::video::SMaterial& mat) {
 			materials.push_back(mat);
 			return materials.size() - 1;
+		}
+
+		const MapGlobalLight& getGlobalLight() const {
+			return mapLight;
+		}
+
+		MapGlobalLight& getGlobalLight() {
+			return mapLight;
 		}
 
 		/// Aktualisiert die Interne Struktur, muss aufgerufen werden wenn das Material verändert wurde!

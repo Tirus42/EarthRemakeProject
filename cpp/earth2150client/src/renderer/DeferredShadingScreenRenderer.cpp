@@ -213,6 +213,14 @@ void DeferredShadingScreenRenderer::render(const VisualMap& map) {
     scene::ISceneManager* smgr = device->getSceneManager();
     gui::IGUIEnvironment* guienv = device->getGUIEnvironment();
 
+    {	// Übernehme beleuchtungs Informationen
+		const MapGlobalLight& mLight = map.getGlobalLight();
+
+		globalLightShaderCallback->ambientColor = mLight.ambientColor;
+		globalLightShaderCallback->lightColor = mLight.lightColor;
+		globalLightShaderCallback->direction = mLight.direction;
+    }
+
     uint64_t startTime, endTime;
 
     HighResolutionTime(&startTime);
@@ -222,9 +230,9 @@ void DeferredShadingScreenRenderer::render(const VisualMap& map) {
 	// Setze mehrere Rendertargets für Ausgabe
 	driver->setRenderTarget(renderTargets);
 
-	map.drawTerrain(driver);
-
 	smgr->drawAll();
+
+	map.drawTerrain(driver);
 
 	// Zeichne Globale Beleuchtung
 	if (usePostProcessRenderTarget) {

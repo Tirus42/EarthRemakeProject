@@ -16,6 +16,7 @@ VisualMap::VisualMap(irr::video::IVideoDriver* driver, scene::ISceneManager* smg
 	mapParts(),
 	materials(),
 	boundingBox(),
+	mapLight(),
 	MarkerManager(*this, smgr) {
 
 	driver->grab();
