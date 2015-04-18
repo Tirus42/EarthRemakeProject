@@ -281,6 +281,11 @@
 			<Option target="Linux - Client - Debug" />
 			<Option target="Linux - Client - Release" />
 		</Unit>
+		<Unit filename="../earth2150client/include/renderer/CompatibleScreenRenderer.h">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+			<Option target="Linux - Client - Release" />
+		</Unit>
 		<Unit filename="../earth2150client/include/renderer/DeferredShadingScreenRenderer.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
@@ -297,11 +302,6 @@
 			<Option target="Linux - Client - Release" />
 		</Unit>
 		<Unit filename="../earth2150client/include/renderer/LightManager.h">
-			<Option target="Client - Debug" />
-			<Option target="Linux - Client - Debug" />
-			<Option target="Linux - Client - Release" />
-		</Unit>
-		<Unit filename="../earth2150client/include/renderer/NormalScreenRenderer.h">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 			<Option target="Linux - Client - Release" />
@@ -421,17 +421,17 @@
 			<Option target="Linux - Client - Debug" />
 			<Option target="Linux - Client - Release" />
 		</Unit>
+		<Unit filename="../earth2150client/src/renderer/CompatibleScreenRenderer.cpp">
+			<Option target="Client - Debug" />
+			<Option target="Linux - Client - Debug" />
+			<Option target="Linux - Client - Release" />
+		</Unit>
 		<Unit filename="../earth2150client/src/renderer/DeferredShadingScreenRenderer.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 			<Option target="Linux - Client - Release" />
 		</Unit>
 		<Unit filename="../earth2150client/src/renderer/LightManager.cpp">
-			<Option target="Client - Debug" />
-			<Option target="Linux - Client - Debug" />
-			<Option target="Linux - Client - Release" />
-		</Unit>
-		<Unit filename="../earth2150client/src/renderer/NormalScreenRenderer.cpp">
 			<Option target="Client - Debug" />
 			<Option target="Linux - Client - Debug" />
 			<Option target="Linux - Client - Release" />

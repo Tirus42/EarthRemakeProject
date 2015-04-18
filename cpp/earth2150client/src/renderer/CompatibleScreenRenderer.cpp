@@ -1,4 +1,4 @@
-#include "renderer/NormalScreenRenderer.h"
+#include "renderer/CompatibleScreenRenderer.h"
 
 #include "client/VisualMap.h"
 
@@ -6,26 +6,26 @@
 
 using namespace irr;
 
-NormalScreenRenderer::NormalScreenRenderer(irr::IrrlichtDevice* device, irr::video::SColor backgroundColor) :
+CompatibleScreenRenderer::CompatibleScreenRenderer(irr::IrrlichtDevice* device, irr::video::SColor backgroundColor) :
 	IScreenRenderer(device, backgroundColor) {
 
 
 }
 
-NormalScreenRenderer::~NormalScreenRenderer() {
+CompatibleScreenRenderer::~CompatibleScreenRenderer() {
 
 }
 
-bool NormalScreenRenderer::init() {
+bool CompatibleScreenRenderer::init() {
 	// In diesem Renderer gibt es nichts zu initiieren
 	return true;
 }
 
-void NormalScreenRenderer::resize(const irr::core::dimension2du& newSize) {
+void CompatibleScreenRenderer::resize(const irr::core::dimension2du& newSize) {
 	// Nichts zu tun bei Auflösungsänderung
 }
 
-void NormalScreenRenderer::render(const VisualMap& map) {
+void CompatibleScreenRenderer::render(const VisualMap& map) {
 	video::IVideoDriver* driver = device->getVideoDriver();
     scene::ISceneManager* smgr = device->getSceneManager();
     gui::IGUIEnvironment* guienv = device->getGUIEnvironment();

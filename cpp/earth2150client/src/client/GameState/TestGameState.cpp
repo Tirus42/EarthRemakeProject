@@ -4,7 +4,7 @@
 #include "client/MapMarker.h"
 #include "client/MousePicker.h"
 #include "GUI/IngameGUI.h"
-#include "renderer/NormalScreenRenderer.h"
+#include "renderer/CompatibleScreenRenderer.h"
 #include "GUI/ResizeEvent.h"
 #include "renderer/DeferredShadingScreenRenderer.h"
 
@@ -126,7 +126,7 @@ AbstractGameState* TestGameState::run() {
 	bool useCompatibleRenderer = engineData.getConfig().getUseCompatibilityRenderer();
 
 	if (useCompatibleRenderer) {
-		renderer = new NormalScreenRenderer(device, video::SColor(0, 200, 200, 200));
+		renderer = new CompatibleScreenRenderer(device, video::SColor(0, 200, 200, 200));
 	} else {
 		renderer = new DeferredShadingScreenRenderer(device, video::SColor(0, 255, 255, 255));
 	}
