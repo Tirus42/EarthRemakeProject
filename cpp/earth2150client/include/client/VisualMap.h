@@ -25,15 +25,13 @@ class VisualMap : public Map {
 		/// Manager für Markierungen auf der Map
 		MapMarkerManager MarkerManager;
 
-		VisualMapPart* getMapPart(uint16_t partX, uint16_t partY) const;
+		VisualMapPart* getMapPart(uint16_t partX, uint16_t partY);
 
 		VisualMap(const VisualMap&);
 		VisualMap operator=(const VisualMap&);
 	public:
 		/// Definiert in was für Größen die Map eingeteilt wird (Grafisch)
 		static const uint8_t VISUAL_PART_SIZE = 128;
-
-
 
 		VisualMap(irr::video::IVideoDriver* driver, irr::scene::ISceneManager* smgr, uint16_t width, uint16_t height);
 		~VisualMap();
@@ -42,13 +40,18 @@ class VisualMap : public Map {
 		double getField3DHeight(uint32_t position) const {return getRawHeight(position) / 2560.0;}
 
 		/// Gibt die Referenz auf das Material zurück
-		const irr::video::SMaterial& getMaterial(int32_t index) const {
+		const irr::video::SMaterial& getMaterial(uint32_t index) const {
 			return materials[index];
 		}
 
 		/// Gibt die Referenz auf das Material zurück
-		irr::video::SMaterial& getMaterial(int32_t index) {
+		irr::video::SMaterial& getMaterial(uint32_t index) {
 			return materials[index];
+		}
+
+		uint32_t addMaterial(const irr::video::SMaterial& mat) {
+			materials.push_back(mat);
+			return materials.size() - 1;
 		}
 
 		/// Aktualisiert die Interne Struktur, muss aufgerufen werden wenn das Material verändert wurde!

@@ -22,10 +22,6 @@
 using namespace irr;
 
 using namespace core;
-using namespace scene;
-using namespace video;
-using namespace io;
-using namespace gui;
 
 TestGameState::TestGameState(EngineData& engineData, bool testCreateFlyingObjects) :
 	AbstractGameState(engineData),
@@ -48,8 +44,8 @@ TestGameState::~TestGameState() {
 AbstractGameState* TestGameState::run() {
 	IrrlichtDevice* device = engineData.getIrrlichtDevice();
 
-	IVideoDriver* driver = device->getVideoDriver();
-	ISceneManager* smgr = device->getSceneManager();
+	video::IVideoDriver* driver = device->getVideoDriver();
+	scene::ISceneManager* smgr = device->getSceneManager();
 	gui::IGUIEnvironment* guienv = device->getGUIEnvironment();
 
 	gui::IGUIFont* defaultFont = guienv->getBuiltInFont();
@@ -69,6 +65,22 @@ AbstractGameState* TestGameState::run() {
 
 	// Karte erstellen
 	VisualMap map(driver, smgr, 1024, 1024);
+
+	{	// Material setzen
+		video::SMaterial mat;
+
+		//mat.BackfaceCulling = false;
+		mat.setTexture(0, driver->getTexture("sand1.jpg"));
+
+		if (!mat.getTexture(0))
+			printf("Konnte Textur nicht laden!\n");
+
+		mat.AmbientColor.set(255,255,255,255);
+		mat.DiffuseColor.set(255,255,255,255);
+		mat.EmissiveColor.set(127,127,127,127);
+
+		map.addMaterial(mat);
+	}
 
 	// Raw-Heightmap laden
 	if (!map.loadHeightMapRAW("GameData/map1024x1024.bin"))
@@ -102,7 +114,7 @@ AbstractGameState* TestGameState::run() {
 
 	m.AmbientColor.set(255,255,255,255);
 	m.Lighting = false;
-	m.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL;
+	m.MaterialType = video::EMT_TRANSPARENT_ALPHA_CHANNEL;
 
 	m.setTexture(0, tex);
 
@@ -114,9 +126,9 @@ AbstractGameState* TestGameState::run() {
 	bool useCompatibleRenderer = engineData.getConfig().getUseCompatibilityRenderer();
 
 	if (useCompatibleRenderer) {
-		renderer = new NormalScreenRenderer(device, SColor(0, 200, 200, 200));
+		renderer = new NormalScreenRenderer(device, video::SColor(0, 200, 200, 200));
 	} else {
-		renderer = new DeferredShadingScreenRenderer(device, SColor(0, 255, 255, 255));
+		renderer = new DeferredShadingScreenRenderer(device, video::SColor(0, 255, 255, 255));
 	}
 
 	renderer->init();
