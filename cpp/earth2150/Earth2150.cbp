@@ -512,6 +512,7 @@
 		<Unit filename="include/Unit/UnitChassis.h" />
 		<Unit filename="include/Unit/UnitChassisList.h" />
 		<Unit filename="include/Util/MemoryBlock.h" />
+		<Unit filename="include/Util/MemoryHelper.h" />
 		<Unit filename="include/Util/ReferenceCounter.h" />
 		<Unit filename="include/Util/UIDManager.h" />
 		<Unit filename="include/e2150/AStar.h" />
@@ -567,6 +568,7 @@
 		<Unit filename="src/Unit/Unit.cpp" />
 		<Unit filename="src/Unit/UnitChassis.cpp" />
 		<Unit filename="src/Unit/UnitChassisList.cpp" />
+		<Unit filename="src/Util/MemoryHelper.cpp" />
 		<Unit filename="src/Util/UIDManager.cpp" />
 		<Unit filename="src/e2150/AStar.cpp" />
 		<Unit filename="src/e2150/AStarNode.cpp" />
