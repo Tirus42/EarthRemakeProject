@@ -52,7 +52,14 @@ const uint16_t& HeightMap::operator()(uint16_t x, uint16_t y) const {
 	assert(x < mapWidth);
 	assert(y < mapHeight);
 
-	return heightData[y * mapHeight + x];
+	return heightData[y * mapWidth + x];
+}
+
+uint16_t& HeightMap::operator()(uint16_t x, uint16_t y) {
+	assert(x < mapWidth);
+	assert(y < mapHeight);
+
+	return heightData[y * mapWidth + x];
 }
 
 uint16_t* HeightMap::allocateMemory(uint16_t mapWidth, uint16_t mapHeight) const {

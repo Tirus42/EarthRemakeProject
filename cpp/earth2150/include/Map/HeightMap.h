@@ -30,4 +30,6 @@ class HeightMap {
 		uint16_t& operator[](uint32_t index);
 
 		const uint16_t& operator()(uint16_t x, uint16_t y) const;
+
+		uint16_t& operator()(uint16_t x, uint16_t y);
 };
