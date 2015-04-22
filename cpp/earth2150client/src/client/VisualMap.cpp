@@ -71,18 +71,22 @@ void VisualMap::updateTerrainTexture(const MapRectArea& area) {
 }
 
 void VisualMap::build() {
-	int32_t width = getWidth() / VISUAL_PART_SIZE;
-	int32_t height = getHeight() / VISUAL_PART_SIZE;
+	// Bestimme anzahl an benötigter Kartenstücken
+	uint32_t countX = getWidth() / VISUAL_PART_SIZE;
+	uint32_t countY = getHeight() / VISUAL_PART_SIZE;
 
-	//width = 16;
-	//height = 16;
+	if (getWidth() % VISUAL_PART_SIZE > 0)
+		countX++;
+
+	if (getHeight() % VISUAL_PART_SIZE > 0)
+		countY++;
 
 	scene::IMeshManipulator* manipulator = smgr->getMeshManipulator();
 
 	boundingBox.reset(core::vector3df(0));
 
-	for (int32_t y = 0; y < height; ++y) {
-		for (int32_t x = 0; x < width; ++x) {
+	for (uint32_t y = 0; y < countY; ++y) {
+		for (uint32_t x = 0; x < countX; ++x) {
 			VisualMapPart* part = new VisualMapPart(*this, x, y);
 
 			irr::scene::SMeshBuffer* mPart = part->getMeshBuffer();

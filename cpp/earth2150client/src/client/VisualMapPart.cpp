@@ -36,12 +36,14 @@ void VisualMapPart::updateNormalsBorderTop() {
 }
 
 void VisualMapPart::buildMesh(const VisualMap& map) {
-	const uint8_t size = VisualMap::VISUAL_PART_SIZE;
-
 	const uint16_t partX = this->x * map.VISUAL_PART_SIZE;
 	const uint16_t partY = this->y * map.VISUAL_PART_SIZE;
 
+	const uint16_t mapWidth = map.getWidth();
 	const uint16_t mapHeight = map.getHeight();
+
+	const uint8_t sizeX = partX + VisualMap::VISUAL_PART_SIZE < mapWidth ? VisualMap::VISUAL_PART_SIZE : mapWidth - partX;
+	const uint8_t sizeY = partY + VisualMap::VISUAL_PART_SIZE < mapHeight ? VisualMap::VISUAL_PART_SIZE : mapHeight - partY;
 
 	// Vertex und Zuweisungsarray holen und vorskalieren
 	core::array<video::S3DVertex>& vertices = meshBuffer.Vertices;
@@ -51,16 +53,16 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 	indices.clear();
 
 	// Bestimmen wieviel Einträge gebraucht werden
-	const uint32_t countVertices = (size + 1) * (size + 1);
-	const uint32_t countIndices = size * size * 6;
+	const uint32_t countVertices = (sizeX + 1) * (sizeY + 1);
+	const uint32_t countIndices = sizeX * sizeY * 6;
 
 	// Speicher direkt allokieren um unnötiges realloc zu sparen
 	vertices.reallocate(countVertices);
 	indices.reallocate(countIndices);
 
 	// Setze alle Vertices
-	for (uint16_t y = 0; y <= size; ++y) {
-		for (uint16_t x = 0; x <= size; ++x) {
+	for (uint16_t y = 0; y <= sizeY; ++y) {
+		for (uint16_t x = 0; x <= sizeX; ++x) {
 			// Hole 3D-Höhe der Map
 			double dHeight = map.getField3DHeight(map.position(partX + x, partY + y));
 
@@ -70,17 +72,17 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 	}
 
 	// Verbinde die Vertices zu Dreiecken (d.h. Baue eine Feld-Fläche auf)
-	for (uint16_t y = 0; y < size; ++y) {
-		for (uint16_t x = 0; x < size; ++x) {
-			int offset = y * (size + 1)  + x;
+	for (uint16_t y = 0; y < sizeY; ++y) {
+		for (uint16_t x = 0; x < sizeX; ++x) {
+			int offset = y * (sizeX + 1)  + x;
 
 			indices.push_back(offset);
 			indices.push_back(offset + 1);
-			indices.push_back(offset + 1 + (size + 1));
+			indices.push_back(offset + 1 + (sizeX + 1));
 
 			indices.push_back(offset);
-			indices.push_back(offset + 1 + (size + 1));
-			indices.push_back(offset + (size + 1));
+			indices.push_back(offset + 1 + (sizeX + 1));
+			indices.push_back(offset + (sizeX + 1));
 		}
 	}
 
