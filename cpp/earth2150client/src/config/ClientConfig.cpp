@@ -7,6 +7,7 @@ ClientConfig::ClientConfig() :
 	useCompatibilityRenderer(false),
 	path_TheMoonProject(),
 	path_LostSouls(),
+	inactiveFPSLimit(5),
 	latestConfigVersion(true) {
 }
 
@@ -23,6 +24,8 @@ void ClientConfig::setDefaultValues() {
 
 	path_TheMoonProject = "";
 	path_LostSouls = "";
+
+	inactiveFPSLimit = 5;
 
 	latestConfigVersion = true;
 }
@@ -55,7 +58,8 @@ void ClientConfig::saveXMLFile(io::IXMLWriter* writer) const {
 	writer->writeLineBreak();
 
 	writer->writeElement(L"rendering", true,
-						L"compatible", core::stringw(useCompatibilityRenderer).c_str()
+						L"compatible", core::stringw(useCompatibilityRenderer).c_str(),
+						L"inactiveFPSLimit", core::stringw(inactiveFPSLimit).c_str()
 						);
 	writer->writeLineBreak();
 
@@ -122,6 +126,8 @@ void ClientConfig::loadXMLFile(io::IXMLReader* reader) {
 		if (core::stringw(reader->getNodeName()) == L"rendering") {
 			if (reader->getAttributeValue(L"compatible"))
 				useCompatibilityRenderer = reader->getAttributeValueAsInt(L"compatible");
+			if (reader->getAttributeValue(L"inactiveFPSLimit"))
+				inactiveFPSLimit = reader->getAttributeValueAsInt(L"inactiveFPSLimit");
 		}
 
 		if (core::stringw(reader->getNodeName()) == L"path") {

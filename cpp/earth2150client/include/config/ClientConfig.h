@@ -11,7 +11,7 @@ class ClientConfig {
 	private:
 		/// Versionsnr der Config Datei, diese Nr sollte bei jedem Ändern dieser Klasse erhöht werden.
 		/// Immer wenn diese Nr != der gespeicherten ist, sollte die Config neu geschrieben werden.
-		static const irr::u16 CONFIG_VERSION = 2;
+		static const irr::u16 CONFIG_VERSION = 3;
 
 		/// Irrlicht Parameter für Grafikeinstellungen
 		irr::SIrrlichtCreationParameters param;
@@ -24,6 +24,8 @@ class ClientConfig {
 
 		/// Pfard Angabe zu den Spieldaten von Lost Souls
 		irr::io::path path_LostSouls;
+
+		irr::u32 inactiveFPSLimit;
 
 		/// Angabe ob die geladene Config in der aktuellen Version ist (siehe CONFIG_VERSION)
 		bool latestConfigVersion;
@@ -55,6 +57,8 @@ class ClientConfig {
 
 		/// Gibt den Pfard zu dem Spielordner von Lost Souls zurück (kann "" sein)
 		const irr::io::path& getLostSoulsPath() const {return path_LostSouls;}
+
+		irr::u32 getInactiveFPSLimit() const {return inactiveFPSLimit;}
 
 		/// Gibt zurück ob die geladene Config in der aktuellen Version ist (siehe CONFIG_VERSION)
 		bool isLatestConfigVersion() const {return latestConfigVersion;}
