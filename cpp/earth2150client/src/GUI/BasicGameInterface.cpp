@@ -41,6 +41,7 @@ void BasicGameInterface::buildMenuPanel() {
 
 	menuPanel = env->addWindow(core::recti(0, screen.getHeight() - MENUPANEL_HEIGHT, screen.getWidth(), screen.getHeight()), false, L"Menü Panel");
 	makeWindowToPanel(menuPanel);
+	menuPanel->setAlignment(gui::EGUIA_UPPERLEFT, gui::EGUIA_LOWERRIGHT, gui::EGUIA_LOWERRIGHT, gui::EGUIA_LOWERRIGHT);
 
 	mapName = env->addStaticText(L"<Kartenname>", core::recti(95, 1, 95 + 158, MENUPANEL_HEIGHT - 1), true, false, menuPanel);
 	mapName->setTextAlignment(gui::EGUIA_CENTER, gui::EGUIA_CENTER);
@@ -49,6 +50,7 @@ void BasicGameInterface::buildMenuPanel() {
 
 	menuButton = env->addComboBox(core::recti(menuButton_x, 1, menuButton_x + 207, MENUPANEL_HEIGHT - 1), menuPanel);
 	menuButton->setTextAlignment(gui::EGUIA_CENTER, gui::EGUIA_CENTER);
+	menuButton->setAlignment(gui::EGUIA_LOWERRIGHT, gui::EGUIA_LOWERRIGHT, gui::EGUIA_LOWERRIGHT, gui::EGUIA_LOWERRIGHT);
 }
 
 // Passe Menü Panel an neue Auflösung an
@@ -76,6 +78,7 @@ void BasicGameInterface::buildControlPanel() {
 
 	controlPanel = env->addWindow(core::recti(172, screen.getHeight() - MENUPANEL_HEIGHT - CONTROLPANEL_HEIGHT, screen.getWidth(), screen.getHeight() - MENUPANEL_HEIGHT), false, L"Control Panel");
     makeWindowToPanel(controlPanel);
+    controlPanel->setAlignment(gui::EGUIA_UPPERLEFT, gui::EGUIA_LOWERRIGHT, gui::EGUIA_LOWERRIGHT, gui::EGUIA_LOWERRIGHT);
 }
 
 void BasicGameInterface::resizeControlPanel(const irr::core::dimension2du& newSize) {

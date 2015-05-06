@@ -23,6 +23,7 @@ IngameGUI::~IngameGUI() {
 void IngameGUI::buildGUI() {
 	// Karten Panel holen
 	gui::IGUIWindow* mapPanel = getMapPanel();
+	mapPanel->setAlignment(gui::EGUIA_UPPERLEFT, gui::EGUIA_UPPERLEFT, gui::EGUIA_LOWERRIGHT, gui::EGUIA_LOWERRIGHT);
 
 	const core::recti mapRect = mapPanel->getRelativePosition();
 
@@ -43,6 +44,7 @@ void IngameGUI::buildGUI() {
 	testTabControl = env->addTabControl(core::rect<s32>(10, 10, panelRect.getWidth() - 40, panelRect.getHeight() - 10), panel, true, true, GUI_TABBER);
 
 	gui::IGUITabControl* tab = testTabControl;
+	tab->setAlignment(gui::EGUIA_UPPERLEFT, gui::EGUIA_LOWERRIGHT, gui::EGUIA_LOWERRIGHT, gui::EGUIA_LOWERRIGHT);
 
 	// Tab Leisten Breite und Höhe festlegen
 	tab->setTabExtraWidth(60);
@@ -88,6 +90,7 @@ void IngameGUI::buildGUI() {
 	testAlphaControl->setMax(255);
 	testAlphaControl->setPos(127);
 	testAlphaControl->setToolTipText(L"Bestimmt die Opazität der GUI");
+	testAlphaControl->setAlignment(gui::EGUIA_LOWERRIGHT, gui::EGUIA_LOWERRIGHT, gui::EGUIA_UPPERLEFT, gui::EGUIA_LOWERRIGHT);
 }
 
 void IngameGUI::onResize(const core::dimension2du& newSize) {
