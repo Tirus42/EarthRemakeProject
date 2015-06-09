@@ -91,9 +91,6 @@ void VisualMap::build() {
 
 			irr::scene::SMeshBuffer* mPart = part->getMeshBuffer();
 
-			// Vorerst Mesh-Normale automatisch berechnen lassen (Gibt unschöne Kanten)
-			manipulator->recalculateNormals(mPart);
-
 			boundingBox.addInternalBox(mPart->getBoundingBox());
 
 			mapParts.push_back(part);
@@ -173,6 +170,7 @@ MapPosition VisualMap::pickMapPosition(const core::vector3df& source, const core
 
 void VisualMap::drawTerrain(video::IVideoDriver* driver) const {
 	driver->setTransform(video::ETS_WORLD, core::IdentityMatrix);
+
 	driver->setMaterial(getMaterial(0));
 
 	const scene::SViewFrustum* frust = smgr->getActiveCamera()->getViewFrustum();

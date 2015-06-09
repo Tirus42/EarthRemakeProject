@@ -16,23 +16,30 @@ VisualMapPart::~VisualMapPart() {
 	assert(meshBuffer.getReferenceCount() == 1 && "MeshBuffer Reference Count > 1");
 }
 
-void VisualMapPart::updateNormals() {
-	/// Lagere "teure" Randfallprüfung in Extra Methoden aus (und nicht in Schleife)
-	updateNormalsBorderTop();
-
+void VisualMapPart::updateNormals(const VisualMap& map) {
 	const uint16_t size = VisualMap::VISUAL_PART_SIZE;
 
-	/// Iteriere über inneres Feld und setze Normalen
-	for (uint16_t y = 1; y < size; ++y) {
-		for (uint16_t x = 1; x < size; ++x) {
+	const uint16_t mapX = this->x * size;
+	const uint16_t mapY = this->y * size;
 
+	// Ignoriere Kartenrand
+	uint16_t minX = this->x == 0 ? 1 : 0;
+	uint16_t minY = this->y == 0 ? 1 : 0;
+	uint16_t maxX = this->x == 7 ? size : size + 1;
+	uint16_t maxY = this->y == 7 ? size : size + 1;
+
+	// Iteriere über inneres Feld und setze Normalen
+	for (uint16_t y = minY; y < maxY; ++y) {
+		for (uint16_t x = minX; x < maxX; ++x) {
+			const float left_height = map.getField3DHeight(map.position(mapX + x - 1, mapY + y));
+			const float right_height = map.getField3DHeight(map.position(mapX + x + 1, mapY + y));
+			const float top_height = map.getField3DHeight(map.position(mapX + x, mapY + y - 1));
+			const float bottom_height = map.getField3DHeight(map.position(mapX + x, mapY + y + 1));
+
+			meshBuffer.Vertices[y * (size + 1) + x].Normal =
+			core::vector3df(0.0, top_height - bottom_height, 2.0).crossProduct(core::vector3df(2.0, right_height - left_height, 0.0)).normalize();
 		}
 	}
-}
-
-void VisualMapPart::updateNormalsBorderTop() {
-
-	core::vector3df left(-1, 0, 0);
 }
 
 void VisualMapPart::buildMesh(const VisualMap& map) {
@@ -92,6 +99,7 @@ void VisualMapPart::buildMesh(const VisualMap& map) {
 
 	// Material zuweißen (temp) und Mesh-Buffer in Mesh setzen
 	updateMaterial(map);
+	updateNormals(map);
 
 	// Flag setzen, damit das Mesh im VRAM gespeichert wird
 	meshBuffer.setHardwareMappingHint(scene::EHM_STATIC, scene::EBT_VERTEX_AND_INDEX);

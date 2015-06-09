@@ -20,11 +20,7 @@ class VisualMapPart {
 		void buildMesh(const VisualMap& map);
 
 		/// Setzt alle Normalen neu
-		void updateNormals();
-		void updateNormalsBorderTop();
-		void updateNormalsBorderBottom();
-		void updateNormalsBorderLeft();
-		void updateNormalsBorderRight();
+		void updateNormals(const VisualMap& map);
 
 		VisualMapPart(const VisualMapPart&);
 		VisualMapPart operator=(const VisualMapPart&);
