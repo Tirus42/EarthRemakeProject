@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 130
 
 uniform mat4 mMVP;
 uniform mat4 mInvWorld;

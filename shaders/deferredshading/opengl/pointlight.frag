@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 130
 
 uniform sampler2D DiffuseTex;
 uniform sampler2D NormalTex;

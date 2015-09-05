@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 130
 
 uniform sampler2D myTexture;
 
@@ -6,9 +6,9 @@ in vec3 in_position;
 in vec3 in_normal;
 in vec2 in_texcoord;
 
-layout(location=0) out vec3 Diffuse;
-layout(location=1) out vec3 Normal;
-layout(location=2) out vec4 Position;
+out vec3 Diffuse;
+out vec3 Normal;
+out vec4 Position;
 
 vec3 packNormal(vec3 normal) {
 	return normal * 0.5 + 0.5;

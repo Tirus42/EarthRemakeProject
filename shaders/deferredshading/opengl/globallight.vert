@@ -1,6 +1,6 @@
-#version 330 compatibility
+#version 130
 
-layout(location=0) in vec3 InPosition;
+in vec3 InPosition;
 
 void main (void)
 {
