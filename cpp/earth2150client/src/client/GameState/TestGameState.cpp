@@ -247,6 +247,8 @@ AbstractGameState* TestGameState::run() {
 		lastRenderTime = renderer->getLastRenderTime();
 		lastFrameTime = HighResolutionDiffNanoSec(startTimeFrame, endTimeFrame);
 
+		static bool windowActive = true;
+
 		// Limitiere FPS Rate wenn Fenster keinen Fokus hat und in der Config ein Wert angegeben ist
 		if (!device->isWindowActive()) {
 			const u32 inactiveFPSLimit = engineData.getConfig().getInactiveFPSLimit();
@@ -255,10 +257,14 @@ AbstractGameState* TestGameState::run() {
 				device->sleep(1000 / inactiveFPSLimit);
 				device->run();
 			}
+		}
 
-			// Wenn Fenster inaktiv war dann Shader neu Laden lassen (zu debugging zwecken)
+		// Wenn Fenster inaktiv war dann Shader neu Laden lassen (zu debugging zwecken)
+		if (!windowActive && device->isWindowActive()) {
 			renderer->init();
 		}
+
+		windowActive = device->isWindowActive();
 	}
 
 	delete renderer;
