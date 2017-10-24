@@ -1,0 +1,32 @@
+#windowsbuild:
+#  stage: build
+#  script: 
+#    - "[ ! -d build ] && mkdir build"
+#    - cd build
+#    - cmake ..
+#    - make
+#  artifacts:
+#    paths:
+#      - build/MyAwesomeProject
+#  cache:
+#    paths:
+#      - "build"
+#  tags:
+#    - windows
+
+linuxbuild:
+  stage: build
+  script: 
+    - "[ ! -d build ] && mkdir build"
+    - cd build
+    - cmake ../cpp -DIRRLICHT_ENGINE_INCLUDE=/usr/include/irrlicht -DIRRLICHT_ENGINE_LIB=/usr/lib/x86_64-linux-gnu/irrlicht
+    - make -j4
+  artifacts:
+    paths:
+      - Earth2150_Server
+      - Earth2150_Client
+  cache:
+    paths:
+      - "build"
+  tags:
+    - linux
