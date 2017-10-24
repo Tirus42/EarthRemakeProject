@@ -1,18 +1,18 @@
-windowsbuild:
-  stage: build
-  script: 
-    - "[ ! -d build ] && mkdir build"
-    - cd build
-    - cmake ..
-    - make
-  artifacts:
-    paths:
-      - build/MyAwesomeProject
-  cache:
-    paths:
-      - "build"
-  tags:
-    - windows
+#windowsbuild:
+#  stage: build
+#  script: 
+#    - "[ ! -d build ] && mkdir build"
+#    - cd build
+#    - cmake ..
+#    - make
+#  artifacts:
+#    paths:
+#      - build/MyAwesomeProject
+#  cache:
+#    paths:
+#      - "build"
+#  tags:
+#    - windows
 
 linuxbuild:
   stage: build
@@ -23,8 +23,8 @@ linuxbuild:
     - make
   artifacts:
     paths:
-      - build/Earth2150_Server
-      - build/Earth2150_Client
+      - earth-remake/Earth2150_Server
+      - earth-remake/Earth2150_Client
   cache:
     paths:
       - "build"
