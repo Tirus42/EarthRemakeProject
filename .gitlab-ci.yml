@@ -23,7 +23,8 @@ linuxbuild:
     - make
   artifacts:
     paths:
-      - build/MyAwesomeProject
+      - build/Earth2150_Server
+      - build/Earth2150_Client
   cache:
     paths:
       - "build"
