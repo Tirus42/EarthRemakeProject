@@ -20,7 +20,7 @@ linuxbuild:
     - "[ ! -d build ] && mkdir build"
     - cd build
     - cmake ../cpp -DIRRLICHT_ENGINE_INCLUDE=/usr/include/irrlicht -DIRRLICHT_ENGINE_LIB=/usr/lib/x86_64-linux-gnu/irrlicht
-    - make
+    - make -j4
   artifacts:
     paths:
       - Earth2150_Server
