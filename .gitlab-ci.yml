@@ -19,7 +19,7 @@ linuxbuild:
   script: 
     - "[ ! -d build ] && mkdir build"
     - cd build
-    - cmake ..
+    - cmake ../cpp
     - make
   artifacts:
     paths:
