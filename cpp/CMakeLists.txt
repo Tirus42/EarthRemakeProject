@@ -30,10 +30,6 @@ include_directories("ff/include")
 
 add_subdirectory(tf)
 add_subdirectory(ff)
-
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BINARY_OUTPUT_PATH}")
-
 add_subdirectory(earth2150)
 
 if (BUILD_CLIENT)
