@@ -28,5 +28,6 @@ linuxbuild:
   cache:
     paths:
       - "build"
+      - "*.o"
   tags:
     - linux
