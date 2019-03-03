@@ -4,7 +4,7 @@ This project was started to recreate a game very similar to the existing Earth 2
 
 A first try was made in the game-programming language "BlitzBasic 3D" but stopped due to the limits of the language and the graphics engine. This code is not contained in this repository but was adapted into this project.
 
-After awhile, another try was started using the programming language C++ and the "Irrlicht Engine" for model and texture loading and rendering.
+After a while, another try was started using the programming language C++ and the "Irrlicht Engine" for model and texture loading and rendering.
 
 In the current state of development some basic features are available:
 * Map loading using a hightmap image and waymap generation based on the height difference
