@@ -15,6 +15,7 @@
 #    - windows
 
 linuxbuild:
+  image: gcc-with-libs:latest
   stage: build
   script: 
     - "[ ! -d build ] && mkdir build"
@@ -23,8 +24,8 @@ linuxbuild:
     - make -j4
   artifacts:
     paths:
-      - Earth2150_Server
-      - Earth2150_Client
+      - build/earth2150/Earth2150_Server
+      - build/earth2150client/Earth2150_Client
   cache:
     paths:
       - "build"
